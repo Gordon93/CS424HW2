@@ -17,7 +17,8 @@ def parse_data2(tempData):
         if (tempData[count]>= '0') & (tempData[count]<='9'):
             value = (10*value)+ int(tempData[count])
         elif tempData[count]=='.':
-            value = float(value + (int(tempData[count+1])/10))
+            value = float(value + (float(tempData[count+1])/10))
+            print (value)
             count = count + 1
 
 
@@ -186,7 +187,7 @@ for line in readable:
 for line in filterData:
     if line != [ ]:
         writable.writerow(line)
-        print(line)
+        #print(line)
     #print(count)
 
 
