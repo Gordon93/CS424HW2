@@ -3,9 +3,9 @@ __author__ = 'Ryan Jones'
 import csv
 
 def parse_data(tempData):
-    year = (int(tempData)/10000)
-    month = ((int(tempData)-(year*10000))/100)
-    day = (int(tempData)-((year*10000)+(month*100)))
+    year = int(int(tempData)/10000)
+    month = int((int(tempData)-(year*10000))/100)
+    day = int(int(tempData)-((year*10000)+(month*100)))
     return (year,month,day)
 
 def parse_data2(tempData):
@@ -18,7 +18,7 @@ def parse_data2(tempData):
             value = (10*value)+ int(tempData[count])
         elif tempData[count]=='.':
             value = float(value + (float(tempData[count+1])/10))
-            print (value)
+           # print (value)
             count = count + 1
 
 
@@ -46,11 +46,11 @@ def whiteSpaces(tempData):
 
 
 
-fileName= "hurdat2-1851-2014-060415.txt"
+fileName= "hurdat2-nencpac-1949-2014-092515.txt"
 #fileName2 = "test.txt"
 csvFile = open(fileName,'r')
 readable = csv.reader(csvFile)
-writable = csv.writer(open("output.csv",'wb'))
+writable = csv.writer(open("output.csv",'w',newline=''))
 filterData = []
 line1 = []
 Headers = ["HURID","NAME","YEAR","MONTH","DAY","HOURS","RECID","StatusOfSys","LAT","HEM","LOG","HEM",
@@ -89,7 +89,7 @@ for line in readable:
             line1 = []
             (YEAR,MONTH,DAY) = parse_data(line[0])
 
-            if YEAR > 2004:
+            if YEAR > 1850:
                 line1.append(HURID)
                 line1.append(NAME)
                 line1.append(YEAR)
