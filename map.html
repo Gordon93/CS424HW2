@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+
+<style type="text/css">
+
+.map div { 
+    
+  height: 800px; 
+  width: 500px;
+  font: 10px sans-serif;
+  background-color: blue;
+  text-align: right;
+  padding: 3px;
+  margin: 1px;
+  color: white;
+
+}
+
+</style>
+<html>
+  <head>
+    <title> D3 page template </title>     
+       <div id = top style = "width: 100vh; height: 90vh;" >
+    <div id = "map" style = "height: 50%;"></div>
+     </div>
+    
+      
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"
+    ></script> 
+      <head><script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+      
+       <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.css" />
+      </head>
+      <script src="http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.js"></script>
+
+  </head>
+  <body>
+    <script type="text/javascript">
+       var select;
+       var menu = [];
+       var input;
+       var file;
+       num1 =0;
+        function change() {
+        
+          console.log("get here");
+          var selectedIndex = select.property('selectedIndex'),
+         input = options[0][selectedIndex].__data__;
+         console.log("input:", input);
+        menu.push(input)
+        var end = menu.map(function(d){ return d.Hurricane;});
+    console.log("end:", end);
+        file = end[num1].toString();
+    console.log("file:", file);
+        var name = file;
+        file = "data/" +file + ".csv";
+    console.log("file", file);
+    d3.csv(file, function(error, text1){
+        console.log("file :",text1);  
+          var dataset = d3.entries(text1).map(function(d){ return d.value.Date});
+        console.log("data:",dataset);
+       var data = dataset.map(function(d) { return +d });
+        console.log("data:",data);
+      });
+        num1++;   
+            
+            var map = L.map('map').setView([41.83,-87.68], 11);
+            
+            L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+    maxZoom: 18,
+    id: 'ygordon22.cifd9ql4c53tbsmlx7cegx4iy',
+    accessToken: 'pk.eyJ1IjoieWdvcmRvbjIyIiwiYSI6ImNpZmQ5cW1idzUzeWFzNG03bjVqc3czZWEifQ.dpecRLb3F4lRAOvIVd5KpQ'
+}).addTo(map);
+            
+           }
+        
+   d3.csv("data/Hurricanes.csv", function(error, text){
+         
+          select = d3.select("body").append("select").on("change", change);
+    options = select.selectAll('option').data(text); 
+var selection = options.enter().append("option").text(function(d) { return d.Hurricane; });
+   
+   });
+        
+    </script>
+  </body>
+  </html>
