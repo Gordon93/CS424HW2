@@ -26,7 +26,12 @@ def parse_data2(tempData):
             dir = tempData[count]
 
         count = count +1
+
+    if (dir=='S') | (dir=='W'):
+        value = value * -1
+
     return (value,dir)
+
 def whiteSpaces(tempData):
     size = len(tempData)
     count = 0
@@ -46,14 +51,14 @@ def whiteSpaces(tempData):
 
 
 
-fileName= "hurdat2-nencpac-1949-2014-092515.txt"
-#fileName2 = "test.txt"
+#fileName= "hurdat2-nencpac-1949-2014-092515.txt"
+fileName = "hurdat2-1851-2014-060415.txt"
 csvFile = open(fileName,'r')
 readable = csv.reader(csvFile)
 writable = csv.writer(open("output.csv",'w',newline=''))
 filterData = []
 line1 = []
-Headers = ["HURID","NAME","YEAR","MONTH","DAY","HOURS","RECID","StatusOfSys","LAT","HEM","LOG","HEM",
+Headers = ["HURID","NAME","YEAR","MONTH","DAY","HOURS","RECID","StatusOfSys","LAT","LOG",
            "MaxWind","MinPress","34KTWindNE","34KTWindSE","34KTWindSW","34KTWindNW","50KTWindNE",
            "50KTWindSE","50KTWindSW","50KTWindNW","64KTWindNE","64KTWindSE","64KTWindSW","64KTWindNW"]
 filterData.append(Headers)
@@ -89,7 +94,7 @@ for line in readable:
             line1 = []
             (YEAR,MONTH,DAY) = parse_data(line[0])
 
-            if YEAR > 1850:
+            if YEAR < 2005:
                 line1.append(HURID)
                 line1.append(NAME)
                 line1.append(YEAR)
@@ -102,10 +107,8 @@ for line in readable:
 
                 (lat,latDir)= parse_data2(line[4])
                 line1.append(lat)
-                line1.append(latDir)
                 (log,logDir)= parse_data2(line[5])
                 line1.append(log)
-                line1.append(logDir)
                 index = 6
                 while index < 20:
                     line1.append(whiteSpaces(line[index]))
