@@ -4,21 +4,51 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title>Data</title>
-        <link rel="stylesheet" href="styles.css">
+
+        <!-- Core bootstrap CSS -->
+        <link rel="stylesheet" type="text/css" href="/bootstrap-3.3.4-dist/css/bootstrap.min.css">
+
+        <!-- Custom styles for this template -->
+        <link href="styles.css" rel="stylesheet">
     </head>
     
     <body>
-        <h1>Data</h1>
-        <p>Paragraphs.</p>
-	<table>
-        <tr>
-			<td><a href="index.html"> Home </a></td>
-			<td><a href="app.html"> App </a></td>
-			<td><a href="facts.html"> Interesting Facts </a></td>
-			<td><a href="setup.html"> How to Set Up App </a></td>
-			<td> About the Data </td>
-       </tr>
-	</table>
+        <!-- This section begins the bootstrap button headers -->
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="index.html">Project 2</a>
+
+                </div>
+                <div id="navbar" class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a href="app.html">Application</a></li>
+                        <li><a href="facts.html">Facts</a></li>
+                        <li><a href="setup.html">Setup</a></li>
+                        <li><a href="data.html">Data</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="pageContent">
+            <h1>Data</h1>
+            <p>Paragraphs.</p>
+            <table>
+                <tr>
+                    <td><a href="index.html"> Home </a></td>
+                    <td><a href="app.html"> App </a></td>
+                    <td><a href="facts.html"> Interesting Facts </a></td>
+                    <td><a href="setup.html"> How to Set Up App </a></td>
+                    <td> About the Data </td>
+                </tr>
+            </table>
+        </div>
     </body>
     
 </html>
