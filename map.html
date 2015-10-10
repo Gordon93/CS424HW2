@@ -75,12 +75,23 @@
            }
         
    d3.csv("data/Hurricanes.csv", function(error, text){
-         
+        console.log(text);
           select = d3.select("body").append("select").on("change", change);
     options = select.selectAll('option').data(text); 
 var selection = options.enter().append("option").text(function(d) { return d.Hurricane; });
    
    });
+
+       //The section below grabs the hurricanes from 2005-2014 and groups them by hurricane ID. Thus breaking the file into 170 objects instead of 5000 entries.
+    d3.csv("data/AtlHurricane2005-2014.csv", function (error, text) {
+      console.log(text);
+      var data = d3.nest()
+          .key(function(d) {
+            return d.HURID;
+          }).entries(text);
+          
+      console.log(data);
+    });
         
     </script>
   </body>
