@@ -12,6 +12,7 @@
 
 		<!-- Custom styles for this template -->
 		<link href="styles.css" rel="stylesheet">
+
 	</head>
 	
 	<body>
@@ -37,6 +38,35 @@
                 </div>
             </div>
         </nav>
+
+
+        Sort By: <br />
+        <select id="sortby">
+            <option value ="date">Date</option>
+            <option value ="alpha">Alpha</option>
+            <option value ="wind">Wind Speed</option>
+        </select>
+        <br />
+
+        Display: <br />          
+        <select>
+            <option value ="all">All</option>
+            <option value ="five">Top 5</option>
+            <option value ="ten">Top 10</option>
+            <option value ="year">Selected Year</option>
+        </select>
+        <br />
+        <br />
+        <div>
+            <fieldset>
+            <legend>Filters</legend>
+            Made Land: <input type="checkbox" id="land" /> <br /> 
+            <input type="number" id="min_speed" style ="width:50px" /> < Wind Speed < <input type="number" id="max_speed" style ="width:50px"/> <br />
+            <input type="number" id="min_pressure" style ="width:50px" /> < Pressure < <input type="number" id="max_pressure" style ="width:50px" /> <br />
+            </fieldset>
+
+        </div>
+
 
         <div class="pageContent">
 			<table>
