@@ -40,9 +40,9 @@
        var input;
        var file;
        num1 =0;
+        var latitute =[];
+        var langitute =[];
         function change() {
-        
-          console.log("get here");
           var selectedIndex = select.property('selectedIndex'),
          input = options[0][selectedIndex].__data__;
          console.log("input:", input);
@@ -72,6 +72,17 @@
     accessToken: 'pk.eyJ1IjoieWdvcmRvbjIyIiwiYSI6ImNpZmQ5cW1idzUzeWFzNG03bjVqc3czZWEifQ.dpecRLb3F4lRAOvIVd5KpQ'
 }).addTo(map);
             
+            for (var i=0 ;i<490; i++){
+            //alert(JSON.stringify(langitute));
+            //alert(JSON.stringify(latitute));
+            
+     var circle = L.circle([latitute[i],langitute[i]], 500, {
+    color: 'red',
+    fillColor: '#f03',
+    fillOpacity: 0.5
+}).addTo(map)
+     }
+            
            }
         
    d3.csv("data/Hurricanes.csv", function(error, text){
@@ -87,11 +98,33 @@ var selection = options.enter().append("option").text(function(d) { return d.Hur
       console.log(text);
       var data = d3.nest()
           .key(function(d) {
-            return d.HURID;
+            return d.LAT;
           }).entries(text);
-          
+        //alert('get here')
+        //alert(JSON.stringify(data.length))
+        
+    for (var i=0 ;i<490; i++){
+     //alert(JSON.stringify(data[i]));   
+     latitute.push(data[i]["key"]);
+      //alert(JSON.stringify(latitute));                         
       console.log(data);
+      }
     });
+        
+           d3.csv("data/AtlHurricane2005-2014.csv", function (error, text) {
+      console.log(text);
+      var data = d3.nest()
+          .key(function(d) {
+            return d.LOG;
+          }).entries(text);
+        
+      for (var i=0 ;i<490; i++){
+      langitute.push(data[i]["key"]);
+      //alert(JSON.stringify(langitute));                         
+      console.log(data);
+      }
+    });
+        
         
     </script>
   </body>
