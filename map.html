@@ -21,6 +21,7 @@
     <title> D3 page template </title>     
        <div id = top style = "width: 100vh; height: 90vh;" >
     <div id = "map" style = "height: 50%;"></div>
+    <div id = "legend" style = "height: 50% ; "></div>
      </div>
     
       
@@ -39,31 +40,28 @@
        var menu = [];
        var input;
        var file;
-       num1 =0;
-        var latitute =[];
-        var langitute =[];
+       num =0;
+        
+        var latitute =[[],[],[],[],[],[],[],[],[],[]];
+        var langitute =[[],[],[],[],[],[],[],[],[],[]];
+        var wind =[[],[],[],[],[],[],[],[],[],[]];
+        var names =[[],[],[],[],[],[],[],[],[],[]];
+       // var year = [[]];
+        
         function change() {
-          var selectedIndex = select.property('selectedIndex'),
-         input = options[0][selectedIndex].__data__;
-         console.log("input:", input);
-        menu.push(input)
-        var end = menu.map(function(d){ return d.Hurricane;});
-    console.log("end:", end);
-        file = end[num1].toString();
-    console.log("file:", file);
-        var name = file;
-        file = "data/" +file + ".csv";
-    console.log("file", file);
-    d3.csv(file, function(error, text1){
-        console.log("file :",text1);  
-          var dataset = d3.entries(text1).map(function(d){ return d.value.Date});
-        console.log("data:",dataset);
-       var data = dataset.map(function(d) { return +d });
-        console.log("data:",data);
-      });
-        num1++;   
+              if (num !=0){
+                  alert("removing");
+            d3.select(".map").remove();
+              }
             
-            var map = L.map('map').setView([41.83,-87.68], 11);
+            alert("start here");
+             var selectedIndex = select.property('selectedIndex'),
+            input = options[0][selectedIndex].__data__;
+            var chosenYear = parseInt(input.Hurricane);
+            alert(JSON.stringify(selectedIndex));
+            var index = selectedIndex -1;
+            
+                             var map = L.map('map').setView([41.83,-87.68], 4);
             
             L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
@@ -72,57 +70,80 @@
     accessToken: 'pk.eyJ1IjoieWdvcmRvbjIyIiwiYSI6ImNpZmQ5cW1idzUzeWFzNG03bjVqc3czZWEifQ.dpecRLb3F4lRAOvIVd5KpQ'
 }).addTo(map);
             
-            for (var i=0 ;i<490; i++){
-            //alert(JSON.stringify(langitute));
-            //alert(JSON.stringify(latitute));
+                    alert("get here please");
             
-     var circle = L.circle([latitute[i],langitute[i]], 500, {
-    color: 'red',
+                    var color;
+                    alert(JSON.stringify(wind[index].length));
+                    for (var i=0 ;i<wind[index].length;i++){
+            if (wind[index][i] > 20){
+                color ='red'
+            }
+                else{
+                    color = 'green'
+                }
+                
+     var circle = L.circle([latitute[index][i],langitute[index][i]], 500, {
+    color: color,
     fillColor: '#f03',
     fillOpacity: 0.5
 }).addTo(map)
      }
+          num++;  
             
-           }
+var uniqueNames = [];
+$.each(names[index], function(i, el){
+    if($.inArray(el, uniqueNames) === -1) uniqueNames.push(el);
+});
+            
+            console.log("unique_name",uniqueNames.toString());
+            
+                   d3.select("body").selectAll("input")
+.data(uniqueNames)
+.enter()
+.append('label')
+    .attr('for',function(d,i){ return 'a'+i; })
+    .text(function(d) { return d; })
+.append("input")
+    .attr("checked", true)
+    .attr("type", "checkbox")
+    .attr("id", function(d,i) { return 'a'+i; })
+    .attr("onClick", "modify(this)");
+            
+        }
+            
         
    d3.csv("data/Hurricanes.csv", function(error, text){
         console.log(text);
           select = d3.select("body").append("select").on("change", change);
     options = select.selectAll('option').data(text); 
 var selection = options.enter().append("option").text(function(d) { return d.Hurricane; });
-   
+       
    });
 
        //The section below grabs the hurricanes from 2005-2014 and groups them by hurricane ID. Thus breaking the file into 170 objects instead of 5000 entries.
     d3.csv("data/AtlHurricane2005-2014.csv", function (error, text) {
-      console.log(text);
+      //console.log(text);
+     var i = 0;
       var data = d3.nest()
           .key(function(d) {
-            return d.LAT;
-          }).entries(text);
-        //alert('get here')
-        //alert(JSON.stringify(data.length))
-        
-    for (var i=0 ;i<490; i++){
-     //alert(JSON.stringify(data[i]));   
-     latitute.push(data[i]["key"]);
-      //alert(JSON.stringify(latitute));                         
-      console.log(data);
-      }
-    });
-        
-           d3.csv("data/AtlHurricane2005-2014.csv", function (error, text) {
-      console.log(text);
-      var data = d3.nest()
-          .key(function(d) {
-            return d.LOG;
-          }).entries(text);
-        
-      for (var i=0 ;i<490; i++){
-      langitute.push(data[i]["key"]);
-      //alert(JSON.stringify(langitute));                         
-      console.log(data);
-      }
+            return d.YEAR;
+          })
+      .rollup(function(leaves){
+          alert(JSON.stringify(leaves[0]))
+          for (var j =0 ;j< leaves.length; j++){   
+               langitute[i][j]= (leaves[j].LOG);
+               latitute[i][j] = (leaves[j].LAT);
+               wind[i][j] = (leaves[j].MaxWind);
+                alert(leaves[j].NAME);
+               names[i][j] = (leaves[j].NAME);
+               alert(JSON.stringify(names[i][j]));
+          }
+          i++;
+          return leaves.length;})
+      .entries(text);
+    
+        console.log("speed",wind[0].toString());
+        console.log("lan",wind[0].length);
     });
         
         
