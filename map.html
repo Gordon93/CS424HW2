@@ -126,7 +126,7 @@ var selection = options.enter().append("option").text(function(d) { return d.Hur
      var i = 0;
       var data = d3.nest()
           .key(function(d) {
-<<<<<<< Updated upstream
+//<<<<<<< Updated upstream
             return d.YEAR;
           })
       .rollup(function(leaves){
@@ -145,7 +145,7 @@ var selection = options.enter().append("option").text(function(d) { return d.Hur
     
         console.log("speed",wind[0].toString());
         console.log("lan",wind[0].length);
-=======
+//=======
             return d.LAT;
           }).entries(text);
         //alert('get here')
@@ -171,7 +171,7 @@ var selection = options.enter().append("option").text(function(d) { return d.Hur
       //alert(JSON.stringify(langitute));                         
       console.log(data);
       }
->>>>>>> Stashed changes
+//>>>>>>> Stashed changes
     });
         
         
