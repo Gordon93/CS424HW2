@@ -126,6 +126,7 @@ var selection = options.enter().append("option").text(function(d) { return d.Hur
      var i = 0;
       var data = d3.nest()
           .key(function(d) {
+<<<<<<< Updated upstream
             return d.YEAR;
           })
       .rollup(function(leaves){
@@ -144,6 +145,33 @@ var selection = options.enter().append("option").text(function(d) { return d.Hur
     
         console.log("speed",wind[0].toString());
         console.log("lan",wind[0].length);
+=======
+            return d.LAT;
+          }).entries(text);
+        //alert('get here')
+        //alert(JSON.stringify(data.length))
+        
+    for (var i=0 ;i<490; i++){
+     //alert(JSON.stringify(data[i]));   
+     latitute.push(data[i]["key"]);
+      //alert(JSON.stringify(latitute));                         
+      console.log(data);
+      }
+    });
+        
+    d3.csv("data/AtlHurricane2005-2014.csv", function (error, text) {
+      console.log(text);
+      var data = d3.nest()
+          .key(function(d) {
+            return d.LOG;
+          }).entries(text);
+        
+      for (var i=0 ;i<490; i++){
+      langitute.push(data[i]["key"]);
+      //alert(JSON.stringify(langitute));                         
+      console.log(data);
+      }
+>>>>>>> Stashed changes
     });
         
         
