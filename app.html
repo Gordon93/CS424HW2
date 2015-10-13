@@ -9,6 +9,17 @@
 
 		<!-- Core bootstrap CSS -->
         <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+        <!-- d3 librarry -->
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script> 
+
+        <!-- Ajax -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+        <!-- leaflet -->
+        <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.css" />
+        <script src="http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.js"></script>
+
 		<!-- Custom styles for this template -->
 		<link href="styles.css" rel="stylesheet">
 
@@ -68,5 +79,16 @@
             </fieldset>
 
         </div>-->
+
+        <script type=text/javascript>
+            d3.csv("data/AtlHurricane2005-2014.csv", function (error, text) {
+            console.log(text);
+            var data = d3.nest()
+            .key(function(d) {
+                return d.HURID;
+            }).entries(text);
+            console.log(data);
+            });
+        </script>
 	</body>
 </html>
