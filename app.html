@@ -51,6 +51,9 @@
         <div class="pageContent">
             <!-- PUT ALL PAGE CODE EITHER IN OR BELOW THIS DIV! OTHERWISE IT WILL FALL BELOW THE NAV BAR! -->
             <img src="layout.JPG" alt="Layout" style="width:1500px;height:600px;">
+
+            <div id="chartOne">
+            </div>
         </div>
 
 <!--        Sort By: <br />
@@ -88,6 +91,50 @@
                 return d.HURID;
             }).entries(text);
             console.log(data);
+            var yearArray = [0,0,0,0,0,0,0,0,0,0];
+            for (var i = 0; i < data.length; i++) {
+                //console.log(data[i].values[0].YEAR);
+                switch(data[i].values[0].YEAR - 0) {
+                    case 2005:
+                        yearArray[0]++;
+                        console.log("2005");
+                        break;
+                    case 2006:
+                        yearArray[1]++;
+                        break;
+                    case 2007:
+                        yearArray[2]++;
+                        break;
+                    case 2008:
+                        yearArray[3]++;
+                        break;
+                    case 2009:
+                        yearArray[4]++;
+                        break;
+                    case 2010:
+                        yearArray[5]++;
+                        break;
+                    case 2011:
+                        yearArray[6]++;
+                        break;
+                    case 2012:
+                        yearArray[7]++;
+                        break;
+                    case 2013:
+                        yearArray[8]++;
+                        break;
+                    case 2014:
+                        yearArray[9]++;
+                        break;
+                }
+                /*if(data[i].values[0].YEAR == 2005) {
+                    yearArray[0]++;
+                } //else if
+                */
+                
+                
+            };
+            console.log(yearArray);
             });
         </script>
 	</body>
