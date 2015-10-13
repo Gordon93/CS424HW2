@@ -50,15 +50,15 @@
         
         function change() {
               if (num !=0){
-                  alert("removing");
+                  //alert("removing");
             d3.select(".map").remove();
               }
             
-            alert("start here");
+            //alert("start here");
              var selectedIndex = select.property('selectedIndex'),
             input = options[0][selectedIndex].__data__;
             var chosenYear = parseInt(input.Hurricane);
-            alert(JSON.stringify(selectedIndex));
+            //alert(JSON.stringify(selectedIndex));
             var index = selectedIndex -1;
             
                              var map = L.map('map').setView([41.83,-87.68], 4);
@@ -70,7 +70,7 @@
     accessToken: 'pk.eyJ1IjoieWdvcmRvbjIyIiwiYSI6ImNpZmQ5cW1idzUzeWFzNG03bjVqc3czZWEifQ.dpecRLb3F4lRAOvIVd5KpQ'
 }).addTo(map);
             
-                    alert("get here please");
+                    //alert("get here please");
             
                     var color;
                     alert(JSON.stringify(wind[index].length));
@@ -130,14 +130,14 @@ var selection = options.enter().append("option").text(function(d) { return d.Hur
             return d.YEAR;
           })
       .rollup(function(leaves){
-          alert(JSON.stringify(leaves[0]))
+          //alert(JSON.stringify(leaves[0]))
           for (var j =0 ;j< leaves.length; j++){   
                langitute[i][j]= (leaves[j].LOG);
                latitute[i][j] = (leaves[j].LAT);
                wind[i][j] = (leaves[j].MaxWind);
-                alert(leaves[j].NAME);
+                //alert(leaves[j].NAME);
                names[i][j] = (leaves[j].NAME);
-               alert(JSON.stringify(names[i][j]));
+               //alert(JSON.stringify(names[i][j]));
           }
           i++;
           return leaves.length;})
@@ -147,18 +147,18 @@ var selection = options.enter().append("option").text(function(d) { return d.Hur
         console.log("lan",wind[0].length);
 //=======
             return d.LAT;
-          }).entries(text);
+          })//.entries(text);
         //alert('get here')
         //alert(JSON.stringify(data.length))
         
-    for (var i=0 ;i<490; i++){
+/*    for (var i=0 ;i<490; i++){
      //alert(JSON.stringify(data[i]));   
      latitute.push(data[i]["key"]);
       //alert(JSON.stringify(latitute));                         
       console.log(data);
       }
     });
-        
+       */ 
     d3.csv("data/AtlHurricane2005-2014.csv", function (error, text) {
       console.log(text);
       var data = d3.nest()
