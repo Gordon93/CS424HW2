@@ -37,12 +37,41 @@
   <body>
     <script type="text/javascript">
        var select;
+       var index;
        num =0;
+       var Namedict = [];
+       var mytop5 =[];
+       var mytop10 =[];
         
         var latitute =[[],[],[],[],[],[],[],[],[],[]];
         var langitute =[[],[],[],[],[],[],[],[],[],[]];
         var wind =[[],[],[],[],[],[],[],[],[],[]];
         var names =[[],[],[],[],[],[],[],[],[],[]];
+        
+        //creating a 2d array with constant size of 170
+        //since there are 170 distinct hurricane names
+        // temporary solution.
+        
+        
+        var latitute_id =[[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]];
+        
+        
+        var langitute_id =[[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]];
+        
+        var wind_id = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]];
+        
+        var year_id = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]];
+        
+                    var map = L.map('map').setView([41.83,-87.68], 4);
+            
+            // creating a map
+            
+            L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+    maxZoom: 18,
+    id: 'ygordon22.cifd9ql4c53tbsmlx7cegx4iy',
+    accessToken: 'pk.eyJ1IjoieWdvcmRvbjIyIiwiYSI6ImNpZmQ5cW1idzUzeWFzNG03bjVqc3czZWEifQ.dpecRLb3F4lRAOvIVd5KpQ'
+}).addTo(map);
         
         function change() {
               if (num !=0){
@@ -53,23 +82,122 @@
              var selectedIndex = select.property('selectedIndex'),
             input = options[0][selectedIndex].__data__;
             var chosenYear = parseInt(input.Hurricane);
-            var index = selectedIndex -1;
-            // setting the map to point at Chicago
-            var map = L.map('map').setView([41.83,-87.68], 4);
-            
-            // creating a map
-            
-            L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
-    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-    maxZoom: 18,
-    id: 'ygordon22.cifd9ql4c53tbsmlx7cegx4iy',
-    accessToken: 'pk.eyJ1IjoieWdvcmRvbjIyIiwiYSI6ImNpZmQ5cW1idzUzeWFzNG03bjVqc3czZWEifQ.dpecRLb3F4lRAOvIVd5KpQ'
-}).addTo(map);
-            
+            index = selectedIndex -1;
             
                     var color;
-                    for (var i=0 ;i<wind[index].length;i++){
-            if (wind[index][i] > 20){  // coloring scheme
+                    alert(JSON.stringify(chosenYear));
+            
+                    if (input.Hurricane == 'All'){
+                        alert('compare all');
+                        for(var i=0; i<10;i++){
+                            for (var j=0; j< wind[i].length;j++){
+                               if (wind[i][j] > 40){  // coloring scheme
+                                   color ='red'
+                                 }
+                               else{
+                                  color = 'green'
+                                }
+                
+        // adding a circle for every hurricane generated by user specification.                
+                         var circle = L.circle([latitute[i]                 [j],langitute[i][j]], 500, {
+    color: color,
+    fillColor: '#f03',
+    fillOpacity: 0.5
+}).addTo(map)
+     }   
+                        }
+                    }
+            
+            else if(input.Hurricane == 'TOP5'){
+                alert("get to top 5");
+                top5();
+                for (var k =0; k<5;k++){
+                    for (var j=0; j< wind_id[mytop5[k]].length;j++){
+                   if (wind_id[mytop5[k]][j] > 40){  // coloring scheme
+                      color ='red'
+            }
+                else{
+                    color = 'green'
+                }
+                
+        // adding a circle for every hurricane generated by user specification.                
+     var circle = L.circle([latitute_id[mytop5[k]][j],langitute_id[mytop5[k]][j]], 500, {
+    color: color,
+    fillColor: '#f03',
+    fillOpacity: 0.5
+}).addTo(map)
+       }
+                }
+     }   
+            
+             else if(input.Hurricane == 'TOP10'){
+                alert("get to top 10");
+                top10();
+                for (var k =0; k<10;k++){
+                    for (var j=0; j< wind_id[mytop10[k]].length;j++){
+                   if (wind_id[mytop10[k]][j] > 40){  // coloring scheme
+                      color ='red'
+            }
+                else{
+                    color = 'green'
+                }
+                
+        // adding a circle for every hurricane generated by user specification.                
+     var circle = L.circle([latitute_id[mytop10[k]][j],langitute_id[mytop10[k]][j]], 500, {
+    color: color,
+    fillColor: '#f03',
+    fillOpacity: 0.5
+}).addTo(map)
+       }
+                }
+     }   
+            
+            // a year was selected
+            else{
+         var uniqueNames = [];
+$.each(names[index], function(i, el){
+    if($.inArray(el, uniqueNames) === -1) uniqueNames.push(el);
+});
+                uniqueNames.push("all");
+     }
+          num++;  
+            
+            //console.log("unique_name",uniqueNames.toString());
+            
+            // Creating a legend with all hurricane name
+            
+                    svg = d3.select("body").selectAll("input")
+.data(uniqueNames)
+.enter()
+.append('label')
+    .attr('for',function(d,i){ return 'a'+i; })
+    .text(function(d) { return d; })
+.append("input")
+    .attr("checked", false)
+    .attr("type", "checkbox")
+    .attr("id", function(d,i) { return uniqueNames[i]; })
+    .attr("onClick", "modify(this)");
+            
+        }
+        
+        function modify(that){
+            var val = $(that).attr("id");;
+             alert('in modify');
+             alert(val);
+             for ( var key in Namedict ) {
+                 
+             alert(Namedict[key].value);
+             alert(Namedict[key].key);
+            
+              var mykey = Namedict[key].key;
+                 
+             if ( Namedict[key].value == val){
+                 alert("match");
+                 console.log(wind_id[Namedict[key].key].length);
+                 for( var i =0; i<wind_id[Namedict[key].key].length;i++){
+                     alert(wind_id[Namedict[key].key][i]);
+                     
+               if (wind_id[Namedict[key].key][i] > 40){  // coloring scheme
                 color ='red'
             }
                 else{
@@ -77,36 +205,59 @@
                 }
                 
         // adding a circle for every hurricane generated by user specification.                
-     var circle = L.circle([latitute[index][i],langitute[index][i]], 500, {
+           var circle = L.circle([latitute_id[mykey][i],langitute_id[mykey][i]], 500, {
     color: color,
     fillColor: '#f03',
     fillOpacity: 0.5
 }).addTo(map)
-     }
-          num++;  
+           
+      alert('here');
             
-var uniqueNames = [];
-$.each(names[index], function(i, el){
-    if($.inArray(el, uniqueNames) === -1) uniqueNames.push(el);
-});
-            
-            console.log("unique_name",uniqueNames.toString());
-            
-            // Creating a legend with all hurricane name
-            
-                   d3.select("body").selectAll("input")
-.data(uniqueNames)
-.enter()
-.append('label')
-    .attr('for',function(d,i){ return 'a'+i; })
-    .text(function(d) { return d; })
-.append("input")
-    .attr("checked", true)
-    .attr("type", "checkbox")
-    .attr("id", function(d,i) { return 'a'+i; })
-    .attr("onClick", "modify(this)");
+       }
+                 break;
+             }
+             }
         }
+        
+        function top5(){
+            var maxspeed = [];
             
+            Array.max = function(array){
+               return Math.max.apply(Math, array);
+            };
+            // finding max speed for each hurricane 
+            for(var i =0; i<wind_id.length;i++){
+                   maxspeed.push(Array.max(wind_id[i]));
+            }
+            
+            // finding the strongest 5 hurricanes 
+            
+            for(var k =0; k<5; k++){
+                var i = maxspeed.indexOf(Math.max.apply(Math, maxspeed));
+                mytop5.push(i);
+                maxspeed.splice(i,1);
+            }
+        }
+        
+         function top10(){
+                 var maxspeed = [];
+                Array.max = function(array){
+               return Math.max.apply(Math, array);
+            };
+            // finding max speed for each hurricane 
+            for(var i =0; i<wind_id.length;i++){
+                   maxspeed.push(Array.max(wind_id[i]));
+            }
+            
+            // finding the strongest 5 hurricanes 
+            
+            for(var k =0; k<10; k++){
+                var i = maxspeed.indexOf(Math.max.apply(Math, maxspeed));
+                mytop10.push(i);
+                maxspeed.splice(i,1);
+            }
+            
+        }
         
    d3.csv("data/Hurricanes.csv", function(error, text){
         console.log(text);
@@ -134,8 +285,62 @@ var selection = options.enter().append("option").text(function(d) { return d.Hur
           return leaves.length;})
       .entries(text);
     });
+        
+            d3.csv("data/AtlHurricane2005-2014.csv", function (error, text) {
+     var i = 0;
+      var data = d3.nest()
+          .key(function(d) {
+            return d.HURID;
+          })
+      .rollup(function(leaves){
+          for (var j =0 ;j< leaves.length; j++){
+              // creating arrays for all the hurricane
+              
+               langitute_id[i][j]= (leaves[j].LOG);
+               latitute_id[i][j] = (leaves[j].LAT);
+               wind_id[i][j] = (leaves[j].MaxWind);
+               year_id[i][j] = (leaves[j].YEAR);
+          }
+          // Getting all the hurricane names
+          
+          
+          // Should be opposite, but it's not working
+          // very weird it always make thenumber the key ??
+          
+          Namedict.push({
+              key: i.toString(),
+              value: leaves[0].NAME
+          });
+          
+          i++;
+          return leaves.length;})
+      .entries(text);
+                
+                //debugging code
+                
+       /* console.log(langitute_id.toString());
+        console.log(latitute_id.toString());
+        console.log(wind_id.toString());
+        console.log(year_id.toString());
+        console.log('value of i',i);
+        */
+                
+      for ( var key in Namedict ) {
+          console.log(key);
+          console.log(Namedict[key].value);
+          console.log(Namedict[key].key);
+        }
+                
+    });
+        
      //This is a throw away comment.   
         
     </script>
   </body>
   </html>
+
+
+
+
+
+ 
