@@ -85,57 +85,58 @@
 
         <script type=text/javascript>
             d3.csv("data/AtlHurricane2005-2014.csv", function (error, text) {
-            console.log(text);
-            var data = d3.nest()
-            .key(function(d) {
-                return d.HURID;
-            }).entries(text);
-            console.log(data);
-            var yearArray = [0,0,0,0,0,0,0,0,0,0];
-            for (var i = 0; i < data.length; i++) {
-                //console.log(data[i].values[0].YEAR);
-                switch(data[i].values[0].YEAR - 0) {
-                    case 2005:
-                        yearArray[0]++;
-                        console.log("2005");
-                        break;
-                    case 2006:
-                        yearArray[1]++;
-                        break;
-                    case 2007:
-                        yearArray[2]++;
-                        break;
-                    case 2008:
-                        yearArray[3]++;
-                        break;
-                    case 2009:
-                        yearArray[4]++;
-                        break;
-                    case 2010:
-                        yearArray[5]++;
-                        break;
-                    case 2011:
-                        yearArray[6]++;
-                        break;
-                    case 2012:
-                        yearArray[7]++;
-                        break;
-                    case 2013:
-                        yearArray[8]++;
-                        break;
-                    case 2014:
-                        yearArray[9]++;
-                        break;
-                }
-                /*if(data[i].values[0].YEAR == 2005) {
-                    yearArray[0]++;
-                } //else if
-                */
+                //Create a year array to hold the count of hurricanes per year.
+                var yearArray = [0,0,0,0,0,0,0,0,0,0];
+
+                //Group the data by hurricane id
+                var data = d3.nest()
+                .key(function(d) {
+                    return d.HURID;
+                }).entries(text);
+
+                //Loop through the data to get the count of hurricanes per year.
+                for (var i = 0; i < data.length; i++) {
+                    //The "-0" is to force the conversion from string to integer for use in the switch case.
+                    switch(data[i].values[0].YEAR - 0) {
+                        case 2005:
+                            yearArray[0]++;
+                            console.log("2005");
+                            break;
+                        case 2006:
+                            yearArray[1]++;
+                            break;
+                        case 2007:
+                            yearArray[2]++;
+                            break;
+                        case 2008:
+                            yearArray[3]++;
+                            break;
+                        case 2009:
+                            yearArray[4]++;
+                            break;
+                        case 2010:
+                            yearArray[5]++;
+                            break;
+                        case 2011:
+                            yearArray[6]++;
+                            break;
+                        case 2012:
+                            yearArray[7]++;
+                            break;
+                        case 2013:
+                            yearArray[8]++;
+                            break;
+                        case 2014:
+                            yearArray[9]++;
+                            break;
+                    }
+
                 
                 
-            };
-            console.log(yearArray);
-            });
+                } //Ends the for loop.
+                //Print out the content of the yearArray to the console for checking.
+                console.log(yearArray);
+            }); //End the d3.csv call.
         </script>
 	</body>
 </html>
