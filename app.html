@@ -20,6 +20,10 @@
         <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.css" />
         <script src="http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.js"></script>
 
+        <!-- line chart source -->
+        <script src="data.js"></script>
+        <script src="lineChart.js"></script>
+
 		<!-- Custom styles for this template -->
 		<link href="styles.css" rel="stylesheet">
 
@@ -52,11 +56,23 @@
             <!-- PUT ALL PAGE CODE EITHER IN OR BELOW THIS DIV! OTHERWISE IT WILL FALL BELOW THE NAV BAR! -->
             <img src="layout.JPG" alt="Layout" style="width:1500px;height:600px;">
 
-            <div id="chartOne">
-            </div>
-        </div>
+            <!--line chart-->
+            <!--<script src="data.js"></script>
+            <script src="lineChart.js"></script>-->
+            <div id="chart"></div>
+            <!-- /line chart -->
 
-<!--        Sort By: <br />
+            <div id="chartOne"></div>
+        
+        <br />
+        <br />
+        <br />
+            <div id = top style = "width: 100vh; height: 90vh;" >
+            <div id = "map" style = "height: 50%;"></div>
+            <div id = "legend" style = "height: 50% ; "></div>
+             </div>
+            <!-- Options -->
+        Sort By: <br />
         <select id="sortby">
             <option value ="date">Date</option>
             <option value ="alpha">Alpha</option>
@@ -81,8 +97,426 @@
             <input type="number" id="min_pressure" style ="width:50px" /> < Pressure < <input type="number" id="max_pressure" style ="width:50px" /> <br />
             </fieldset>
 
-        </div>-->
+            <!-- /Options -->
+            <script type="text/javascript">
+                var select;
+                var order;
+                var orderHurr = 0; // can be 0,1,2 depending on user selection.
+                var index;
+                num = 0;
 
+                var Namedict = [];
+                var Timedict = [];
+                var Speeddict = [];
+
+                var mytop5 = [];
+                var mytop10 = [];
+
+                var latitute = [[], [], [], [], [], [], [], [], [], []];
+                var langitute = [[], [], [], [], [], [], [], [], [], []];
+                var wind = [[], [], [], [], [], [], [], [], [], []];
+                var names = [[], [], [], [], [], [], [], [], [], []];
+
+                //creating a 2d array with constant size of 170
+                //since there are 170 distinct hurricane names
+                // temporary solution !!!!.
+
+
+                var latitute_id = [[], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []];
+
+
+                var langitute_id = [[], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []];
+
+                var wind_id = [[], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []];
+
+                var year_id = [[], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []];
+
+                var map = L.map('map').setView([41.83, -87.68], 4);
+
+                // creating a map
+
+                L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+                    attribution: 'Map data &copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://mapbox.com">Mapbox</a>',
+                    maxZoom: 18,
+                    id: 'ygordon22.cifd9ql4c53tbsmlx7cegx4iy',
+                    accessToken: 'pk.eyJ1IjoieWdvcmRvbjIyIiwiYSI6ImNpZmQ5cW1idzUzeWFzNG03bjVqc3czZWEifQ.dpecRLb3F4lRAOvIVd5KpQ'
+                }).addTo(map);
+
+
+
+                function change() {
+                    if (num != 0) {
+                        //alert("removing");
+                        d3.select(".map").remove();
+                    }
+
+                    var selectedIndex = select.property('selectedIndex'),
+                   input = options[0][selectedIndex].__data__;
+                    var chosenYear = parseInt(input.Hurricane);
+                    index = selectedIndex - 1;
+
+                    var color;
+                    alert(JSON.stringify(chosenYear));
+
+                    if (input.Hurricane == 'All') {
+                        alert('compare all');
+                        for (var i = 0; i < 10; i++) {
+                            for (var j = 0; j < wind[i].length; j++) {
+                                if (wind[i][j] > 40) {  // coloring scheme
+                                    color = 'red'
+                                }
+                                else {
+                                    color = 'green'
+                                }
+
+                                // adding a circle for every hurricane generated by user specification.                
+                                var circle = L.circle([latitute[i][j], langitute[i][j]], 500, {
+                                    color: color,
+                                    fillColor: '#f03',
+                                    fillOpacity: 0.5
+                                }).addTo(map)
+                            }
+                        }
+                    }
+
+                    else if (input.Hurricane == 'TOP5') {
+                        alert("get to top 5");
+                        top5();
+                        for (var k = 0; k < 5; k++) {
+                            for (var j = 0; j < wind_id[mytop5[k]].length; j++) {
+                                if (wind_id[mytop5[k]][j] > 40) {  // coloring scheme
+                                    color = 'red'
+                                }
+                                else {
+                                    color = 'green'
+                                }
+
+                                // adding a circle for every hurricane generated by user specification.                
+                                var circle = L.circle([latitute_id[mytop5[k]][j], langitute_id[mytop5[k]][j]], 500, {
+                                    color: color,
+                                    fillColor: '#f03',
+                                    fillOpacity: 0.5
+                                }).addTo(map)
+                            }
+                        }
+                    }
+
+                    else if (input.Hurricane == 'TOP10') {
+                        alert("get to top 10");
+                        top10();
+                        for (var k = 0; k < 10; k++) {
+                            for (var j = 0; j < wind_id[mytop10[k]].length; j++) {
+                                if (wind_id[mytop10[k]][j] > 40) {  // coloring scheme
+                                    color = 'red'
+                                }
+                                else {
+                                    color = 'green'
+                                }
+
+                                // adding a circle for every hurricane generated by user specification.                
+                                var circle = L.circle([latitute_id[mytop10[k]][j], langitute_id[mytop10[k]][j]], 500, {
+                                    color: color,
+                                    fillColor: '#f03',
+                                    fillOpacity: 0.5
+                                }).addTo(map)
+                            }
+                        }
+                    }
+
+                        // a year was selected
+                    else {
+                        var uniqueNames = [];
+                        var mynames = [];
+                        if (orderHurr == 0) {
+
+                        }
+                        else if (orderHurr == 1) {
+
+                        }
+
+                        else if (orderHurr == 2) {
+
+                        }
+
+                        $.each(names[index], function (i, el) {
+                            if ($.inArray(el, uniqueNames) === -1) uniqueNames.push(el);
+                        });
+                        uniqueNames.push("all");
+                    }
+                    num++;
+
+                    //console.log("unique_name",uniqueNames.toString());
+
+                    // Creating a legend with all hurricane name
+
+                    svg = d3.select("body").selectAll("input")
+.data(uniqueNames)
+.enter()
+.append('label')
+    .attr('for', function (d, i) { return 'a' + i; })
+    .text(function (d) { return d; })
+.append("input")
+    .attr("checked", false)
+    .attr("type", "checkbox")
+    .attr("id", function (d, i) { return uniqueNames[i]; })
+    .attr("onClick", "modify(this)");
+
+                }
+
+                function changeOrder() {
+                    var selectedIndex = order.property('selectedIndex'),
+                    input = options2[0][selectedIndex].__data__;
+                    var myorder = input.order;
+                    alert(myorder);
+
+                    if (myorder == 'chronologically') {
+                        console.log(JSON.stringify(Timedict));
+                        orderHurr = 1;
+                    }
+
+                    else if (myorder = 'MaxWindSpeed') {
+                        console.log(JSON.stringify(Speeddict));
+                        orderHurr = 2;
+                    }
+                    else {
+                        orderHurr = 0;
+                    }
+                }
+
+                function modify(that) {
+                    var val = $(that).attr("id");;
+                    alert('in modify');
+                    alert(val);
+                    for (var key in Namedict) {
+
+                        alert(Namedict[key].value);
+                        alert(Namedict[key].key);
+
+                        var mykey = Namedict[key].key;
+
+                        if (Namedict[key].value == val) {
+                            alert("match");
+                            console.log(wind_id[Namedict[key].key].length);
+                            for (var i = 0; i < wind_id[Namedict[key].key].length; i++) {
+                                alert(wind_id[Namedict[key].key][i]);
+
+                                if (wind_id[Namedict[key].key][i] > 40) {  // coloring scheme
+                                    color = 'red'
+                                }
+                                else {
+                                    color = 'green'
+                                }
+
+                                // adding a circle for every hurricane generated by user specification.                
+                                var circle = L.circle([latitute_id[mykey][i], langitute_id[mykey][i]], 500, {
+                                    color: color,
+                                    fillColor: '#f03',
+                                    fillOpacity: 0.5
+                                }).addTo(map)
+
+                                alert('here');
+
+                            }
+                            break;
+                        }
+                    }
+                }
+
+                function top5() {
+                    var maxspeed = [];
+
+                    Array.max = function (array) {
+                        return Math.max.apply(Math, array);
+                    };
+                    // finding max speed for each hurricane 
+                    for (var i = 0; i < wind_id.length; i++) {
+                        maxspeed.push(Array.max(wind_id[i]));
+                    }
+
+                    // finding the strongest 5 hurricanes 
+
+                    for (var k = 0; k < 5; k++) {
+                        var i = maxspeed.indexOf(Math.max.apply(Math, maxspeed));
+                        mytop5.push(i);
+                        maxspeed.splice(i, 1);
+                    }
+                }
+
+                function top10() {
+                    var maxspeed = [];
+                    Array.max = function (array) {
+                        return Math.max.apply(Math, array);
+                    };
+                    // finding max speed for each hurricane 
+                    for (var i = 0; i < wind_id.length; i++) {
+                        maxspeed.push(Array.max(wind_id[i]));
+                    }
+
+                    // finding the strongest 5 hurricanes 
+
+                    for (var k = 0; k < 10; k++) {
+                        var i = maxspeed.indexOf(Math.max.apply(Math, maxspeed));
+                        mytop10.push(i);
+                        maxspeed.splice(i, 1);
+                    }
+
+                }
+
+                d3.csv("data/Hurricanes.csv", function (error, text) {
+                    console.log(text);
+                    select = d3.select("body").append("select").on("change", change);
+                    options = select.selectAll('option').data(text);
+                    var selection = options.enter().append("option").text(function (d) { return d.Hurricane; });
+                });
+
+                d3.csv("data/order.csv", function (error, text) {
+                    order = d3.select("body").append("select").on("change", changeOrder);
+                    options2 = order.selectAll('option').data(text);
+                    var selection2 = options2.enter().append("option").text(function (d) { return d.order; });
+
+                });
+
+                //The section below grabs the hurricanes from 2005-2014 and groups them by hurricane YEAR. Thus breaking the file into 10 objects instead of 5000 entries.
+                d3.csv("data/AtlHurricane2005-2014.csv", function (error, text) {
+                    var i = 0;
+                    var data = d3.nest()
+                        .key(function (d) {
+                            return d.YEAR;
+                        })
+                    .rollup(function (leaves) {
+                        for (var j = 0 ; j < leaves.length; j++) {
+                            langitute[i][j] = (leaves[j].LOG);
+                            latitute[i][j] = (leaves[j].LAT);
+                            wind[i][j] = (leaves[j].MaxWind);
+                            names[i][j] = (leaves[j].NAME);
+                        }
+                        i++;
+                        return leaves.length;
+                    })
+                    .entries(text);
+                });
+
+                d3.csv("data/AtlHurricane2005-2014.csv", function (error, text) {
+                    var i = 0;
+                    var data = d3.nest()
+                        .key(function (d) {
+                            return d.HURID;
+                        })
+                    .rollup(function (leaves) {
+                        alert(JSON.stringify(leaves[0]));
+                        for (var j = 0 ; j < leaves.length; j++) {
+                            // creating arrays for all the hurricane
+
+                            langitute_id[i][j] = (leaves[j].LOG);
+                            latitute_id[i][j] = (leaves[j].LAT);
+                            wind_id[i][j] = (leaves[j].MaxWind);
+                            year_id[i][j] = (leaves[j].YEAR);
+                        }
+
+                        // Should be opposite, but it's not working
+                        // very weird it always make the number the key ??
+                        // works anyways 
+
+                        Namedict.push({
+                            key: i.toString(),
+                            value: leaves[0].NAME
+                        });
+
+                        Timedict.push({
+                            key: i.toString(),
+                            value: leaves[0].MONTH
+                        });
+
+                        Speeddict.push({
+                            key: i.toString(),
+                            value: leaves[0].MaxWind
+                        });
+
+
+                        i++;
+                        return leaves.length;
+                    })
+                        .entries(text);
+
+                    //debugging code
+
+                    /* console.log(langitute_id.toString());
+                     console.log(latitute_id.toString());
+                     console.log(wind_id.toString());
+                     console.log(year_id.toString());
+                     console.log('value of i',i);
+                     
+     
+                   for ( var key in Namedict ) {
+                       console.log(key);
+                       console.log(Namedict[key].value);
+                       console.log(Namedict[key].key);
+                     }  
+     
+                      for ( var key in Speeddict ) {
+                       console.log(key);
+                       console.log(Speeddict[key].value);
+                       console.log(Speeddict[key].key);
+                      }
+     
+                      for ( var key in Timedict ) {
+                       console.log(key);
+                       console.log(Timedict[key].value);
+                       console.log(Timedict[key].key);
+                      }
+                      */
+
+
+                    Timedict = sortOnValue(Timedict);
+                    Speeddict = sortOnValue(Speeddict);
+                    /* 
+                    console.log('after sorting');
+                    
+                     for ( var key in Timedict ) {
+                        console.log(key);
+                        console.log(Timedict[key].value);
+                        console.log(Timedict[key].key);
+                       }
+                       
+                    
+                    console.log('printing the speeds');
+                    
+                    
+                       for ( var key in Speeddict ) {
+                        console.log(Speeddict[key].value);
+                        console.log(Speeddict[key].key);
+                       }
+                       */
+
+                });
+
+                function sortOnValue(dict) {
+                    var sortable = [];
+                    var temp = []
+                    for (var key in dict) {
+                        sortable.push([key, dict[key].value])
+                    }
+                    sortable.sort(function (a, b) { return a[1] - b[1] })
+                    // console.log(JSON.stringify(sortable));
+
+                    for (var key in sortable) {
+                        temp.push({
+                            key: sortable[key][0],
+                            value: sortable[key][1]
+                        });
+                    }
+                    // console.log(JSON.stringify(temp))
+
+                    return temp;
+                }
+
+            </script>
+
+
+
+
+        </div>
+        </div>
         <script type=text/javascript>
             d3.csv("data/AtlHurricane2005-2014.csv", function (error, text) {
                 //Create a year array to hold the count of hurricanes per year.
