@@ -37,5 +37,33 @@ h3 {
 	padding-top: 50px;
 }
 
+.map div { 
 
+    height: 800px; 
+    width: 500px;
+    font: 10px sans-serif;
+    background-color: blue;
+    text-align: right;
+    padding: 3px;
+    margin: 1px;
+    color: white;
 
+}
+
+.axis text{
+    font: 10px sans-serif;
+
+}
+
+   /* path{
+        stroke:steelblue;
+        stroke-width: 2;
+        fill: none;
+    }*/
+
+.axis line, .axis path{
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+
+}
