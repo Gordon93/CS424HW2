@@ -27,12 +27,12 @@ function maxWindChart() {
     //places the x axis at the bottom of the graph
     xAxis = d3.svg.axis()
         .scale(x)
-        .orient("bottom").ticks(20);
+        .orient("bottom").ticks(5);
 
     //places the y axis at the left of the graph
     yAxis = d3.svg.axis()
         .scale(y)
-        .orient("left").ticks(20);
+        .orient("left").ticks(5);
 
     var line = d3.svg.line()
         .x(function (d) {
@@ -52,9 +52,11 @@ function maxWindChart() {
         "translate(" + margin.left + "," + margin.top + ")");
 
 
-    color1 = d3.scale.linear()
+    /*color1 = d3.scale.linear()
         .domain([0, 10])
-        .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+        .range(["#a6cee3", "#1f78b4", "#b2df8a", "#33a02c", "#fb9a99", "#fb9a99", "#e31a1c","#fdbf6f","ff7f00","#cab2d6",
+            "#6a3d9a"]);*/
+    color1 = d3.scale.category20();
 
     /*    color.domain(d3.keys(stateData_Array[0]).filter(function(key) { return key !== "STATE" && key !=="POP" }));
 
@@ -77,37 +79,35 @@ function maxWindChart() {
     });
 
     //this create key for the data and groups the keys by HURID
-    /*var dataSet = d3.nest()
+    var dataSet = d3.nest()
      .key(function(d) {
      return d.HURID;
      })
-     .entries(HurrData)*/
-
+     .entries(HurrData.values)
+    console.log(dataSet);
 
     //creates the x and y domain for the graphs
 
 
-        x.domain(d3.extent(HurrData.values, function (d) {
-            console.log(d);
-            return d.DATE;
-            }));
+        x.domain(d3.extent(HurrData.values, function (d) {return d.DATE;}));
 
         y.domain([d3.min(HurrData.values,function(d){return d.MaxWind;}), d3.max(HurrData.values,function(d){
         return d.MaxWind;})]);
 
 
     //goes through each HURID and create line graph
-  /*  HurrData.forEach(function(d,i)
+   dataSet.forEach(function(d)
     {
+        console.log(d);
         graph1.append('path')
-            //.attr("class","line")
+            .attr("class","line")
+            /*.attr('stroke',function(d, j){return "hsl("+Math.random() *360 + ",100%,50%)";
+            })*/
+            .attr('stroke',function(){return d.color = color1(d.key);})
+            //.attr('stroke-width',2)
             .attr('d',line(d.values))
-            .attr('stroke',function(d, j){
-                return "hsl("+Math.random() *360 + ",100%,50%)";
-            })
-            .attr('stroke-width',2)
             .attr('fill','none');
-    });*/
+    });
 
 
     /*graph1.append("path")
