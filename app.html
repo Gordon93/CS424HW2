@@ -24,8 +24,21 @@
         <script src="data.js"></script>
         <script src="lineChart.js"></script>
 
+        <!-- jQuery -->
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+        <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+        <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+
+        <script>
+            $(function() {
+                $( "#datepicker" ).datepicker();
+            });
+        </script>
+
 		<!-- Custom styles for this template -->
 		<link href="styles.css" rel="stylesheet">
+
+
 
 	</head>
 	
@@ -54,50 +67,68 @@
         </nav>
         <div class="pageContent">
             <!-- PUT ALL PAGE CODE EITHER IN OR BELOW THIS DIV! OTHERWISE IT WILL FALL BELOW THE NAV BAR! -->
-            <img src="layout.JPG" alt="Layout" style="width:1500px;height:600px;">
+            <!--<img src="layout.JPG" alt="Layout" style="width:1500px;height:600px;">-->
+
+
+            <div id="chartOne"></div>
 
             <!--line chart-->
-            <!--<script src="data.js"></script>
-            <script src="lineChart.js"></script>-->
             <div id="chart"></div>
             <!-- /line chart -->
 
-            <div id="chartOne"></div>
-        
-        <br />
-        <br />
-        <br />
+            <!-- Listbox of hurricanes to populate with hurricane names -->
+            <select multiple id="hurricanelist" style="height:800px; width: 100px;">
+                <option value="Katrina">Katrina</option>
+            </select>
             <div id = top style = "width: 100vh; height: 90vh;" >
-            <div id = "map" style = "height: 50%;"></div>
-            <div id = "legend" style = "height: 50% ; "></div>
-             </div>
-            <!-- Options -->
-        Sort By: <br />
-        <select id="sortby">
-            <option value ="date">Date</option>
-            <option value ="alpha">Alpha</option>
-            <option value ="wind">Wind Speed</option>
-        </select>
-        <br />
+            <div id = "map" style = "height: 100%;"></div>
 
-        Display: <br />          
-        <select>
-            <option value ="all">All</option>
-            <option value ="five">Top 5</option>
-            <option value ="ten">Top 10</option>
-            <option value ="year">Selected Year</option>
-        </select>
-        <br />
-        <br />
-        <div>
-            <fieldset>
+            <!--<div id = "map" style = "height: 50%;"></div>-->
+            <div id = "legend" style = "height: 50% ; "></div>
+
+
+             </div>
+        <!-- Options -->
+
+
+            <fieldset style="width:300px">
+                <legend>Options</legend>
+                Sort By:
+                <select id="sortby">
+                    <option value ="date">Date</option>
+                    <option value ="alpha">Alpha</option>
+                    <option value ="wind">Wind Speed</option>
+                </select>
+                <br />
+
+                Display:
+                <select>
+                    <option value ="showall">All</option>
+                    <option value ="showfive">Top 5</option>
+                    <option value ="showten">Top 10</option>
+                    <option value ="showyear">Selected Year</option>
+                </select>
+                <br />
+                Year:<input type="number" id="year" onchange="yearchanged()" /><br />
+                Date: <input type="text" id="datepicker"> <br />
+                Show Heatmap: <input type="checkbox" id="heat" /> <br />
+            </fieldset>
+
+        <!--<div>-->
+            <fieldset style="width:300px">
             <legend>Filters</legend>
             Made Land: <input type="checkbox" id="land" /> <br /> 
             <input type="number" id="min_speed" style ="width:50px" /> < Wind Speed < <input type="number" id="max_speed" style ="width:50px"/> <br />
             <input type="number" id="min_pressure" style ="width:50px" /> < Pressure < <input type="number" id="max_pressure" style ="width:50px" /> <br />
             </fieldset>
+            <br />
 
-            <!-- /Options -->
+            <br />
+
+
+    <!-- /Options -->
+            <div>
+
             <script type="text/javascript">
                 var select;
                 var order;
@@ -403,7 +434,7 @@
                             return d.HURID;
                         })
                     .rollup(function (leaves) {
-                        alert(JSON.stringify(leaves[0]));
+                        //alert(JSON.stringify(leaves[0]));
                         for (var j = 0 ; j < leaves.length; j++) {
                             // creating arrays for all the hurricane
 
