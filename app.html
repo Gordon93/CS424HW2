@@ -195,14 +195,6 @@
 
                 var map = L.map('map').setView([41.83, -87.68], 4);
 
-                var playbackOptions = {
-                    playControl: true,
-                    dateControl: true,
-                    sliderControl: true
-                };
-
-                var playback = new L.Playback(map, null, null, playbackOptions);
-
                 // creating a map
 
                 L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
@@ -212,8 +204,6 @@
                     id: 'ygordon22.cifd9ql4c53tbsmlx7cegx4iy',
                     accessToken: 'pk.eyJ1IjoieWdvcmRvbjIyIiwiYSI6ImNpZmQ5cW1idzUzeWFzNG03bjVqc3czZWEifQ.dpecRLb3F4lRAOvIVd5KpQ'
                 }).addTo(map);
-
-
 
                 function change() {
                     if (num != 0) {
@@ -627,14 +617,17 @@
                         for (var i = 0; i < hurricaneOne.values.length; i++) {
                             var strDate;
                             lnglat.push([hurricaneOne.values[i].LOG, hurricaneOne.values[i].LAT]);
+                            var hour = hurricaneOne.values[i].HOURS[0] + "" + hurricaneOne.values[i].HOURS[1];
                             strDate = hurricaneOne.values[i].YEAR + " " + 
                                         hurricaneOne.values[i].MONTH + " " + 
                                         hurricaneOne.values[i].DAY + " " +
                                         hurricaneOne.values[i].HOURS[0] + hurricaneOne.values[i].HOURS[1] + 
                                         ":00:00";
+                            var tempDate = Date.UTC(hurricaneOne.values[i].YEAR, hurricaneOne.values[i].MONTH, hurricaneOne.values[i].DAY, hour);//hurricaneOne.values[i].HOURS);
+                            console.log(tempDate);
                             //console.log(strDate);
                             //console.log(toTimestamp(strDate));
-                            time.push(toTimestamp(strDate));
+                            time.push(tempDate);
                             //Year Month Day time
 /*  
                             var circle = L.circle([hurricaneOne.values[i].LAT, hurricaneOne.values[i].LOG], 500, { 
@@ -668,7 +661,16 @@
 
                         console.log(geoJson);
 
-                        playback.setData(geoJson);
+                        var playbackOptions = {
+                            playControl: true,
+                            dateControl: true,
+                            sliderControl: true,
+                            speed: 2000
+                        };
+
+                        var playback = new L.Playback(map, geoJson, null, playbackOptions);
+
+                        //playback.setData(geoJson);
 
                         //var playback = new L.Playback(map, geoJson, null, playbackOptions);
                     }); //End the d3.csv call.
