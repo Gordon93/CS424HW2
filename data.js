@@ -36,11 +36,11 @@ d3.csv('data/AtlHurricane2005-2014.csv',function(error,data){
             console.log(dataSet);
 
     //load data to global variable usaData
-    HurrData = dataSet[0];
-    console.log(HurrData);
+    HurrData = dataSet;
+    //console.log(HurrData);
 
 
-    maxWindChart();
-    minPressChart();
+    createChart1();
+    createChart2();
 
 });

@@ -77,6 +77,8 @@
 
             <!--line chart-->
             <div id="chart"></div>
+
+            <div id="chart1"></div>
             <!-- /line chart -->
 
             <!-- Listbox of hurricanes to populate with hurricane names -->
@@ -188,6 +190,11 @@
                     input = options[0][selectedIndex].__data__;
                     var chosenYear = parseInt(input.Hurricane);
                     index = selectedIndex - 1;
+
+                    //method to create linechart
+                    updateChart1(HurrData[index]);
+                    updateChart2(HurrData[index]);
+
 
                     var color;
                     alert(JSON.stringify(chosenYear));
