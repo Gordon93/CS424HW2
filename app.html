@@ -29,6 +29,9 @@
         <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
         <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 
+        <!-- Leaflet playback -->
+        <script src="LeafletPlayback.js"></script>
+
         <script>
             $(function() {
                 $( "#datepicker" ).datepicker();
@@ -121,6 +124,8 @@
             <input type="number" id="min_speed" style ="width:50px" /> < Wind Speed < <input type="number" id="max_speed" style ="width:50px"/> <br />
             <input type="number" id="min_pressure" style ="width:50px" /> < Pressure < <input type="number" id="max_pressure" style ="width:50px" /> <br />
             </fieldset>
+            <!-- This is a temporary placement for a button, just for testing the play functionality -->
+            <button id="play" value = "paused" onclick="playHit()">Play/Pause</button>
             <br />
 
             <br />
@@ -303,7 +308,7 @@
                     else {
                         orderHurr = 0;
                     }
-                }
+                };
 
                 function modify(that) {
                     var val = $(that);//.attr("id");
@@ -313,7 +318,7 @@
                         
                         //This is where we will need to run the remove code for a single hurricane.
 
-                        return;
+
                     } else {
                         val.context.attributes.val.value = "true"
                         for (var key in Namedict) {
@@ -349,7 +354,7 @@
                                 }
                                 break;
                             }
-                        }
+                        } // End of for loop.
                     }
                 }; //End of modify function.
 
@@ -371,7 +376,7 @@
                         mytop5.push(i);
                         maxspeed.splice(i, 1);
                     }
-                }
+                }; //End of the top 5 function.
 
                 function top10() {
                     var maxspeed = [];
@@ -390,7 +395,7 @@
                         mytop10.push(i);
                         maxspeed.splice(i, 1);
                     }
-                }
+                }; //End of the top 10 function.
 
                 d3.csv("data/Hurricanes.csv", function (error, text) {
                     console.log(text);
@@ -538,8 +543,51 @@
                     }
 
                     return temp;
-                }
+                }; //End of the sortOnValue function.
 
+                function playHit() {
+                    console.log("just pushed play");
+                    d3.csv("data/AtlHurricane2005-2014.csv", function (error, text) {
+                        //Create a year array to hold the count of hurricanes per year.
+                        var yearArray = [0,0,0,0,0,0,0,0,0,0];
+
+                        //Group the data by hurricane id
+                        var data = d3.nest()
+                        .key(function(d) {
+                            return d.HURID;
+                        }).entries(text);
+
+                        var hurricaneOne = data[0];
+                        console.log(hurricaneOne);
+
+                        for (var i = 0; i < hurricaneOne.values.length; i++) {
+
+                            var circle = L.circle([hurricaneOne.values[i].LAT, hurricaneOne.values[i].LOG], 500, { 
+                                color: "red",
+                                fillColor: "#f03",
+                                fillOpacity: 0.5
+                            }).addTo(map);
+
+                            //sleep(1000);
+/*
+                            var circle = L.circle([latitute_id[mykey][i], langitute_id[mykey][i]], 500, {
+                                        color: color,
+                                        fillColor: '#f03',
+                                        fillOpacity: 0.5
+                                    }).addTo(map)
+*/
+                        };
+                    }); //End the d3.csv call.
+                }; //End of the Play function.
+
+                function sleep(milliseconds) {
+                    var start = new Date().getTime();
+                    for (var i = 0; i < 1e7; i++) {
+                        if ((new Date().getTime() - start) > milliseconds) {
+                            break;
+                        }
+                    }
+                }; //End of the sleep function.
             </script>
 
 
