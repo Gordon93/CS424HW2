@@ -21,7 +21,7 @@ function maxWindChart() {
 
 
     //creates the x and y scales for the graph
-    x = d3.time.scale().range([0,width]);
+    x = d3.time.scale().range([0, width]);
     y = d3.scale.linear().range([height, 0]);
 
     //places the x axis at the bottom of the graph
@@ -35,8 +35,12 @@ function maxWindChart() {
         .orient("left").ticks(20);
 
     var line = d3.svg.line()
-        .x(function(d){return x(d.DATE);})
-        .y(function(d){return y(d.MaxWind);})
+        .x(function (d) {
+            return x(d.DATE);
+        })
+        .y(function (d) {
+            return y(d.MaxWind);
+        })
         .interpolate("basis");
 
     //creates a SVG witht apporiate width and height
@@ -49,7 +53,7 @@ function maxWindChart() {
 
 
     color1 = d3.scale.linear()
-        .domain([0,10])
+        .domain([0, 10])
         .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
 
     /*    color.domain(d3.keys(stateData_Array[0]).filter(function(key) { return key !== "STATE" && key !=="POP" }));
@@ -63,28 +67,37 @@ function maxWindChart() {
      //console.log(d);
      });*/
 
-    HurrData.forEach(function(d){
-        date = format(new Date( d.YEAR, (d.MONTH-1), d.DAY));
-        console.log(date);
-        d.DATE = format.parse(date);
-    })
+
+    HurrData.values.forEach(function (d) {
+       // d.values.forEach(function (d) {
+            date = format(new Date(d.YEAR, (d.MONTH - 1), d.DAY));
+            d.DATE = format.parse(date);
+        //});
+
+    });
 
     //this create key for the data and groups the keys by HURID
     /*var dataSet = d3.nest()
-        .key(function(d) {
-        return d.HURID;
-    })
-        .entries(HurrData)*/
+     .key(function(d) {
+     return d.HURID;
+     })
+     .entries(HurrData)*/
 
-
-    console.log(dataSet);
 
     //creates the x and y domain for the graphs
-    x.domain(d3.extent(HurrData,function(d){return d.DATE}));
-    y.domain([d3.min(HurrData,function(d){return d.MaxWind;}), d3.max(HurrData,function(d){return d.MaxWind;})]);
+
+
+        x.domain(d3.extent(HurrData.values, function (d) {
+            console.log(d);
+            return d.DATE;
+            }));
+
+        y.domain([d3.min(HurrData.values,function(d){return d.MaxWind;}), d3.max(HurrData.values,function(d){
+        return d.MaxWind;})]);
+
 
     //goes through each HURID and create line graph
-    dataSet.forEach(function(d,i)
+  /*  HurrData.forEach(function(d,i)
     {
         graph1.append('path')
             //.attr("class","line")
@@ -94,7 +107,7 @@ function maxWindChart() {
             })
             .attr('stroke-width',2)
             .attr('fill','none');
-    });
+    });*/
 
 
     /*graph1.append("path")
