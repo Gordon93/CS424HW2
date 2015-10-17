@@ -15,6 +15,7 @@ d3.csv('data/AtlHurricane2005-2014.csv',function(error,data){
         console.log(data);
     }
 
+
     data.forEach(function(d) {
         d.YEAR = parseInt(d.YEAR);
         d.MONTH = parseInt(d.MONTH);
@@ -35,11 +36,11 @@ d3.csv('data/AtlHurricane2005-2014.csv',function(error,data){
             console.log(dataSet);
 
     //load data to global variable usaData
-    HurrData = dataSet[3];
+    HurrData = dataSet[0];
     console.log(HurrData);
 
 
     maxWindChart();
-    //minPressChart();
+    minPressChart();
 
 });
