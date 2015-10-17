@@ -169,6 +169,14 @@
 
                 var map = L.map('map').setView([41.83, -87.68], 4);
 
+                var playbackOptions = {
+                    playControl: true,
+                    dateControl: true,
+                    sliderControl: true
+                };
+
+                var playback = new L.Playback(map, null, null, playbackOptions);
+
                 // creating a map
 
                 L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
@@ -559,15 +567,29 @@
 
                         var hurricaneOne = data[0];
                         console.log(hurricaneOne);
+                        var lnglat = [];
+                        var time = [];
 
                         for (var i = 0; i < hurricaneOne.values.length; i++) {
-
+                            var strDate;
+                            lnglat.push([hurricaneOne.values[i].LOG, hurricaneOne.values[i].LAT]);
+                            strDate = hurricaneOne.values[i].YEAR + " " + 
+                                        hurricaneOne.values[i].MONTH + " " + 
+                                        hurricaneOne.values[i].DAY + " " +
+                                        hurricaneOne.values[i].HOURS[0] + hurricaneOne.values[i].HOURS[1] + 
+                                        ":00:00";
+                            //console.log(strDate);
+                            //console.log(toTimestamp(strDate));
+                            time.push(toTimestamp(strDate));
+                            //Year Month Day time
+/*  
                             var circle = L.circle([hurricaneOne.values[i].LAT, hurricaneOne.values[i].LOG], 500, { 
                                 color: "red",
                                 fillColor: "#f03",
                                 fillOpacity: 0.5
                             }).addTo(map);
 
+*/
                             //sleep(1000);
 /*
                             var circle = L.circle([latitute_id[mykey][i], langitute_id[mykey][i]], 500, {
@@ -576,7 +598,25 @@
                                         fillOpacity: 0.5
                                     }).addTo(map)
 */
+                        }; //End of the for function.
+
+                        var geoJson = {
+                            "type": "Feature",
+                            "geometry": {
+                                "type": "MultiPoint",
+                                "coordinates": lnglat
+                            },
+                            "properties": {
+                                "time": time
+                            }
+
                         };
+
+                        console.log(geoJson);
+
+                        playback.setData(geoJson);
+
+                        //var playback = new L.Playback(map, geoJson, null, playbackOptions);
                     }); //End the d3.csv call.
                 }; //End of the Play function.
 
@@ -588,6 +628,11 @@
                         }
                     }
                 }; //End of the sleep function.
+
+                function toTimestamp(strDate) {
+                    var datum = Date.parse(strDate);
+                    return datum/1000;
+                }; //End of the toTimestamp function.
             </script>
 
 
