@@ -182,7 +182,7 @@
                     }
 
                     var selectedIndex = select.property('selectedIndex'),
-                   input = options[0][selectedIndex].__data__;
+                    input = options[0][selectedIndex].__data__;
                     var chosenYear = parseInt(input.Hurricane);
                     index = selectedIndex - 1;
 
@@ -208,9 +208,7 @@
                                 }).addTo(map)
                             }
                         }
-                    }
-
-                    else if (input.Hurricane == 'TOP5') {
+                    } else if (input.Hurricane == 'TOP5') {
                         alert("get to top 5");
                         top5();
                         for (var k = 0; k < 5; k++) {
@@ -230,9 +228,7 @@
                                 }).addTo(map)
                             }
                         }
-                    }
-
-                    else if (input.Hurricane == 'TOP10') {
+                    } else if (input.Hurricane == 'TOP10') {
                         alert("get to top 10");
                         top10();
                         for (var k = 0; k < 10; k++) {
@@ -252,10 +248,7 @@
                                 }).addTo(map)
                             }
                         }
-                    }
-
-                        // a year was selected
-                    else {
+                    } else {
                         var uniqueNames = [];
                         var mynames = [];
                         if (orderHurr == 0) {
@@ -276,21 +269,19 @@
                     }
                     num++;
 
-                    //console.log("unique_name",uniqueNames.toString());
 
                     // Creating a legend with all hurricane name
-
                     svg = d3.select("body").selectAll("input")
-.data(uniqueNames)
-.enter()
-.append('label')
-    .attr('for', function (d, i) { return 'a' + i; })
-    .text(function (d) { return d; })
-.append("input")
-    .attr("checked", false)
-    .attr("type", "checkbox")
-    .attr("id", function (d, i) { return uniqueNames[i]; })
-    .attr("onClick", "modify(this)");
+                            .data(uniqueNames)
+                            .enter()
+                            .append('label')
+                            .attr('for', function (d, i) { return 'a' + i; })
+                            .text(function (d) { return d; })
+                            .append("input")
+                            .attr("val", false)
+                            .attr("type", "checkbox")
+                            .attr("id", function (d, i) { return uniqueNames[i]; })
+                            .attr("onClick", "modify(this)");
 
                 }
 
@@ -315,43 +306,52 @@
                 }
 
                 function modify(that) {
-                    var val = $(that).attr("id");;
-                    alert('in modify');
-                    alert(val);
-                    for (var key in Namedict) {
+                    var val = $(that);//.attr("id");
 
-                        alert(Namedict[key].value);
-                        alert(Namedict[key].key);
+                    if (val.context.attributes.val.value == "true") {
+                        val.context.attributes.val.value = "false";
+                        
+                        //This is where we will need to run the remove code for a single hurricane.
 
-                        var mykey = Namedict[key].key;
+                        return;
+                    } else {
+                        val.context.attributes.val.value = "true"
+                        for (var key in Namedict) {
 
-                        if (Namedict[key].value == val) {
-                            alert("match");
-                            console.log(wind_id[Namedict[key].key].length);
-                            for (var i = 0; i < wind_id[Namedict[key].key].length; i++) {
-                                alert(wind_id[Namedict[key].key][i]);
+                            alert(Namedict[key].value);
+                            alert(Namedict[key].key);
 
-                                if (wind_id[Namedict[key].key][i] > 40) {  // coloring scheme
-                                    color = 'red'
+                            var mykey = Namedict[key].key;
+
+                            if (Namedict[key].value == val.attr("id")) {
+                                alert("match");
+                                console.log(wind_id[Namedict[key].key].length);
+                                for (var i = 0; i < wind_id[Namedict[key].key].length; i++) {
+                                    alert(wind_id[Namedict[key].key][i]);
+
+                                    if (wind_id[Namedict[key].key][i] > 40) {  // coloring scheme
+                                        color = 'red'
+                                    }
+                                    else {
+                                        color = 'green'
+                                    }
+
+
+                                    // adding a circle for every hurricane generated by user specification.
+                                    var circle = L.circle([latitute_id[mykey][i], langitute_id[mykey][i]], 500, {
+                                        color: color,
+                                        fillColor: '#f03',
+                                        fillOpacity: 0.5
+                                    }).addTo(map)
+
+                                    alert('here');
+
                                 }
-                                else {
-                                    color = 'green'
-                                }
-
-                                // adding a circle for every hurricane generated by user specification.                
-                                var circle = L.circle([latitute_id[mykey][i], langitute_id[mykey][i]], 500, {
-                                    color: color,
-                                    fillColor: '#f03',
-                                    fillOpacity: 0.5
-                                }).addTo(map)
-
-                                alert('here');
-
+                                break;
                             }
-                            break;
                         }
                     }
-                }
+                }; //End of modify function.
 
                 function top5() {
                     var maxspeed = [];
@@ -390,7 +390,6 @@
                         mytop10.push(i);
                         maxspeed.splice(i, 1);
                     }
-
                 }
 
                 d3.csv("data/Hurricanes.csv", function (error, text) {
@@ -427,6 +426,7 @@
                     .entries(text);
                 });
 
+                //The function below grabs the hurricane data and breaks it up into HURID.
                 d3.csv("data/AtlHurricane2005-2014.csv", function (error, text) {
                     var i = 0;
                     var data = d3.nest()
@@ -536,7 +536,6 @@
                             value: sortable[key][1]
                         });
                     }
-                    // console.log(JSON.stringify(temp))
 
                     return temp;
                 }
@@ -595,8 +594,6 @@
                             yearArray[9]++;
                             break;
                     }
-
-                
                 
                 } //Ends the for loop.
                 //Print out the content of the yearArray to the console for checking.
