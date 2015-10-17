@@ -2,9 +2,10 @@
  * Created by Ryan Jones on 10/14/2015.
  */
 
-HurrData = [];
+var HurrData = [];
+var dataSet = [];
 
-d3.csv('data/2005.csv',function(error,data){
+d3.csv('data/AtlHurricane2005-2014.csv',function(error,data){
     if(error) {
         //if error is not null then something went wrong
         console.log(error);
@@ -25,9 +26,20 @@ d3.csv('data/2005.csv',function(error,data){
         d.MinPress = parseInt(d.MinPress);
     });
 
-    //load data to global variable usaData
-    HurrData = data;
+     dataSet = d3.nest()
+        .key(function(d) {
+            return d.YEAR;
+        })
+        .entries(data)
 
-    lineChart();
+            console.log(dataSet);
+
+    //load data to global variable usaData
+    HurrData = dataSet[0];
+    console.log(HurrData);
+
+
+    maxWindChart();
+    //minPressChart();
 
 });
