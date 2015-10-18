@@ -47,7 +47,6 @@ h3 {
     padding: 3px;
     margin: 1px;
     color: white;
-
 }
 
 
@@ -75,6 +74,11 @@ fieldset
     padding: 3px;
     float: left;
     border-color: black;
+}
+
+div.inline
+{
+    float:left;
 }
 
 /*! jQuery UI - v1.11.4 - 2015-03-11
