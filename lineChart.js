@@ -367,6 +367,8 @@ function updateChart1(HurrData) {
         })
         .entries(HurrData.values)
 
+    console.log(dataSet);
+
 
     //creates the x and y domain for the graphs
     x.domain(d3.extent(HurrData.values, function (d) {return d.DATE;}));
