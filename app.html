@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 
 
 <html>
@@ -45,7 +45,7 @@
 
 	</head>
 	
-	<body onload="change()">
+	<body>
 	        <!-- This section begins the bootstrap button headers -->
         <nav class="navbar navbar-inverse navbar-fixed-top">
             <div class="container">
@@ -166,6 +166,8 @@
                 var orderHurr = 0; // can be 0,1,2 depending on user selection.
                 var index;
                 num = 0;
+                
+                var num_hurricanes = [[], [], [], [], [], [], [], [], [], []];
 
                 var Namedict = [];
                 var Timedict = [];
@@ -211,17 +213,15 @@
                         d3.select(".map").remove();
                     }
 
+                    
                     var selectedIndex = select.property('selectedIndex'),
                     input = options[0][selectedIndex].__data__;
                     var chosenYear = parseInt(input.Hurricane);
-                    //var chosenyear = document.getElementById("yearselect").value;
-                   /* alert(chosenyear);*/
-
-                    //var selectedOption = document.getElementById("optionselect").value;
-                    /*alert(selectedOption);*/
-
-                    index = selectedIndex - 1;
-
+                    index = selectedIndex -1;
+                   
+                    
+                    alert('here');
+                    alert(index);
                     //method to create linechart
                     updateChart1(HurrData[index]);
                     updateChart2(HurrData[index]);
@@ -306,18 +306,53 @@
                         alert(JSON.stringify(chosenYear));
                         var uniqueNames = [];
                         var mynames = [];
+                        var starting_position =0;
+                        var ending_position =0;
+                        //alert(index);
+                        //alert(num_hurricanes[0].length);
+                        
+                        for(var j=0; j<(index+1);j++){
+                            
+                            //alert(num_hurricanes[j].length);
+                            starting_position += num_hurricanes[j].length;
+                        }
+                        ending_position = starting_position + num_hurricanes[index].length;
+                        
+                        //alert(starting_position);
+                        //alert(ending_position);
+                        
                         if (orderHurr == 0) {
-
+                               for(var k =0; k<names[index].length;k++){
+                                   mynames.push(names[index][k]);
+                               }
+                            console.log(mynames.toString());
                         }
                         else if (orderHurr == 1) {
-
+                            alert('get here');
+                            alert(num_hurricanes.toString());
+                            
+                            alert(starting_position);
+                            alert(ending_position);
+                            
+                              //console.log(JSON.stringify(Timedict));
+                              console.log(Timedict.length)
+                              for(var k=0;k<Timedict.length;k++){
+                                  console.log(Timedict[k].key);
+                                  if (Timedict[k].key > starting_position && Timedict[k].key < ending_position){
+                                      console.log('pushed this');
+                                      console.log(names[index][Timedict[k].key-starting_position]);
+                                      mynames.push(names[index][Timedict[k].key-starting_position]);
+                                  }
+                          }
+                            alert('printing');
+                            console.log(mynames.toString());
                         }
-
+                        
                         else if (orderHurr == 2) {
-
+                               console.loge(Speeddict);
                         }
 
-                        $.each(names[index], function (i, el) {
+                        $.each(mynames, function (i, el) {
                             if ($.inArray(el, uniqueNames) === -1) uniqueNames.push(el);
                         });
                         uniqueNames.push("all");
@@ -326,7 +361,7 @@
 
 
                     // Creating a legend with all hurricane name
-                    svg = d3.select("body").selectAll("input")
+                    svg = d3.select("legend").selectAll("input")
                             .data(uniqueNames)
                             .enter()
                             .append('label')
@@ -338,18 +373,16 @@
                             .attr("id", function (d, i) { return uniqueNames[i]; })
                             .attr("onClick", "modify(this)");
 
-
                 }
 
                 function changeOrder() {
                     var selectedIndex = order.property('selectedIndex'),
                     input = options2[0][selectedIndex].__data__;
-                    //var myorder = input.order;
-                    var myorder = document.getElementById("sortby").value;
-                    /*alert*/(myorder);
+                    var myorder = input.order;
+                    alert(myorder);
 
                     if (myorder == 'chronologically') {
-                        console.log(JSON.stringify(Timedict));
+                        //console.log(JSON.stringify(Timedict));
                         orderHurr = 1;
                     }
 
@@ -361,54 +394,46 @@
                         orderHurr = 0;
                     }
                 };
+                
+                 function modify(that){
+                    var val = $(that).attr("id");;
+                     alert('in modify');
+                     alert(val);
+                     for ( var key in Namedict ) {
 
-                function modify(that) {
-                    var val = $(that);//.attr("id");
+                     alert(Namedict[key].value);
+                     alert(Namedict[key].key);
 
-                    if (val.context.attributes.val.value == "true") {
-                        val.context.attributes.val.value = "false";
-                        
-                        //This is where we will need to run the remove code for a single hurricane.
+                      var mykey = Namedict[key].key;
 
+                     if ( Namedict[key].value == val){
+                         alert("match");
+                         console.log(wind_id[Namedict[key].key].length);
+                         for( var i =0; i<wind_id[Namedict[key].key].length;i++){
+                             alert(wind_id[Namedict[key].key][i]);
 
-                    } else {
-                        val.context.attributes.val.value = "true"
-                        for (var key in Namedict) {
-
-                            alert(Namedict[key].value);
-                            alert(Namedict[key].key);
-
-                            var mykey = Namedict[key].key;
-
-                            if (Namedict[key].value == val.attr("id")) {
-                                alert("match");
-                                console.log(wind_id[Namedict[key].key].length);
-                                for (var i = 0; i < wind_id[Namedict[key].key].length; i++) {
-                                    alert(wind_id[Namedict[key].key][i]);
-
-                                    if (wind_id[Namedict[key].key][i] > 40) {  // coloring scheme
-                                        color = 'red'
-                                    }
-                                    else {
-                                        color = 'green'
-                                    }
-
-
-                                    // adding a circle for every hurricane generated by user specification.
-                                    var circle = L.circle([latitute_id[mykey][i], langitute_id[mykey][i]], 500, {
-                                        color: color,
-                                        fillColor: '#f03',
-                                        fillOpacity: 0.5
-                                    }).addTo(map)
-
-                                    alert('here');
-
-                                }
-                                break;
-                            }
-                        } // End of for loop.
+                       if (wind_id[Namedict[key].key][i] > 40){  // coloring scheme
+                        color ='red'
                     }
-                }; //End of modify function.
+                        else{
+                            color = 'green'
+                        }
+
+                // adding a circle for every hurricane generated by user specification.               
+                   var circle = L.circle([latitute_id[mykey][i],langitute_id[mykey][i]], 500, {
+            color: color,
+            fillColor: '#f03',
+            fillOpacity: 0.5
+        }).addTo(map)
+
+              alert('here');
+
+               }
+                         break;
+                     }
+                     }
+                }
+
 
                 function top5() {
                     var maxspeed = [];
@@ -557,6 +582,20 @@
 
                     Timedict = sortOnValue(Timedict);
                     Speeddict = sortOnValue(Speeddict);
+                    
+                
+                    console.log(num_hurricanes.length);
+                    
+                    for(var i=0;i<num_hurricanes.length;i++){
+                    $.each(names[i], function (k, el) {
+                            if ($.inArray(el, num_hurricanes[i]) === -1) num_hurricanes[i].push(el);
+                        });
+                        console.log('get here');
+                        console.log(num_hurricanes[i].toString());
+                        console.log(num_hurricanes[i].length);
+                        
+                    }
+                     alert(num_hurricanes.toString());
                     /* 
                     console.log('after sorting');
                     
