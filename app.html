@@ -83,9 +83,9 @@
 
             <!-- Listbox of hurricanes to populate with hurricane names -->
             <div class="inline" style="height:60vh">
-                <select multiple id="hurricanelist" style="height:100%; width: 100px;">
-                    <option value="Katrina">Katrina</option>
-                </select>
+                <fieldset id="hurricanelist" style="width:100px;height:100%;overflow:scroll;">
+                    <legend style="font-size:15px;">Atlantic Hurricanes</legend>
+                </fieldset>
             </div>
             <div class="inline" id = top style = "width: 50vw; height: 60vh;" >
                 <div  id = "map" style = "height: 100%;"></div>
@@ -108,14 +108,14 @@
 
             <fieldset style="width:300px">
                 <legend>Options</legend>
-                Display:
+<!--                Display:
                 <select id="optionselect" onchange="change()">
                     <option value ="showall">All</option>
                     <option value ="showfive">Top 5</option>
                     <option value ="showten">Top 10</option>
                     <option value ="showyear">Selected Year</option>
                 </select>
-                <br />
+                <br />-->
 
                 <!-- Year:<select id="yearselect" onchange="change()">
                 <option value="2005">2005</option>
