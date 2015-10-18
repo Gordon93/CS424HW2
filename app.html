@@ -225,11 +225,11 @@
                     input = options[0][selectedIndex].__data__;
                     //var chosenYear = parseInt(input.Hurricane);
                     var chosenyear = document.getElementById("yearselect").value;
-                    alert(chosenyear);
+                   /* alert(chosenyear);*/
 
                     var selectedOption = document.getElementById("optionselect").value;
-                    alert(selectedOption);
-                    alert(document.getElementById("optionselect").value);
+                    /*alert(selectedOption);*/
+
                     index = selectedIndex - 1;
 
                     //method to create linechart
@@ -348,6 +348,7 @@
                             .attr("id", function (d, i) { return uniqueNames[i]; })
                             .attr("onClick", "modify(this)");
 
+
                 }
 
                 function changeOrder() {
@@ -355,7 +356,7 @@
                     input = options2[0][selectedIndex].__data__;
                     //var myorder = input.order;
                     var myorder = document.getElementById("sortby").value;
-                    alert(myorder);
+                    /*alert*/(myorder);
 
                     if (myorder == 'chronologically') {
                         console.log(JSON.stringify(Timedict));
