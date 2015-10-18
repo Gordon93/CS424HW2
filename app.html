@@ -600,8 +600,6 @@
                 function playHit() {
                     console.log("just pushed play");
                     d3.csv("data/AtlHurricane2005-2014.csv", function (error, text) {
-                        //Create a year array to hold the count of hurricanes per year.
-                        var yearArray = [0,0,0,0,0,0,0,0,0,0];
 
                         //Group the data by hurricane id
                         var data = d3.nest()
