@@ -411,17 +411,8 @@
                     }
                 };
                 
-                 function modify(that){
-                    var val = $(that).attr("id");;
-                     alert('in modify');
-                     alert(val);
-                     for ( var key in Namedict ) {
-
-<<<<<<< HEAD
-                     alert(Namedict[key].value);
-                     alert(Namedict[key].key);
-=======
                 function modify(that) {
+                    
                     var val = $(that);//.attr("id");
                     var selName = val.attr("id");
                     if (val.context.attributes.val.value == "true") {
@@ -489,7 +480,6 @@
                         }
 
                         for (var key in Namedict) {
->>>>>>> 8b1977400382aea4bd44d912152a6ed298176c7e
 
                       var mykey = Namedict[key].key;
 
@@ -519,6 +509,7 @@
                          break;
                      }
                      }
+                }
                 }
 
 
@@ -831,6 +822,7 @@
                     var datum = Date.parse(strDate);
                     return datum/1000;
                 }; //End of the toTimestamp function.
+                    
             </script>
 
 
