@@ -77,14 +77,15 @@
             <!--<img src="layout.JPG" alt="Layout" style="width:1500px;height:600px;">-->
 
 
-            <div id="graph1"></div>
+
 
 
 
             <!-- Listbox of hurricanes to populate with hurricane names -->
             <div class="inline" style="height:60vh">
-                <fieldset id="hurricanelist" style="width:100px;height:100%;overflow:scroll;">
+                <fieldset style="width:100px;height:100%;overflow:auto;">
                     <legend style="font-size:15px;">Atlantic Hurricanes</legend>
+                    <div id="hurricanelist" style="width:100%;height:100% font-size:10px;overflow:auto;"></div>
                 </fieldset>
             </div>
             <div class="inline" id = top style = "width: 50vw; height: 60vh;" >
@@ -95,11 +96,16 @@
 
 
             </div>
+
+
+
             <!--line chart-->
             <div id="chart"></div>
 
             <div id="chart1"></div>
             <!-- /line chart -->
+
+            <div id="graph1"></div>
 
             <br/>
 
@@ -108,6 +114,9 @@
 
             <fieldset style="width:300px">
                 <legend>Options</legend>
+                <div id="optionmenu"></div>
+                <br />
+                <div id="ordermenu"></div>
 <!--                Display:
                 <select id="optionselect" onchange="change()">
                     <option value ="showall">All</option>
@@ -554,13 +563,13 @@
 
                 d3.csv("data/Hurricanes.csv", function (error, text) {
                     console.log(text);
-                    select = d3.select("body").append("select").on("change", change);
+                    select = d3.select("#optionmenu").append("select").on("change", change);
                     options = select.selectAll('option').data(text);
                     var selection = options.enter().append("option").text(function (d) { return d.Hurricane; });
                 });
 
                 d3.csv("data/order.csv", function (error, text) {
-                    order = d3.select("body").append("select").on("change", changeOrder);
+                    order = d3.select("#ordermenu").append("select").on("change", changeOrder);
                     options2 = order.selectAll('option').data(text);
                     var selection2 = options2.enter().append("option").text(function (d) { return d.order; });
 
