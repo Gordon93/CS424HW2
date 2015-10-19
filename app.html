@@ -36,12 +36,12 @@
         <!-- Leaflet playback -->
         <script src="LeafletPlayback.js"></script>
 
-        <script>
-            $(function() {
-                $( "#datepicker" ).datepicker();
-            });
-        </script>
-
+       //script
+            //$(function() {
+            //    $( "#datepicker" ).datepicker();
+        //    });
+        //script>
+        
 		<!-- Custom styles for this template -->
 		<link href="styles.css" rel="stylesheet">
 
@@ -178,6 +178,8 @@
                 var orderHurr = 0; // can be 0,1,2 depending on user selection.
                 var index;
                 num = 0;
+                
+                var mydate;
                 
                 var num_hurricanes = [[], [], [], [], [], [], [], [], [], []];
 
@@ -643,7 +645,19 @@
                         maxspeed.splice(i, 1);
                     }
                 }; //End of the top 10 function.
-
+                
+                
+               $(function() {
+                $('#datepicker').datepicker();
+                 $('#datepicker').datepicker('option', 'onSelect', function(dateText,inst) {       
+                     alert('one');
+                     alert(dateText)                                                                     
+                } );
+                    });
+                
+                
+                
+                
                 d3.csv("data/Hurricanes.csv", function (error, text) {
                     console.log(text);
                     select = d3.select("#optionmenu").append("select").on("change", change);
