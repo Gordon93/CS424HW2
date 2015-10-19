@@ -244,8 +244,8 @@
                     index = selectedIndex -1;
                    
                     
-                    alert('here');
-                    alert(index);
+                    //alert('here');
+                    //alert(index);
                     //method to create linechart
                     updateline1(HurrData[index]);
                     updateline2(HurrData[index]);
@@ -327,7 +327,7 @@
                         if(selectedOption == "showyear")*/
                             //chosenYear = selectedYear;
 
-                        alert(JSON.stringify(chosenYear));
+                        //alert(JSON.stringify(chosenYear));
                         var uniqueNames = [];
                         var mynames = [];
                         var starting_position =0;
@@ -346,17 +346,20 @@
                         //alert(ending_position);
                         
                         if (orderHurr == 0) {
-                               for(var k =0; k<names[index].length;k++){
-                                   mynames.push(names[index][k]);
+                            //alert('get here');
+                               for(var k =0; k<num_hurricanes[index].length;k++){
+                                   mynames.push(num_hurricanes[index][k]);
                                }
                             console.log(mynames.toString());
+                            alert(mynames.toString());
+                            
                         }
                         else if (orderHurr == 1) {
-                            alert('get here');
-                            alert(num_hurricanes.toString());
+                            //alert('get here');
+                          //alert(num_hurricanes.toString());
                             
-                            alert(starting_position);
-                            alert(ending_position);
+                            //alert(starting_position);
+                            //alert(ending_position);
                             
                               //console.log(JSON.stringify(Timedict));
                               console.log(Timedict.length)
@@ -364,16 +367,29 @@
                                   console.log(Timedict[k].key);
                                   if (Timedict[k].key > starting_position && Timedict[k].key < ending_position){
                                       console.log('pushed this');
-                                      console.log(names[index][Timedict[k].key-starting_position]);
-                                      mynames.push(names[index][Timedict[k].key-starting_position]);
+                                      console.log(num_hurricanes[index][Timedict[k].key-starting_position]);
+                                      mynames.push(num_hurricanes[index][Timedict[k].key-starting_position]);
                                   }
                           }
-                            alert('printing');
+                            //alert('printing');
                             console.log(mynames.toString());
+                            alert(mynames.toString());
                         }
                         
                         else if (orderHurr == 2) {
-                               console.loge(Speeddict);
+                               console.log(Speeddict);
+                                         for(var k=0;k<Speeddict.length;k++){
+                                  console.log(Speeddict[k].key);
+                                  if (Speeddict[k].key > starting_position && Speeddict[k].key < ending_position){
+                                      console.log('pushed this');
+                                      console.log(num_hurricanes[index][Speeddict[k].key-starting_position]);
+                                      mynames.push(num_hurricanes[index][Speeddict[k].key-starting_position]);
+                                  }
+                          }
+                            //alert('printing');
+                            console.log(mynames.toString());
+                            alert(mynames.toString());
+                            
                         }
 
                         $.each(mynames, function (i, el) {
@@ -410,11 +426,12 @@
                         orderHurr = 1;
                     }
 
-                    else if (myorder = 'MaxWindSpeed') {
+                    else if (myorder == 'MaxWindSpeed') {
                         console.log(JSON.stringify(Speeddict));
                         orderHurr = 2;
                     }
-                    else {
+                    else if (myorder == 'alphabetically'){
+                        //alert("that was chosen");
                         orderHurr = 0;
                     }
                 };
