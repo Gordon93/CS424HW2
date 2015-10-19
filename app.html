@@ -72,6 +72,8 @@
                 </div>
             </div>
         </nav>
+
+
         <div class="pageContent">
             <!-- PUT ALL PAGE CODE EITHER IN OR BELOW THIS DIV! OTHERWISE IT WILL FALL BELOW THE NAV BAR! -->
             <!--<img src="layout.JPG" alt="Layout" style="width:1500px;height:600px;">-->
@@ -97,15 +99,12 @@
 
             </div>
 
-
-
-            <!--line chart-->
-            <div id="chart"></div>
-
-            <div id="chart1"></div>
-            <!-- /line chart -->
-
-            <div id="graph1"></div>
+            <!-- chart container-->
+            <div id="chartContainer">
+                <div id="chart"></div>
+                <div id="chart1"></div>
+                <div id="graph1"> </div>
+            </div>
 
             <br/>
 
@@ -248,8 +247,8 @@
                     alert('here');
                     alert(index);
                     //method to create linechart
-                    updateChart1(HurrData[index]);
-                    updateChart2(HurrData[index]);
+                    updateline1(HurrData[index]);
+                    updateline2(HurrData[index]);
 
 
                     var color;
