@@ -36,12 +36,12 @@
         <!-- Leaflet playback -->
         <script src="LeafletPlayback.js"></script>
 
-       //script
+       <!--//script
             //$(function() {
             //    $( "#datepicker" ).datepicker();
         //    });
         //script>
-        
+        -->
 		<!-- Custom styles for this template -->
 		<link href="styles.css" rel="stylesheet">
 
@@ -76,12 +76,6 @@
 
         <div class="pageContent">
             <!-- PUT ALL PAGE CODE EITHER IN OR BELOW THIS DIV! OTHERWISE IT WILL FALL BELOW THE NAV BAR! -->
-            <!--<img src="layout.JPG" alt="Layout" style="width:1500px;height:600px;">-->
-
-
-
-
-
 
             <!-- Listbox of hurricanes to populate with hurricane names -->
             <div class="inline" style="height:60vh">
@@ -96,81 +90,45 @@
                 <!--<div id = "map" style = "height: 50%;"></div>-->
                 <div id = "legend" style = "height: 50% ; "></div>
 
-
             </div>
 
-            <!-- chart container-->
-            <div id="chartContainer">
-                <div id="chart"></div>
-                <div id="chart1"></div>
-                <div id="graph1"> </div>
-            </div>
 
             <br/>
-
         <!-- Options -->
-
-
-            <fieldset style="width:300px">
+        <div class="inline">
+            <fieldset style="width:250px">
                 <legend>Options</legend>
-                <div id="optionmenu"></div>
-                <br />
-                <div id="ordermenu"></div>
-<!--                Display:
-                <select id="optionselect" onchange="change()">
-                    <option value ="showall">All</option>
-                    <option value ="showfive">Top 5</option>
-                    <option value ="showten">Top 10</option>
-                    <option value ="showyear">Selected Year</option>
-                </select>
-                <br />-->
-
-                <!-- Year:<select id="yearselect" onchange="change()">
-                <option value="2005">2005</option>
-                <option value="2006">2006</option>
-                <option value="2007">2007</option>
-                <option value="2008">2008</option>
-                <option value="2009">2009</option>
-                <option value="2010">2010</option>
-                <option value="2011">2011</option>
-                <option value="2012">2012</option>
-                <option value="2013">2013</option>
-                <option value="2014">2014</option>
-            </select>-->
-                <br />
+                <div id="optionmenu"></div>                <br />
+                <div id="ordermenu"></div>                <br />
                 Date: <input type="text" id="datepicker"> <br />
-
-                <!--Sort By:
-                <select id="sortby" onchange="changeOrder()">
-                    <option value ="chronologically">Date</option>
-                    <option value ="alphabetically">Alpha</option>
-                    <option value ="MaxWindSpeed">Wind Speed</option>
-                </select>
-                <br />-->
-
                 Show Heatmap: <input type="checkbox" id="heat" /> <br />
+                <!-- This is a temporary placement for a button, just for testing the play functionality -->
+                <button id="play" value = "paused" onclick="playHit()">Play/Pause</button>
+                <br />
+                <br />
             </fieldset>
-
-        <!--<div>-->
-            <fieldset style="width:300px">
-            <legend>Filters</legend>
-            <input type="number" id="min_speed" style ="width:50px" /> < Wind Speed < <input type="number" id="max_speed" style ="width:50px"/> <br />
-            <input type="number" id="min_pressure" style ="width:50px" /> < Pressure < <input type="number" id="max_pressure" style ="width:50px" /> <br />
-            Made Land: <input type="checkbox" id="land" /> <br />
-            </fieldset>
-            <!-- This is a temporary placement for a button, just for testing the play functionality -->
-            <button id="play" value = "paused" onclick="playHit()">Play/Pause</button>
             <br />
 
-            <br />
+            <!--<div>-->
+            <fieldset style="width:250px">
+                <legend>Filters</legend>
+                <input type="number" id="min_speed" style ="width:50px" /> < Wind Speed < <input type="number" id="max_speed" style ="width:50px"/> <br />
+                <input type="number" id="min_pressure" style ="width:50px" /> < Pressure < <input type="number" id="max_pressure" style ="width:50px" /> <br />
+                Made Land: <input type="checkbox" id="land" /> <br />
+
+            </fieldset>
+
+        </div>
+        <!-- chart container-->
+        <div id="chartContainer" class="inline">
+            <div id="chart"></div>
+            <div id="chart1"></div>
+            <div id="graph1"> </div>
+        </div>
+        <!-- /Options -->
 
 
-    <!-- /Options -->
 
-
-
-
-            <div>
 
             <script type="text/javascript">
                 var select;
@@ -246,19 +204,23 @@
                     index = selectedIndex -1;
                    
                     
-                    //alert('here');
-                    //alert(index);
+
                     //method to create linechart
-                    updateline1(HurrData[index]);
-                    updateline2(HurrData[index]);
+                    if(index < 10)
+                    {
+                        updateline1(HurrData[index]);
+                        updateline2(HurrData[index]);
+                    }
+
+
 
 
                     var color;
-//                    alert(JSON.stringify(chosenYear));
+//                    //alert(JSON.stringify(chosenYear));
 
                     if (input.Hurricane == 'All') {
                    // if (selectedOption == "showall") {
-                        alert('compare all');
+                        //alert('compare all');
                         for (var i = 0; i < 10; i++) {
                             for (var j = 0; j < wind[i].length; j++) {
                                 if (wind[i][j] > 40) {  // coloring scheme
@@ -278,8 +240,7 @@
                         }
                     }
                     else if (input.Hurricane == 'TOP5') {
-//                    else if (selectedOption == "showfive") {
-                        alert("get to top 5");
+                        //alert("get to top 5");
                         top5();
                         for (var k = 0; k < 5; k++) {
                             for (var j = 0; j < wind_id[mytop5[k]].length; j++) {
@@ -301,7 +262,7 @@
                     }
                     else if (input.Hurricane == 'TOP10') {
 //                    else if (selectedOption == "showten") {
-                        alert("get to top 10");
+                        //alert("get to top 10");
                         top10();
                         for (var k = 0; k < 10; k++) {
                             for (var j = 0; j < wind_id[mytop10[k]].length; j++) {
@@ -325,11 +286,7 @@
                     }
 
                     else {
-/*
-                        if(selectedOption == "showyear")*/
-                            //chosenYear = selectedYear;
 
-                        //alert(JSON.stringify(chosenYear));
                         var uniqueNames = [];
                         var mynames = [];
                         var starting_position =0;
@@ -353,7 +310,7 @@
                                    mynames.push(num_hurricanes[index][k]);
                                }
                             console.log(mynames.toString());
-                            alert(mynames.toString());
+                            //alert(mynames.toString());
                             
                         }
                         else if (orderHurr == 1) {
@@ -375,7 +332,7 @@
                           }
                             //alert('printing');
                             console.log(mynames.toString());
-                            alert(mynames.toString());
+                            //alert(mynames.toString());
                         }
                         
                         else if (orderHurr == 2) {
@@ -390,7 +347,7 @@
                           }
                             //alert('printing');
                             console.log(mynames.toString());
-                            alert(mynames.toString());
+                            //alert(mynames.toString());
                             
                         }
 
@@ -427,7 +384,7 @@
                     var selectedIndex = order.property('selectedIndex'),
                     input = options2[0][selectedIndex].__data__;
                     var myorder = input.order;
-                    alert(myorder);
+                    //alert(myorder);
 
                     if (myorder == 'chronologically') {
                         //console.log(JSON.stringify(Timedict));
@@ -448,7 +405,7 @@
                   var myline = new Array();
                   var dot = [];
                   var val = $(that).attr("id");;
-                     alert('in modify');
+                     //alert('in modify');
                      //alert(val);
                      for ( var key in Namedict ) {
 
@@ -495,7 +452,7 @@
                             color: 'red'
                          };
                          
-                         alert(JSON.stringify(myline));
+                         //alert(JSON.stringify(myline));
                          //alert(JSON.stringify(line_points));
                          
                          var polyline = L.polyline(myline,polyline_options).addTo(map);
@@ -578,10 +535,10 @@
                       var mykey = Namedict[key].key;
 
                      if ( Namedict[key].value == val){
-                         alert("match");
+                         //alert("match");
                          console.log(wind_id[Namedict[key].key].length);
                          for( var i =0; i<wind_id[Namedict[key].key].length;i++){
-                             alert(wind_id[Namedict[key].key][i]);
+                             //alert(wind_id[Namedict[key].key][i]);
 
                        if (wind_id[Namedict[key].key][i] > 40){  // coloring scheme
                         color ='red'
@@ -597,7 +554,7 @@
             fillOpacity: 0.5
         }).addTo(map)
 
-              alert('here');
+              //alert('here');
 
                }
                          break;
@@ -650,8 +607,8 @@
                $(function() {
                 $('#datepicker').datepicker();
                  $('#datepicker').datepicker('option', 'onSelect', function(dateText,inst) {       
-                     alert('one');
-                     alert(dateText)                                                                     
+                     //alert('one');
+                     //alert(dateText)                                                                     
                 } );
                     });
                 
@@ -794,7 +751,7 @@
                         console.log(num_hurricanes[i].length);
                         
                     }
-                     alert(num_hurricanes.toString());
+                     //alert(num_hurricanes.toString());
                     /* 
                     console.log('after sorting');
                     
@@ -934,7 +891,6 @@
 
 
 
-        </div>
         </div>
         <script type=text/javascript>
             d3.csv("data/AtlHurricane2005-2014.csv", function (error, text) {
