@@ -142,11 +142,9 @@ function createbar1(HurrData) {
     HurrData.forEach(function(d){
         var temp = [];
         var name = " ";
-        //console.log(d);
-        //temp.YEAR = d.values[0].YEAR;
         temp.perYear = 0;
         date = format(new Date(d.values[0].YEAR, (d.values[0].MONTH - 1), d.values[0].DAY));
-        console.log(date);
+
         temp.YEAR = format.parse(date);
         d.values.forEach(function(d){
             if(name!= d.HURID) {
@@ -214,7 +212,7 @@ function createbar1(HurrData) {
         .attr("y",10-(margin.top/2))
         .attr("text-anchor","middle")
         .style("font-size","16px");
-    //.text(mapLoc1)
+        //.text()
 
 }
 
@@ -222,37 +220,9 @@ function createbar1(HurrData) {
 
 
 function updateline1(HurrData) {
-    var tickF;
+    var tickF,numTicks;
     //set the dimensions of the canvas/graph
     graph1.selectAll("*").remove();
-
-    //creates the x and y scales for the graph
-    x = d3.time.scale().range([0, width]);
-    y = d3.scale.linear().range([height, 0]);
-    console.log(width);
-    if(width< 400)
-        tickF = d3.time.format("%b");
-    else
-        tickF = d3.time.format("%B")
-
-    //places the x axis at the bottom of the graph
-    xAxis = d3.svg.axis()
-        .scale(x)
-        .orient("bottom").ticks(5)
-        .tickFormat(tickF);
-
-    //places the y axis at the left of the graph
-    yAxis = d3.svg.axis()
-        .scale(y)
-        .orient("left").ticks(5);
-
-    /*color1 = d3.scale.linear()
-     .domain([0, 10])
-     .range(["#a6cee3", "#1f78b4", "#b2df8a", "#33a02c", "#fb9a99", "#fb9a99", "#e31a1c","#fdbf6f","ff7f00","#cab2d6",
-     "#6a3d9a"]);*/
-    color1 = d3.scale.category20();
-
-
 
     HurrData.values.forEach(function (d) {
         // d.values.forEach(function (d) {
@@ -264,6 +234,42 @@ function updateline1(HurrData) {
 
     });
 
+    console.log(numTicks);
+    //creates the x and y scales for the graph
+    x = d3.time.scale().range([0, width]);
+    y = d3.scale.linear().range([height, 0]);
+
+    if(width< 400)
+        tickF = d3.time.format("%b");
+    else
+        tickF = d3.time.format("%B");
+
+    if(width<1000)
+        numTicks = 5;
+
+    else {
+        numTicks = 20;
+        tickF = d3.time.format("%b-%d")
+    }
+
+    //places the x axis at the bottom of the graph
+    xAxis = d3.svg.axis()
+        .scale(x)
+        .orient("bottom").ticks(numTicks)
+        .tickFormat(tickF);
+
+    //places the y axis at the left of the graph
+    yAxis = d3.svg.axis()
+        .scale(y)
+        .orient("left").ticks(numTicks);
+
+    /*color1 = d3.scale.linear()
+     .domain([0, 10])
+     .range(["#a6cee3", "#1f78b4", "#b2df8a", "#33a02c", "#fb9a99", "#fb9a99", "#e31a1c","#fdbf6f","ff7f00","#cab2d6",
+     "#6a3d9a"]);*/
+    color1 = d3.scale.category20();
+
+
     //this create key for the data and groups the keys by HURID
     var dataSet = d3.nest()
         .key(function(d) {
@@ -271,7 +277,8 @@ function updateline1(HurrData) {
         })
         .entries(HurrData.values)
 
-   // console.log(dataSet);
+
+    console.log(dataSet);
 
 
     //creates the x and y domain for the graphs
@@ -314,7 +321,7 @@ function updateline1(HurrData) {
     {
 
 
-        console.log(d);
+
         graph1.append('path')
             .attr("class","line")
             .attr('stroke',function(){return d.color = color1(d.key);})
@@ -322,7 +329,6 @@ function updateline1(HurrData) {
             .attr('d',line(d.values))
             .attr('fill','none');
 
-        console.log(d.values);
         /*graph1.selectAll('.point')
          .data(d.values)
          .enter().append('circle')
@@ -332,13 +338,12 @@ function updateline1(HurrData) {
          .attr("r",1.5)
          .attr('fill',function(d){return d.color = color1(d.key);});*/
     });
-    /*
      graph1.append("text")
      .attr("x",(width/2))
      .attr("y",10-(margin.top/2))
      .attr("text-anchor","middle")
-     .style("font-size","16px")
-     .text(mapLoc1)*/
+     //.style("font-size","16px")
+     .text("MaxWind for "+HurrData.values[0].YEAR);
 
 }
 
@@ -355,18 +360,26 @@ function updateline2(HurrData) {
     if(width< 400)
         tickF = d3.time.format("%b");
     else
-        tickF = d3.time.format("%B")
+        tickF = d3.time.format("%B");
+
+    if(width<1000)
+        numTicks = 5;
+
+    else {
+        numTicks = 20;
+        tickF = d3.time.format("%b-%d")
+    }
 
     //places the x axis at the bottom of the graph
     xAxis = d3.svg.axis()
         .scale(x)
-        .orient("bottom").ticks(5)
+        .orient("bottom").ticks(numTicks)
         .tickFormat(tickF);
 
     //places the y axis at the left of the graph
     yAxis = d3.svg.axis()
         .scale(y)
-        .orient("left").ticks(5);
+        .orient("left").ticks(numTicks);
 
     color1 = d3.scale.category20();
 
@@ -425,7 +438,7 @@ function updateline2(HurrData) {
     {
 
 
-        console.log(d);
+
         graph2.append('path')
             .attr("class","line")
             .attr('stroke',function(){return d.color = color1(d.key);})
@@ -433,7 +446,7 @@ function updateline2(HurrData) {
             .attr('d',line2(d.values))
             .attr('fill','none');
 
-        console.log(d.values);
+
         /*graph1.selectAll('.point')
          .data(d.values)
          .enter().append('circle')
@@ -443,13 +456,13 @@ function updateline2(HurrData) {
          .attr("r",1.5)
          .attr('fill',function(d){return d.color = color1(d.key);});*/
     });
-    /*
-     graph1.append("text")
+
+     graph2.append("text")
      .attr("x",(width/2))
      .attr("y",10-(margin.top/2))
      .attr("text-anchor","middle")
-     .style("font-size","16px")
-     .text(mapLoc1)*/
+     //.style("font-size","16px")
+     .text("MinPress for "+HurrData.values[0].YEAR)
 
 }
 
