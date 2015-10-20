@@ -40,8 +40,10 @@ d3.csv('data/AtlHurricane2005-2014.csv',function(error,data){
     //console.log(HurrData);
 
 
-    createChart1();
-    createChart2();
-    createGraph1(HurrData);
+    createline1();
+    createline2();
+    createbar1(HurrData);
+    updateline1(HurrData[0]);
+    updateline2(HurrData[0]);
 
 });
