@@ -35,14 +35,14 @@ var line2 = d3.svg.line()
 function createline1() {
 
     //set the dimensions of the canvas/graph
-    margin = {top: 30, right: 20, bottom: 35, left: 50},
+    margin = {top: 30, right: 20, bottom: 30, left: 50},
         width = parseInt(d3.select('#chart').style('width'),10),
         width = width - margin.left - margin.right,
-        height = parseInt(d3.select('#chart').style('height'),10);
+        height = ((window.innerHeight) *.30)-margin.bottom - margin.top;
     console.log(height);
-        height = 270 - margin.top - margin.bottom;
+        //height = 270 - margin.top - margin.bottom;
 
-    console.log(height);
+   // console.log(height);
 
     //creates the x and y scales for the graph
     x = d3.time.scale().range([0, width]);
