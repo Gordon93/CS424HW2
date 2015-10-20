@@ -9,6 +9,7 @@ var color1 = d3.scale.category20();
 
 //parse the date
 var format = d3.time.format("%d-%b-%y");
+var format2 = d3.time.format("%d");
 
 var graphs = [];
 var line = d3.svg.line()
@@ -102,19 +103,30 @@ function createline2() {
 }
 
 function createbar1(HurrData) {
-    var x0 =0;
+    var tickF;
    /* var margin = {top: 20, right: 20, bottom: 30, left: 80},
         width = 800 - margin.left - margin.right,
         height = 250 - margin.top - margin.bottom;*/
 
     x = d3.scale.ordinal().rangeRoundBands([0, width],.3);
     y = d3.scale.linear().range([height, 0]);
+
+
+    if(width< 400)
+        tickF = d3.time.format("%y");
+    else
+        tickF = d3.time.format("%Y")
+
+    //places the x axis at the bottom of the graph
     xAxis = d3.svg.axis()
         .scale(x)
-        .orient("bottom");
+        .orient("bottom").ticks(5)
+        .tickFormat(tickF);
+
     yAxis = d3.svg.axis()
         .scale(y)
         .orient("left");
+
     bar1 = d3.select("#graph1").append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
@@ -124,15 +136,18 @@ function createbar1(HurrData) {
 
 
     var HurrPerYear = [];
-    console.log(HurrData);
+    //console.log(HurrData);
 
 
     HurrData.forEach(function(d){
         var temp = [];
         var name = " ";
-        console.log(d);
-        temp.YEAR = d.values[0].YEAR;
+        //console.log(d);
+        //temp.YEAR = d.values[0].YEAR;
         temp.perYear = 0;
+        date = format(new Date(d.values[0].YEAR, (d.values[0].MONTH - 1), d.values[0].DAY));
+        console.log(date);
+        temp.YEAR = format.parse(date);
         d.values.forEach(function(d){
             if(name!= d.HURID) {
                 temp.perYear = temp.perYear + 1;
@@ -144,7 +159,6 @@ function createbar1(HurrData) {
         HurrPerYear.push(temp);
     })
 
-    console.log(HurrPerYear);
 
     /* color1 = d3.scale.linear()
      .domain([0,10])
@@ -161,6 +175,7 @@ function createbar1(HurrData) {
 
      //console.log(d);
      });*/
+
 
     x.domain(HurrPerYear.map(function(d) { return d.YEAR; }));
     y.domain([0, d3.max(HurrPerYear,function(d){return d.perYear;})]);
@@ -207,18 +222,24 @@ function createbar1(HurrData) {
 
 
 function updateline1(HurrData) {
-
+    var tickF;
     //set the dimensions of the canvas/graph
     graph1.selectAll("*").remove();
 
     //creates the x and y scales for the graph
     x = d3.time.scale().range([0, width]);
     y = d3.scale.linear().range([height, 0]);
+    console.log(width);
+    if(width< 400)
+        tickF = d3.time.format("%b");
+    else
+        tickF = d3.time.format("%B")
 
     //places the x axis at the bottom of the graph
     xAxis = d3.svg.axis()
         .scale(x)
-        .orient("bottom").ticks(5);
+        .orient("bottom").ticks(5)
+        .tickFormat(tickF);
 
     //places the y axis at the left of the graph
     yAxis = d3.svg.axis()
@@ -331,10 +352,16 @@ function updateline2(HurrData) {
     x = d3.time.scale().range([0, width]);
     y = d3.scale.linear().range([height, 0]);
 
+    if(width< 400)
+        tickF = d3.time.format("%b");
+    else
+        tickF = d3.time.format("%B")
+
     //places the x axis at the bottom of the graph
     xAxis = d3.svg.axis()
         .scale(x)
-        .orient("bottom").ticks(5);
+        .orient("bottom").ticks(5)
+        .tickFormat(tickF);
 
     //places the y axis at the left of the graph
     yAxis = d3.svg.axis()
