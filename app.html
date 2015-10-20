@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 
 <html>
@@ -374,19 +374,22 @@
                         //alert("removing");
                         d3.select(".legend").remove();
                     }
-                    svg = d3.select("legend").selectAll("input")
-                            .data(uniqueNames)
-                            .enter()
-                            .append('label')
-                            .attr('for', function (d, i) { return 'a' + i; })
-                            .text(function (d) { return d; })
-                            .append("input")
-                            .attr("val", false)
-                            .attr("type", "checkbox")
-                            .attr("id", function (d, i) { return uniqueNames[i]; })
-                            .attr("onClick", "modify(this)")
-                            .attr("onClick", "drawPath(this)");
-                    
+                      svg = d3.select("legend").selectAll("input")
+                          .data(uniqueNames)
+                          .enter()
+                          .append('label')
+                          .style("font-size", "80%")
+                              .attr('for', function (d, i) { return 'a' + i; })
+                              .text(function (d) { return d; })
+                              .append("input")
+                              .attr("val", false)
+                              .attr("type", "checkbox")
+                              .attr("id", function (d, i) { return uniqueNames[i]; })
+                              .attr("onClick", "modify(this)")
+                              .attr("onClick", "drawPath(this)");
+                      
+                              
+                              
                     num++;
 
                 }
