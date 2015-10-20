@@ -54,9 +54,7 @@
         -->
 		<!-- Custom styles for this template -->
 		<link href="styles.css" rel="stylesheet">
-
-
-
+        
 	</head>
 	
 	<body>
@@ -83,26 +81,8 @@
             </div>
         </nav>
 
-
         <div class="pageContent">
             <!-- PUT ALL PAGE CODE EITHER IN OR BELOW THIS DIV! OTHERWISE IT WILL FALL BELOW THE NAV BAR! -->
-
-            <!-- Listbox of hurricanes to populate with hurricane names -->
-            <div class="inline" style="height:90vh;width:8vw;">
-                <fieldset style="width:100%;height:100%;overflow:auto;">
-                    <legend style="font-size:15px;">Atlantic Hurricanes</legend>
-                    <div id="hurricanelist" style="width:100%;height:100%; overflow:auto;"></div>
-                </fieldset>
-            </div>
-
-            <!--map-->
-            <div class="inline" id = top style = "width: 50vw; height: 80vh;" >
-                <div  id = "map" style = "height: 100%;"></div>
-
-                <!--<div id = "map" style = "height: 50%;"></div>-->
-                <div id = "legend" style = "height: 50% ; "></div>
-
-            </div>
 
             <!-- Options -->
             <div class="inline">
@@ -122,24 +102,45 @@
                 <!--<div>-->
                 <fieldset style="width:15vw;">
                     <legend>Filters</legend>
-                    <input type="number" id="min_speed" style ="width:50px" /> < Wind Speed < <input type="number" id="max_speed" style ="width:50px"/> <br />
-                    <input type="number" id="min_pressure" style ="width:50px" /> < Pressure < <input type="number" id="max_pressure" style ="width:50px" /> <br />
+                    <input type="number" id="min_speed" style="width:50px" /> < Wind Speed < <input type="number" id="max_speed" style="width:50px" /> <br />
+                    <input type="number" id="min_pressure" style="width:50px" /> < Pressure < <input type="number" id="max_pressure" style="width:50px" /> <br />
                     Made Land: <input type="checkbox" id="land" /> <br />
 
                 </fieldset>
 
             </div>
 
+            <!-- atlantic list -->
+            <div class="inline" style="height:80vh;width:8vw;">
+                <fieldset style="width:100%;height:100%;overflow:auto;">
+                    <legend style="font-size:15px; overflow:auto">Pacific Hurricanes</legend>
+                    <div id="hurricanelist2" style="width:100%;height:100%; overflow:auto;"></div>
+                </fieldset>
+            </div>
+
+            <!--maps-->
+            <div class="inline" id = top style = "width: 50vw; height: 80vh;" >
+                <div id="map2" style="height: 100%; width:50%" class="inline"></div>
+                <div  id="map"  style="height: 100%; width:50%" class="inline"></div>                
+                <!--<div id = "map" style = "height: 50%;"></div>-->
+                <div id = "legend" style = "height: 50% ; "></div>
+
+            </div>
+
+            <!-- atlantic list -->
+            <div class="inline" style="height:80vh;width:8vw;">
+                <fieldset style="width:100%;height:100%;overflow:auto;">
+                    <legend style="font-size:15px; overflow:auto">Atlantic Hurricanes</legend>
+                    <div id="hurricanelist" style="width:100%;height:100%; overflow:auto;"></div>
+                </fieldset>
+            </div>          
+
             <!-- chart container-->
-            <div id="chartContainer" class="inline">
+            <div id="chartContainer" class="inline" style="width:19vw">
                 <div id="chart"></div>
                 <div id="chart1"></div>
                 <div id="graph1"> </div>
             </div>
-
-
-
-
 
             <script type="text/javascript">
                 var select;
@@ -183,6 +184,7 @@
                 var year_id = [[], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []];
 
                 var map = L.map('map').setView([41.83, -87.68], 4);
+                var map2 = L.map('map2').setView([41.83, -87.68], 4);
 
                 // creating a map
 
@@ -193,6 +195,14 @@
                     id: 'ygordon22.cifd9ql4c53tbsmlx7cegx4iy',
                     accessToken: 'pk.eyJ1IjoieWdvcmRvbjIyIiwiYSI6ImNpZmQ5cW1idzUzeWFzNG03bjVqc3czZWEifQ.dpecRLb3F4lRAOvIVd5KpQ'
                 }).addTo(map);
+
+                L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+                    attribution: 'Map data &copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://mapbox.com">Mapbox</a>',
+                    maxZoom: 18,
+                    noWrap: true,
+                    id: 'ygordon22.cifd9ql4c53tbsmlx7cegx4iy',
+                    accessToken: 'pk.eyJ1IjoieWdvcmRvbjIyIiwiYSI6ImNpZmQ5cW1idzUzeWFzNG03bjVqc3czZWEifQ.dpecRLb3F4lRAOvIVd5KpQ'
+                }).addTo(map2);
 
                 var playbackOptions = {
                     playControl: true,
@@ -222,9 +232,6 @@
                         updateline1(HurrData[index]);
                         updateline2(HurrData[index]);
                     }
-
-
-
 
                     var color;
 //                    //alert(JSON.stringify(chosenYear));
@@ -292,8 +299,6 @@
                                 }).addTo(map)
                             }
                         }
-
-
                     }
 
                     else {
@@ -372,10 +377,13 @@
                     // Creating a legend with all hurricane name
                       if (num != 0) {
                         alert("removing");
-                d3.select("legend").selectAll("input").remove();
-                d3.select("legend").selectAll('label').remove();    
+                d3.select("#hurricanelist").selectAll("input").remove();
+                d3.select("#hurricanelist").selectAll('label').remove();
+
+                d3.select("#hurricanelist2").selectAll("input").remove();
+                d3.select("#hurricanelist2").selectAll('label').remove();
                     }
-                      svg = d3.select("legend").selectAll("input")
+                      svg = d3.select("#hurricanelist").selectAll("input")
                           .data(uniqueNames)
                           .enter()
                           .append('label')
@@ -388,9 +396,20 @@
                               .attr("id", function (d, i) { return uniqueNames[i]; })
                               .attr("onClick", "modify(this)")
                               .attr("onClick", "drawPath(this)");
-                      
-                              
-                              
+
+                      svg = d3.select("#hurricanelist2").selectAll("input")
+                           .data(uniqueNames)
+                           .enter()
+                           .append('label')
+                           .style("font-size", "12px")
+                               .attr('for', function (d, i) { return 'a' + i; })
+                               .text(function (d) { return d; })
+                               .append("input")
+                               .attr("val", false)
+                               .attr("type", "checkbox")
+                               .attr("id", function (d, i) { return uniqueNames[i]; })
+                               .attr("onClick", "modify(this)")
+                               .attr("onClick", "drawPath(this)");
                     num++;
 
                 }
@@ -454,8 +473,7 @@
                    myline[i][0] = parseFloat(latitute_id[mykey][i])
                    myline[i][1] = parseFloat(langitute_id[mykey][i])
                    
-               }
-                         
+               }                         
                         polyline_options = {
                             color: 'red'
                          };
@@ -929,9 +947,6 @@
                 }; //End of the toTimestamp function.
                     
             </script>
-
-
-
 
         </div>
         <script type=text/javascript>
