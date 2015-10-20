@@ -471,7 +471,7 @@
                          break;
                      }
                      }
-                     modify(that);
+                     //modify(that);
                   }
                 
                 function modify(that) {
@@ -804,6 +804,7 @@
                     return temp;
                 }; //End of the sortOnValue function.
 
+/*
                 function playHit() {
                     console.log("just pushed play");
                     console.log(hurricanesByID);
@@ -835,22 +836,9 @@
                             //console.log(toTimestamp(strDate));
                             time.push(tempDate);
                             //Year Month Day time
-/*  
-                            var circle = L.circle([hurricaneOne.values[i].LAT, hurricaneOne.values[i].LOG], 500, { 
-                                color: "red",
-                                fillColor: "#f03",
-                                fillOpacity: 0.5
-                            }).addTo(map);
 
-*/
                             //sleep(1000);
-/*
-                            var circle = L.circle([latitute_id[mykey][i], langitute_id[mykey][i]], 500, {
-                                        color: color,
-                                        fillColor: '#f03',
-                                        fillOpacity: 0.5
-                                    }).addTo(map)
-*/
+
                         }; //End of the for function.
 
                         var geoJson = {
@@ -883,7 +871,7 @@
                         //var playback = new L.Playback(map, geoJson, null, playbackOptions);
                     }); //End the d3.csv call.
                 }; //End of the Play function.
-
+*/
                 function sleep(milliseconds) {
                     var start = new Date().getTime();
                     for (var i = 0; i < 1e7; i++) {
