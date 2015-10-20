@@ -78,13 +78,15 @@
             <!-- PUT ALL PAGE CODE EITHER IN OR BELOW THIS DIV! OTHERWISE IT WILL FALL BELOW THE NAV BAR! -->
 
             <!-- Listbox of hurricanes to populate with hurricane names -->
-            <div class="inline" style="height:60vh">
-                <fieldset style="width:100px;height:100%;overflow:auto;">
+            <div class="inline" style="height:90vh;width:8vw;">
+                <fieldset style="width:100%;height:100%;overflow:auto;">
                     <legend style="font-size:15px;">Atlantic Hurricanes</legend>
-                    <div id="hurricanelist" style="width:100%;height:100% font-size:10px;overflow:auto;"></div>
+                    <div id="hurricanelist" style="width:100%;height:100% font-size:15px;overflow:auto;"></div>
                 </fieldset>
             </div>
-            <div class="inline" id = top style = "width: 50vw; height: 60vh;" >
+
+            <!--map-->
+            <div class="inline" id = top style = "width: 50vw; height: 80vh;" >
                 <div  id = "map" style = "height: 100%;"></div>
 
                 <!--<div id = "map" style = "height: 50%;"></div>-->
@@ -92,40 +94,39 @@
 
             </div>
 
-
-            <br/>
-        <!-- Options -->
-        <div class="inline">
-            <fieldset style="width:250px">
-                <legend>Options</legend>
-                <div id="optionmenu"></div>                <br />
-                <div id="ordermenu"></div>                <br />
-                Date: <input type="text" id="datepicker"> <br />
-                Show Heatmap: <input type="checkbox" id="heat" /> <br />
-                <!-- This is a temporary placement for a button, just for testing the play functionality -->
-                <button id="play" value = "paused" onclick="playHit()">Play/Pause</button>
+            <!-- Options -->
+            <div class="inline">
+                <fieldset style="width:15vw;">
+                    <legend>Options</legend>
+                    <div id="optionmenu"></div>                <br />
+                    <div id="ordermenu"></div>                <br />
+                    Date: <input type="text" id="datepicker"> <br />
+                    Show Heatmap: <input type="checkbox" id="heat" /> <br />
+                    <!-- This is a temporary placement for a button, just for testing the play functionality -->
+                    <button id="play" value = "paused" onclick="playHit()">Play/Pause</button>
+                    <br />
+                    <br />
+                </fieldset>
                 <br />
-                <br />
-            </fieldset>
-            <br />
 
-            <!--<div>-->
-            <fieldset style="width:250px">
-                <legend>Filters</legend>
-                <input type="number" id="min_speed" style ="width:50px" /> < Wind Speed < <input type="number" id="max_speed" style ="width:50px"/> <br />
-                <input type="number" id="min_pressure" style ="width:50px" /> < Pressure < <input type="number" id="max_pressure" style ="width:50px" /> <br />
-                Made Land: <input type="checkbox" id="land" /> <br />
+                <!--<div>-->
+                <fieldset style="width:15vw;">
+                    <legend>Filters</legend>
+                    <input type="number" id="min_speed" style ="width:50px" /> < Wind Speed < <input type="number" id="max_speed" style ="width:50px"/> <br />
+                    <input type="number" id="min_pressure" style ="width:50px" /> < Pressure < <input type="number" id="max_pressure" style ="width:50px" /> <br />
+                    Made Land: <input type="checkbox" id="land" /> <br />
 
-            </fieldset>
+                </fieldset>
 
-        </div>
-        <!-- chart container-->
-        <div id="chartContainer" class="inline">
-            <div id="chart"></div>
-            <div id="chart1"></div>
-            <div id="graph1"> </div>
-        </div>
-        <!-- /Options -->
+            </div>
+
+            <!-- chart container-->
+            <div id="chartContainer" class="inline">
+                <div id="chart"></div>
+                <div id="chart1"></div>
+                <div id="graph1"> </div>
+            </div>
+
 
 
 
