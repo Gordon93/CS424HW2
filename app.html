@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 
 
 <html>
@@ -158,7 +158,15 @@
                 var mydate;
                 
                 var num_hurricanes = [[], [], [], [], [], [], [], [], [], []];
-
+                 
+                var polyline = {};
+                
+                var day_lat ={};
+                var day_lag ={};
+                var day_wind ={};
+                var day_name ={};
+                
+                
                 var Namedict = [];
                 var Timedict = [];
                 var Speeddict = [];
@@ -445,8 +453,7 @@
                   function drawPath(that){
                       
                   var check = $(that).attr("val");      
-                  alert(check);  
-                  var polyline;
+                  //alert(check);  
                   var polyline_options; 
                   var myline;
                   
@@ -485,58 +492,18 @@
                             color: 'red'
                          };
                          
-                         //alert(JSON.stringify(myline));
-                         //alert(JSON.stringify(line_points));
-                         
-                          polyline = L.polyline(myline,polyline_options).addTo(map);
+                        polyline[val] = L.polyline(myline,polyline_options).addTo(map);
+            // polyline = L.polyline(myline,polyline_options).addTo(map);
                          
                          break;
                      }
                      }
                   }
                       else if(check == 'true'){
-                          var myline = new Array();
-                  var dot = [];
-                  var val = $(that).attr("id");
-                     //alert('in modify');
-                     //alert(val);
-                     for ( var key in Namedict ) {
-
-                     //alert(Namedict[key].value);
-                     //alert(Namedict[key].key);
-
-                      var mykey = Namedict[key].key;
-
-                     if ( Namedict[key].value == val){
-                         //alert("match");
-                         console.log(wind_id[Namedict[key].key].length);
-                         for( var i =0; i<wind_id[Namedict[key].key].length;i++){
-                             //alert(wind_id[Namedict[key].key][i]);
-
-                       if (wind_id[Namedict[key].key][i] > 40){  // coloring scheme
-                        color ='red'
-                    }
-                        else{
-                            color = 'green'
-                        }
-                             
-                   myline[i] = new Array(2);
-                   myline[i][0] = parseFloat(latitute_id[mykey][i])
-                   myline[i][1] = parseFloat(langitute_id[mykey][i])
-                   
-               }
-                         
-                          polyline_options = {
-                            color: 'red'
-                         };
-                         
-                         //alert(JSON.stringify(myline));
-                         //alert(JSON.stringify(line_points));
-                         polyline = L.polyline(myline,polyline_options).removeLayer(map);
-                         
-                         break;
-                     }
-                     }
+                          var val = $(that).attr("id");
+                          //alert(val);
+                          //alert(polyline[val]);
+                         map.removeLayer(polyline[val]);
                       }
                      modify(that);
                   }
@@ -683,15 +650,23 @@
                 }; //End of the top 10 function.
                 
                 
-               $(function() {
+          
+        $(function() {
                 $('#datepicker').datepicker();
-                 $('#datepicker').datepicker('option', 'onSelect', function(dateText,inst) {       
-                     //alert('one');
-                     //alert(dateText)                                                                     
+                 $('#datepicker').datepicker('option', 'onSelect', function(dateText,inst) {      
+                     alert('one');
+                     alert(dateText)
+                     alert(JSON.stringify(day_lat));
+                     for(var key in day_lat) {
+                        if(day_lat.hasOwnProperty(key)) {
+                           if(key.indexOf(dateText) != -1){
+                               alert("get here");
+                               alert(day_lat[key]);
+                              }
+                        }
+                   }
                 } );
                     });
-                
-                
                 
                 
                 d3.csv("data/Hurricanes.csv", function (error, text) {
@@ -742,8 +717,44 @@
                     console.log("hurricane obj by id");
                     console.log(data);
                 });
-
+            
+                // This function gets clusters by year, month, day
+                
+                           d3.csv("data/AtlHurricane2005-2014.csv", function (error, text) {
+                    var i = 0;
+                    var data = d3.nest()
+                        .key(function (d) {
+                            return d.YEAR;
+                        })
+                        .key(function (d) {
+                            return d.MONTH;
+                        })
+                    .key(function (d) {
+                            return d.DAY;
+                        })
+                    .rollup(function (leaves) {
+                        console.log(JSON.stringify(leaves[0]));
+                        var mykey = leaves[0].MONTH + "/" + leaves[0].DAY + "/" +leaves[0].YEAR;
+                        console.log(mykey);
+                        for (var j = 0 ; j < leaves.length; j++) {
+                            mykey += "|" + j.toString();
+                            
+                            day_lat[mykey] = parseFloat(leaves[j].LAT);
+                            day_lag[mykey] = parseFloat(leaves[j].LAG);
+                            day_wind[mykey] = parseFloat(leaves[j].MaxWind);
+                            day_name[mykey] = parseFloat(leaves[j].NAME);
+                        }
+                        i++;
+                        return leaves.length;
+                    })
+                    .entries(text);
+                    //alert(i);   
+                    console.log('printing here');
+                    //alert(JSON.stringify(day_lat));
+                });
+                
                 //The function below grabs the hurricane data and breaks it up into HURID.
+                
                 d3.csv("data/AtlHurricane2005-2014.csv", function (error, text) {
                     var i = 0;
                     var data = d3.nest()
