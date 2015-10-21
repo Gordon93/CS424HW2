@@ -161,10 +161,13 @@
                  
                 var polyline = {};
                 
-                var day_lat ={};
-                var day_lag ={};
-                var day_wind ={};
-                var day_name ={};
+                var dateLine = {};
+                var mydateline = [];
+                
+                var day_lat = {};
+                var day_lag = {};
+                var day_wind = {};
+                var day_name = {};
                 
                 
                 var Namedict = [];
@@ -657,16 +660,29 @@
                      alert('one');
                      alert(dateText)
                      alert(JSON.stringify(day_lat));
+                     var i =0;
                      for(var key in day_lat) {
                         if(day_lat.hasOwnProperty(key)) {
                            if(key.indexOf(dateText) != -1){
                                alert("get here");
                                alert(day_lat[key]);
-                              }
+                               alert(day_lag[key]);
+                               alert(day_wind[key]);
+                               alert(day_name[key]);
+                               mydateline[i] = new Array(2);
+                               mydateline[i][0] = parseFloat(day_lat[key]);
+                               mydateline[i][1] = parseFloat(day_lag[key]);
+                               i++;
+               }                         
+                       var line_options = {
+                            color: 'red'
+                         };
                         }
-                   }
-                } );
-                    });
+                     }
+         dateLine[dateText] = L.polyline(mydateline,line_options).addTo(map);    
+                      
+                        });
+                   });
                 
                 
                 d3.csv("data/Hurricanes.csv", function (error, text) {
@@ -733,24 +749,22 @@
                             return d.DAY;
                         })
                     .rollup(function (leaves) {
-                        console.log(JSON.stringify(leaves[0]));
+                        //alert(JSON.stringify(leaves[0]));
                         var mykey = leaves[0].MONTH + "/" + leaves[0].DAY + "/" +leaves[0].YEAR;
                         console.log(mykey);
                         for (var j = 0 ; j < leaves.length; j++) {
                             mykey += "|" + j.toString();
                             
-                            day_lat[mykey] = parseFloat(leaves[j].LAT);
-                            day_lag[mykey] = parseFloat(leaves[j].LAG);
-                            day_wind[mykey] = parseFloat(leaves[j].MaxWind);
-                            day_name[mykey] = parseFloat(leaves[j].NAME);
+                            day_lat[mykey] =  leaves[j].LAT;
+                            day_lag[mykey] =  leaves[j].LOG;
+                            day_wind[mykey] = leaves[j].MaxWind;
+                            day_name[mykey] = leaves[j].NAME;
                         }
                         i++;
                         return leaves.length;
                     })
                     .entries(text);
-                    //alert(i);   
-                    console.log('printing here');
-                    //alert(JSON.stringify(day_lat));
+                               
                 });
                 
                 //The function below grabs the hurricane data and breaks it up into HURID.
