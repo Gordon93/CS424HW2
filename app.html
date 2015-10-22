@@ -507,6 +507,7 @@
                           //alert(val);
                           //alert(polyline[val]);
                          map.removeLayer(polyline[val]);
+                         map.removeLayer(dateLine[val]);
                       }
                      modify(that);
                   }
@@ -661,6 +662,8 @@
                      alert(dateText)
                      alert(JSON.stringify(day_lat));
                      var i =0;
+                     var dateNames = [];
+                     var uniqueDateNames = [];
                      for(var key in day_lat) {
                         if(day_lat.hasOwnProperty(key)) {
                            if(key.indexOf(dateText) != -1){
@@ -672,6 +675,7 @@
                                mydateline[i] = new Array(2);
                                mydateline[i][0] = parseFloat(day_lat[key]);
                                mydateline[i][1] = parseFloat(day_lag[key]);
+                               dateNames[i] = day_name[key];
                                i++;
                }                         
                        var line_options = {
@@ -679,8 +683,29 @@
                          };
                         }
                      }
-         dateLine[dateText] = L.polyline(mydateline,line_options).addTo(map);    
-                      
+         //dateLine[dateText] = L.polyline(mydateline,line_options).addTo(map);
+                     
+                         $.each(dateNames, function (i, el) {
+                            if ($.inArray(el, uniqueDateNames) === -1) uniqueDateNames.push(el);
+                        });
+                     
+                     alert(uniqueDateNames[0]);
+    dateLine[uniqueDateNames[0]] = L.polyline(mydateline,line_options).addTo(map);
+                        
+                     svg = d3.select("#hurricanelist").selectAll("input")
+                          .data(uniqueDateNames)
+                          .enter()
+                          .append('label')
+                          .style("font-size", "12px")
+                              .attr('for', function (d, i) { return 'a' + i; })
+                              .text(function (d) { return d; })
+                              .append("input")
+                              .attr("val", false)
+                              .attr("type", "checkbox")
+                              .attr("id", function (d, i) { return uniqueDateNames[i]; })
+                              .attr("onClick", "modify(this)")
+                              .attr("onClick", "drawPath(this)");
+                     
                         });
                    });
                 
