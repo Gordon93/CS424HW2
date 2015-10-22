@@ -54,9 +54,7 @@
         -->
 		<!-- Custom styles for this template -->
 		<link href="styles.css" rel="stylesheet">
-
-
-
+        
 	</head>
 	
 	<body>
@@ -83,30 +81,12 @@
             </div>
         </nav>
 
-
         <div class="pageContent">
             <!-- PUT ALL PAGE CODE EITHER IN OR BELOW THIS DIV! OTHERWISE IT WILL FALL BELOW THE NAV BAR! -->
 
-            <!-- Listbox of hurricanes to populate with hurricane names -->
-            <div class="inline" style="height:90vh;width:8vw;">
-                <fieldset style="width:100%;height:100%;overflow:auto;">
-                    <legend style="font-size:15px;">Atlantic Hurricanes</legend>
-                    <div id="hurricanelist" style="width:100%;height:100% font-size:15px;overflow:auto;"></div>
-                </fieldset>
-            </div>
-
-            <!--map-->
-            <div class="inline" id = top style = "width: 50vw; height: 80vh;" >
-                <div  id = "map" style = "height: 100%;"></div>
-
-                <!--<div id = "map" style = "height: 50%;"></div>-->
-                <div id = "legend" style = "height: 50% ; "></div>
-
-            </div>
-
             <!-- Options -->
-            <div class="inline">
-                <fieldset style="width:15vw;">
+            <div class="inline" style="width:12vw;">
+                <fieldset>
                     <legend>Options</legend>
                     <div id="optionmenu"></div>                <br />
                     <div id="ordermenu"></div>                <br />
@@ -120,26 +100,53 @@
                 <br />
 
                 <!--<div>-->
-                <fieldset style="width:15vw;">
+                <fieldset>
                     <legend>Filters</legend>
-                    <input type="number" id="min_speed" style ="width:50px" /> < Wind Speed < <input type="number" id="max_speed" style ="width:50px"/> <br />
-                    <input type="number" id="min_pressure" style ="width:50px" /> < Pressure < <input type="number" id="max_pressure" style ="width:50px" /> <br />
+                    <input type="number" id="min_speed" style="width:50px" /> < Wind Speed < <input type="number" id="max_speed" style="width:50px" /> <br />
+                    <input type="number" id="min_pressure" style="width:50px" /> < Pressure < <input type="number" id="max_pressure" style="width:50px" /> <br />
                     Made Land: <input type="checkbox" id="land" /> <br />
 
                 </fieldset>
 
             </div>
 
+            <!-- atlantic list -->
+            <div class="inline" style="height:80vh;width:8vw;">
+                <fieldset style="width:100%;height:100%;overflow:auto;">
+                    <legend style="font-size:15px; overflow:auto">Pacific Hurricanes</legend>
+                    <div id="hurricanelist2" style="width:100%;height:100%; overflow:auto;"></div>
+                </fieldset>
+            </div>
+
+            <!--maps-->
+            <div class="inline" id = top style = "width: 50vw; height: 80vh;" >
+                <div id="map2" style="height: 100%; width:50%" class="inline"></div>
+                <div  id="map"  style="height: 100%; width:50%" class="inline"></div>                
+                <!--<div id = "map" style = "height: 50%;"></div>-->
+                <div id = "legend" style = "height: 50% ; "></div>
+
+            </div>
+
+            <!-- atlantic list -->
+            <div class="inline" style="height:80vh;width:8vw;">
+                <fieldset style="width:100%;height:100%;overflow:auto;">
+                    <legend style="font-size:15px; overflow:auto">Atlantic Hurricanes</legend>
+                    <div id="hurricanelist" style="width:100%;height:100%; overflow:auto;"></div>
+                </fieldset>
+            </div>          
+
             <!-- chart container-->
-            <div id="chartContainer" class="inline">
+            <div id="chartContainer" class="inline" style="width:19vw">
                 <div id="chart"></div>
                 <div id="chart1"></div>
                 <div id="graph1"> </div>
             </div>
 
-
-
-
+            <div id="chartContainer2" class="inline" style="...">
+                <div id="chart2"></div>
+                <div id="chart3"></div>
+                <div id="graph2"> </div>
+            </div>
 
             <script type="text/javascript">
                 var select;
@@ -151,7 +158,18 @@
                 var mydate;
                 
                 var num_hurricanes = [[], [], [], [], [], [], [], [], [], []];
-
+                 
+                var polyline = {};
+                
+                var dateLine = {};
+                var mydateline = [];
+                
+                var day_lat = {};
+                var day_lag = {};
+                var day_wind = {};
+                var day_name = {};
+                
+                
                 var Namedict = [];
                 var Timedict = [];
                 var Speeddict = [];
@@ -183,6 +201,7 @@
                 var year_id = [[], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []];
 
                 var map = L.map('map').setView([41.83, -87.68], 4);
+                var map2 = L.map('map2').setView([41.83, -87.68], 4);
 
                 // creating a map
 
@@ -193,6 +212,14 @@
                     id: 'ygordon22.cifd9ql4c53tbsmlx7cegx4iy',
                     accessToken: 'pk.eyJ1IjoieWdvcmRvbjIyIiwiYSI6ImNpZmQ5cW1idzUzeWFzNG03bjVqc3czZWEifQ.dpecRLb3F4lRAOvIVd5KpQ'
                 }).addTo(map);
+
+                L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+                    attribution: 'Map data &copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://mapbox.com">Mapbox</a>',
+                    maxZoom: 18,
+                    noWrap: true,
+                    id: 'ygordon22.cifd9ql4c53tbsmlx7cegx4iy',
+                    accessToken: 'pk.eyJ1IjoieWdvcmRvbjIyIiwiYSI6ImNpZmQ5cW1idzUzeWFzNG03bjVqc3czZWEifQ.dpecRLb3F4lRAOvIVd5KpQ'
+                }).addTo(map2);
 
                 var playbackOptions = {
                     playControl: true,
@@ -219,12 +246,10 @@
                     //method to create linechart
                     if(index < 10)
                     {
-                        updateline1(HurrData[index]);
-                        updateline2(HurrData[index]);
+                        updateline1(HurrData1[index],graphs[0]);
+                        updateline1(HurrData2[index],graphs[1]);
+
                     }
-
-
-
 
                     var color;
 //                    //alert(JSON.stringify(chosenYear));
@@ -292,8 +317,6 @@
                                 }).addTo(map)
                             }
                         }
-
-
                     }
 
                     else {
@@ -371,22 +394,40 @@
 
                     // Creating a legend with all hurricane name
                       if (num != 0) {
-                        //alert("removing");
-                        d3.select(".legend").remove();
+                        alert("removing");
+                d3.select("#hurricanelist").selectAll("input").remove();
+                d3.select("#hurricanelist").selectAll('label').remove();
+
+                d3.select("#hurricanelist2").selectAll("input").remove();
+                d3.select("#hurricanelist2").selectAll('label').remove();
                     }
-                    svg = d3.select("legend").selectAll("input")
-                            .data(uniqueNames)
-                            .enter()
-                            .append('label')
-                            .attr('for', function (d, i) { return 'a' + i; })
-                            .text(function (d) { return d; })
-                            .append("input")
-                            .attr("val", false)
-                            .attr("type", "checkbox")
-                            .attr("id", function (d, i) { return uniqueNames[i]; })
-                            .attr("onClick", "modify(this)")
-                            .attr("onClick", "drawPath(this)");
-                    
+                      svg = d3.select("#hurricanelist").selectAll("input")
+                          .data(uniqueNames)
+                          .enter()
+                          .append('label')
+                          .style("font-size", "12px")
+                              .attr('for', function (d, i) { return 'a' + i; })
+                              .text(function (d) { return d; })
+                              .append("input")
+                              .attr("val", false)
+                              .attr("type", "checkbox")
+                              .attr("id", function (d, i) { return uniqueNames[i]; })
+                              .attr("onClick", "modify(this)")
+                              .attr("onClick", "drawPath(this)");
+
+                      svg = d3.select("#hurricanelist2").selectAll("input")
+                           .data(uniqueNames)
+                           .enter()
+                           .append('label')
+                           .style("font-size", "12px")
+                               .attr('for', function (d, i) { return 'a' + i; })
+                               .text(function (d) { return d; })
+                               .append("input")
+                               .attr("val", false)
+                               .attr("type", "checkbox")
+                               .attr("id", function (d, i) { return uniqueNames[i]; })
+                               .attr("onClick", "modify(this)")
+                               .attr("onClick", "drawPath(this)");
                     num++;
 
                 }
@@ -413,9 +454,16 @@
                 };
                 
                   function drawPath(that){
-                  var myline = new Array();
+                      
+                  var check = $(that).attr("val");      
+                  //alert(check);  
+                  var polyline_options; 
+                  var myline;
+                  
+                  if (check == 'false'){
+                   myline = new Array();
                   var dot = [];
-                  var val = $(that).attr("id");;
+                  var val = $(that).attr("id");
                      //alert('in modify');
                      //alert(val);
                      for ( var key in Namedict ) {
@@ -437,40 +485,30 @@
                         else{
                             color = 'green'
                         }
-
-              /*
-                             
-                             // adding a circle for every hurricane generated by user specification.              
-                   var circle = L.circle([latitute_id[mykey][i],langitute_id[mykey][i]], 500, {
-            color: color,
-            fillColor: '#f03',
-            fillOpacity: 0.5
-        }).addTo(map)
-        
-                   var line_points = [
-    [38.893596444352134, -77.0381498336792],
-    [37.89337933372204, -78.03792452812195]
-];
-                             */
                              
                    myline[i] = new Array(2);
                    myline[i][0] = parseFloat(latitute_id[mykey][i])
                    myline[i][1] = parseFloat(langitute_id[mykey][i])
                    
-               }
-                         
-                         var polyline_options = {
+               }                         
+                        polyline_options = {
                             color: 'red'
                          };
                          
-                         //alert(JSON.stringify(myline));
-                         //alert(JSON.stringify(line_points));
-                         
-                         var polyline = L.polyline(myline,polyline_options).addTo(map);
+                        polyline[val] = L.polyline(myline,polyline_options).addTo(map);
+            // polyline = L.polyline(myline,polyline_options).addTo(map);
                          
                          break;
                      }
                      }
+                  }
+                      else if(check == 'true'){
+                          var val = $(that).attr("id");
+                          //alert(val);
+                          //alert(polyline[val]);
+                         map.removeLayer(polyline[val]);
+                         map.removeLayer(dateLine[val]);
+                      }
                      modify(that);
                   }
                 
@@ -616,15 +654,60 @@
                 }; //End of the top 10 function.
                 
                 
-               $(function() {
+          
+        $(function() {
                 $('#datepicker').datepicker();
-                 $('#datepicker').datepicker('option', 'onSelect', function(dateText,inst) {       
-                     //alert('one');
-                     //alert(dateText)                                                                     
-                } );
-                    });
-                
-                
+                 $('#datepicker').datepicker('option', 'onSelect', function(dateText,inst) {      
+                     alert('one');
+                     alert(dateText)
+                     alert(JSON.stringify(day_lat));
+                     var i =0;
+                     var dateNames = [];
+                     var uniqueDateNames = [];
+                     for(var key in day_lat) {
+                        if(day_lat.hasOwnProperty(key)) {
+                           if(key.indexOf(dateText) != -1){
+                               alert("get here");
+                               alert(day_lat[key]);
+                               alert(day_lag[key]);
+                               alert(day_wind[key]);
+                               alert(day_name[key]);
+                               mydateline[i] = new Array(2);
+                               mydateline[i][0] = parseFloat(day_lat[key]);
+                               mydateline[i][1] = parseFloat(day_lag[key]);
+                               dateNames[i] = day_name[key];
+                               i++;
+               }                         
+                       var line_options = {
+                            color: 'red'
+                         };
+                        }
+                     }
+         //dateLine[dateText] = L.polyline(mydateline,line_options).addTo(map);
+                     
+                         $.each(dateNames, function (i, el) {
+                            if ($.inArray(el, uniqueDateNames) === -1) uniqueDateNames.push(el);
+                        });
+                     
+                     alert(uniqueDateNames[0]);
+    dateLine[uniqueDateNames[0]] = L.polyline(mydateline,line_options).addTo(map);
+                        
+                     svg = d3.select("#hurricanelist").selectAll("input")
+                          .data(uniqueDateNames)
+                          .enter()
+                          .append('label')
+                          .style("font-size", "12px")
+                              .attr('for', function (d, i) { return 'a' + i; })
+                              .text(function (d) { return d; })
+                              .append("input")
+                              .attr("val", false)
+                              .attr("type", "checkbox")
+                              .attr("id", function (d, i) { return uniqueDateNames[i]; })
+                              .attr("onClick", "modify(this)")
+                              .attr("onClick", "drawPath(this)");
+                     
+                        });
+                   });
                 
                 
                 d3.csv("data/Hurricanes.csv", function (error, text) {
@@ -675,8 +758,42 @@
                     console.log("hurricane obj by id");
                     console.log(data);
                 });
-
+            
+                // This function gets clusters by year, month, day
+                
+                           d3.csv("data/AtlHurricane2005-2014.csv", function (error, text) {
+                    var i = 0;
+                    var data = d3.nest()
+                        .key(function (d) {
+                            return d.YEAR;
+                        })
+                        .key(function (d) {
+                            return d.MONTH;
+                        })
+                    .key(function (d) {
+                            return d.DAY;
+                        })
+                    .rollup(function (leaves) {
+                        //alert(JSON.stringify(leaves[0]));
+                        var mykey = leaves[0].MONTH + "/" + leaves[0].DAY + "/" +leaves[0].YEAR;
+                        console.log(mykey);
+                        for (var j = 0 ; j < leaves.length; j++) {
+                            mykey += "|" + j.toString();
+                            
+                            day_lat[mykey] =  leaves[j].LAT;
+                            day_lag[mykey] =  leaves[j].LOG;
+                            day_wind[mykey] = leaves[j].MaxWind;
+                            day_name[mykey] = leaves[j].NAME;
+                        }
+                        i++;
+                        return leaves.length;
+                    })
+                    .entries(text);
+                               
+                });
+                
                 //The function below grabs the hurricane data and breaks it up into HURID.
+                
                 d3.csv("data/AtlHurricane2005-2014.csv", function (error, text) {
                     var i = 0;
                     var data = d3.nest()
@@ -892,9 +1009,6 @@
                 }; //End of the toTimestamp function.
                     
             </script>
-
-
-
 
         </div>
         <script type=text/javascript>

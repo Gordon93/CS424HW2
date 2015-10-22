@@ -2,8 +2,9 @@
  * Created by Ryan Jones on 10/14/2015.
  */
 
-var x, y, xAxis,yAxis,
-    graph1,graph2,bar1,margin,height,width;
+var x, y, xAxis,yAxis,graphs,
+    graph1,graph2,graph3,graph4,bar1,bar2,margin,height,width;
+
 
 var color1 = d3.scale.category20();
 
@@ -40,24 +41,11 @@ function createline1() {
         width = parseInt(d3.select('#chart').style('width'),10),
         width = width - margin.left - margin.right,
         height = ((window.innerHeight) *.30)-margin.bottom - margin.top;
-    console.log(height);
+    console.log(width);
         //height = 270 - margin.top - margin.bottom;
 
    // console.log(height);
 
-    //creates the x and y scales for the graph
-    x = d3.time.scale().range([0, width]);
-    y = d3.scale.linear().range([height, 0]);
-
-    //places the x axis at the bottom of the graph
-    xAxis = d3.svg.axis()
-        .scale(x)
-        .orient("bottom").ticks(15);
-
-    //places the y axis at the left of the graph
-    yAxis = d3.svg.axis()
-        .scale(y)
-        .orient("left").ticks(5);
 
     //creates a SVG witht apporiate width and height
     graph1 = d3.select("#chart").append("svg")
@@ -66,30 +54,6 @@ function createline1() {
         .append("g")
         .attr("transform",
         "translate(" + margin.left + "," + margin.top + ")");
-}
-
-
-
-function createline2() {
-
-
-    //parse the date
-    var format = d3.time.format("%d-%b-%y");
-
-
-    //creates the x and y scales for the graph
-    x = d3.time.scale().range([0, width]);
-    y = d3.scale.linear().range([height, 0]);
-
-    //places the x axis at the bottom of the graph
-    xAxis = d3.svg.axis()
-        .scale(x)
-        .orient("bottom").ticks(15);
-
-    //places the y axis at the left of the graph
-    yAxis = d3.svg.axis()
-        .scale(y)
-        .orient("left").ticks(5);
 
     //creates a SVG witht apporiate width and height
     graph2 = d3.select("#chart1").append("svg")
@@ -99,15 +63,47 @@ function createline2() {
         .attr("transform",
         "translate(" + margin.left + "," + margin.top + ")");
 
+    //creates a SVG witht apporiate width and height
+    graph3 = d3.select("#chart2").append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform",
+        "translate(" + margin.left + "," + margin.top + ")");
+
+    //creates a SVG witht apporiate width and height
+    graph4 = d3.select("#chart3").append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform",
+        "translate(" + margin.left + "," + margin.top + ")");
+
+
+    bar1 = d3.select("#graph1").append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform",
+        "translate(" + margin.left + "," + margin.top + ")");
+
+
+   var bar2 = d3.select("#graph2").append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform",
+        "translate(" + margin.left + "," + margin.top + ")");
+
+    graphs.push({max:graph1,min:graph2,bar:bar1});
+    graphs.push({max:graph3,min:graph4,bar:bar2});
 
 }
 
-function createbar1(HurrData) {
-    var tickF;
-   /* var margin = {top: 20, right: 20, bottom: 30, left: 80},
-        width = 800 - margin.left - margin.right,
-        height = 250 - margin.top - margin.bottom;*/
 
+
+function createbar1(HurrData,graph) {
+    var tickF;
     x = d3.scale.ordinal().rangeRoundBands([0, width],.3);
     y = d3.scale.linear().range([height, 0]);
 
@@ -127,12 +123,6 @@ function createbar1(HurrData) {
         .scale(y)
         .orient("left");
 
-    bar1 = d3.select("#graph1").append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform",
-        "translate(" + margin.left + "," + margin.top + ")");
 
 
     var HurrPerYear = [];
@@ -178,7 +168,7 @@ function createbar1(HurrData) {
     x.domain(HurrPerYear.map(function(d) { return d.YEAR; }));
     y.domain([0, d3.max(HurrPerYear,function(d){return d.perYear;})]);
 
-    bar1.append("g")
+    graph.append("g")
         .attr("class", "x axis")
         .attr("transform", "translate(0," + height + ")")
         .call(xAxis)
@@ -189,7 +179,7 @@ function createbar1(HurrData) {
         .attr("x",-15)
         //.attr("dy", ".35em");
         //.attr("transform", "rotate(90)" )*/;
-    bar1.append("g")
+    graph.append("g")
         .attr("class", "y axis")
         .call(yAxis)
         .append("text")
@@ -198,7 +188,7 @@ function createbar1(HurrData) {
         .attr("dy", ".71em")
         .style("text-anchor","end")
         .text("POP(EST)");
-    bar1.selectAll("bar")
+    graph.selectAll("bar")
         .data(HurrPerYear)
         .enter().append("rect")
         .attr("x", function(d) { return x(d.YEAR); })
@@ -207,7 +197,7 @@ function createbar1(HurrData) {
         .attr("height", function(d) { return height - y(d.perYear); })
         .style("fill",  function (d) {
             return color1(d.YEAR);});
-    bar1.append("text")
+    graph.append("text")
         .attr("x",(width/2))
         .attr("y",10-(margin.top/2))
         .attr("text-anchor","middle")
@@ -219,10 +209,10 @@ function createbar1(HurrData) {
 
 
 
-function updateline1(HurrData) {
+function updateline1(HurrData,graph) {
     var tickF,numTicks;
     //set the dimensions of the canvas/graph
-    graph1.selectAll("*").remove();
+    graph.max.selectAll("*").remove();
 
     HurrData.values.forEach(function (d) {
         // d.values.forEach(function (d) {
@@ -231,7 +221,6 @@ function updateline1(HurrData) {
         d.DATE = format.parse(date);
         //console.log(d.DATE);
         //});
-
     });
 
     console.log(numTicks);
@@ -239,7 +228,7 @@ function updateline1(HurrData) {
     x = d3.time.scale().range([0, width]);
     y = d3.scale.linear().range([height, 0]);
 
-    if(width< 400)
+    if(width< 1000)
         tickF = d3.time.format("%b");
     else
         tickF = d3.time.format("%B");
@@ -280,7 +269,6 @@ function updateline1(HurrData) {
 
     console.log(dataSet);
 
-
     //creates the x and y domain for the graphs
     x.domain(d3.extent(HurrData.values, function (d) {return d.DATE;}));
     y.domain([d3.min(HurrData.values,function(d){return d.MaxWind;}), d3.max(HurrData.values,function(d){
@@ -291,7 +279,7 @@ function updateline1(HurrData) {
      .attr("d",line(HurrData));*/
 
     //Add the x axis
-    graph1.append("g")
+    graph.max.append("g")
         .attr("class", "x axis")
         .attr("transform", "translate(0," + height + ")")
         .call(xAxis)
@@ -304,7 +292,7 @@ function updateline1(HurrData) {
         //.attr("transform", "rotate(90)" );
 
     //Add the Y axist
-    graph1.append("g")
+    graph.max.append("g")
         .attr("class", "y axis")
         .call(yAxis)
         .append("text")
@@ -322,7 +310,7 @@ function updateline1(HurrData) {
 
 
 
-        graph1.append('path')
+        graph.max.append('path')
             .attr("class","line")
             .attr('stroke',function(){return d.color = color1(d.key);})
             //.attr('stroke-width',2)*/
@@ -338,68 +326,24 @@ function updateline1(HurrData) {
          .attr("r",1.5)
          .attr('fill',function(d){return d.color = color1(d.key);});*/
     });
-     graph1.append("text")
+     graph.max.append("text")
      .attr("x",(width/2))
      .attr("y",10-(margin.top/2))
      .attr("text-anchor","middle")
      //.style("font-size","16px")
      .text("MaxWind for "+HurrData.values[0].YEAR);
 
+    updateline2(HurrData,dataSet,graph.min)
+
 }
 
 
-function updateline2(HurrData) {
+function updateline2(HurrData,dataSet,graph) {
 
     //set the dimensions of the canvas/graph
-    graph2.selectAll("*").remove();
-
-    //creates the x and y scales for the graph
-    x = d3.time.scale().range([0, width]);
-    y = d3.scale.linear().range([height, 0]);
-
-    if(width< 400)
-        tickF = d3.time.format("%b");
-    else
-        tickF = d3.time.format("%B");
-
-    if(width<1000)
-        numTicks = 5;
-
-    else {
-        numTicks = 20;
-        tickF = d3.time.format("%b-%d")
-    }
-
-    //places the x axis at the bottom of the graph
-    xAxis = d3.svg.axis()
-        .scale(x)
-        .orient("bottom").ticks(numTicks)
-        .tickFormat(tickF);
-
-    //places the y axis at the left of the graph
-    yAxis = d3.svg.axis()
-        .scale(y)
-        .orient("left").ticks(numTicks);
-
-    color1 = d3.scale.category20();
-
-
-
-    HurrData.values.forEach(function (d) {
-        date = format(new Date(d.YEAR, (d.MONTH - 1), d.DAY));
-        d.DATE = format.parse(date);
-    });
-
-    //this create key for the data and groups the keys by HURID
-    var dataSet = d3.nest()
-        .key(function(d) {
-            return d.HURID;
-        })
-        .entries(HurrData.values)
-
+    graph.selectAll("*").remove();
 
     //creates the x and y domain for the graphs
-    x.domain(d3.extent(HurrData.values, function (d) {return d.DATE;}));
     y.domain([d3.min(HurrData.values,function(d){return d.MinPress;}), d3.max(HurrData.values,function(d){
         return d.MinPress;})]);
 
@@ -408,7 +352,7 @@ function updateline2(HurrData) {
      .attr("d",line(HurrData));*/
 
     //Add the x axis
-    graph2.append("g")
+    graph.append("g")
         .attr("class", "x axis")
         .attr("transform", "translate(0," + height + ")")
         .call(xAxis)
@@ -421,7 +365,7 @@ function updateline2(HurrData) {
     //.attr("transform", "rotate(90)" );
 
     //Add the Y axist
-    graph2.append("g")
+    graph.append("g")
         .attr("class", "y axis")
         .call(yAxis)
         .append("text")
@@ -439,7 +383,7 @@ function updateline2(HurrData) {
 
 
 
-        graph2.append('path')
+        graph.append('path')
             .attr("class","line")
             .attr('stroke',function(){return d.color = color1(d.key);})
             //.attr('stroke-width',2)*/
@@ -457,7 +401,7 @@ function updateline2(HurrData) {
          .attr('fill',function(d){return d.color = color1(d.key);});*/
     });
 
-     graph2.append("text")
+     graph.append("text")
      .attr("x",(width/2))
      .attr("y",10-(margin.top/2))
      .attr("text-anchor","middle")
@@ -471,8 +415,10 @@ d3.select(window).on('resize',resize);
 
 function resize(){
     //update width
-    width = parseInt(d3.select('#chart').style('width'),10),
-        width = width - margin.left - margin.right;
+    margin = {top: 30, right: 20, bottom: 30, left: 50},
+        width = parseInt(d3.select('#chart').style('width'),10),
+        width = width - margin.left - margin.right,
+        height = ((window.innerHeight) *.30)-margin.bottom - margin.top;
 
 
 }
