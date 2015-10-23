@@ -235,7 +235,6 @@
 
                 function change() {
                     if (num != 0) {
-                        //alert("removing");
                         d3.select(".map").remove();
                     }
 
@@ -256,7 +255,6 @@
                     }
 
                     var color;
-//                    //alert(JSON.stringify(chosenYear));
 
                     if (input.Hurricane == 'All') {
                         var myline = new Array();
@@ -279,12 +277,37 @@
                          };    
                             
                        alert(JSON.stringify((myline[k])));
-                             polyline["TOP5"+topNum.toString()]=L.polyline(myline[k],polyline_options).addTo(map);
+                             polyline["ALL"+topNum.toString()]=L.polyline(myline[k],polyline_options).addTo(map);
                             
                              topNum++; 
                               
                             }
+                        
+                           if (num != 0) {   
+                d3.select("#hurricanelist").selectAll("input").remove();
+                d3.select("#hurricanelist").selectAll('label').remove();
+                d3.select("#hurricanelist2").selectAll("input").remove();
+                d3.select("#hurricanelist2").selectAll('label').remove();
+                    }
+                        
+                    var ALLbox =[]
+                    ALLbox.push("ALL");
+                    
+                    d3.select("#hurricanelist").selectAll("input")
+                          .data(ALLbox)
+                          .enter()
+                          .append('label')
+                          .style("font-size", "12px")
+                              .text("Remove ALL")
+                              .append("input")
+                              .attr("val", false)
+                              .attr("type", "checkbox")
+                              .attr("id", function (d, i) { return ALLbox[i]; })
+                              .attr("onClick", "modify(this)")
+                              .attr("onClick", "drawPath(this)");
+                               num++;
                         }
+                    
                     else if (input.Hurricane == 'TOP5') {
                         top5();
                         var myline = [[], [], [], [], []];
@@ -313,18 +336,40 @@
                             
                              topNum++;     
                             }
+                        
+                if (num != 0) {   
+                d3.select("#hurricanelist").selectAll("input").remove();
+                d3.select("#hurricanelist").selectAll('label').remove();
+                d3.select("#hurricanelist2").selectAll("input").remove();
+                d3.select("#hurricanelist2").selectAll('label').remove();
+                    }
+                        
+                    var Top5box =[]
+                    Top5box.push("TOP5");
+                    
+                    d3.select("#hurricanelist").selectAll("input")
+                          .data(Top5box)
+                          .enter()
+                          .append('label')
+                          .style("font-size", "12px")
+                              .text("Remove TOP5")
+                              .append("input")
+                              .attr("val", false)
+                              .attr("type", "checkbox")
+                              .attr("id", function (d, i) { return Top5box[i]; })
+                              .attr("onClick", "modify(this)")
+                              .attr("onClick", "drawPath(this)");
+                               num++;
                     }
                     
                     else if (input.Hurricane == 'TOP10') {
 
-                        //alert("get to top 10");
                         var myline = [[], [], [], [], [], [], [], [], [], []];
                         var polyline_options; 
                         top10();
                         
                         for (var k = 0; k < 10; k++) {
                              myline[k] = new Array();
-                            //alert(wind_id[mytop10[k]].length);
                             for (var j = 0; j < wind_id[mytop10[k]].length; j++) {
                                 if (wind_id[mytop10[k]][j] > 40) {  // coloring scheme
                                     color = 'red'
@@ -332,15 +377,9 @@
                                 else {
                                     color = 'green'
                                 }
-                   //alert(JSON.stringify(mytop10));
                    myline[k][j] = new Array(2);
-        
-                   //alert(latitute_id[mytop10[k]][j]);
                    myline[k][j][0] = parseFloat(latitute_id[mytop10[k]][j]);
-                   //alert(myline[i][0]);
-                   //alert(langitute_id[mytop10[k]][j]);
                    myline[k][j][1] = parseFloat(langitute_id[mytop10[k]][j]);
-                   //alert(myline[i][1]);
                }                         
                         polyline_options = {
                             color: 'red'
@@ -351,6 +390,31 @@
                             
                              topNum++;     
                             }
+                        
+                if (num != 0) {
+                d3.select("#hurricanelist").selectAll("input").remove();
+                d3.select("#hurricanelist").selectAll('label').remove();
+
+                d3.select("#hurricanelist2").selectAll("input").remove();
+                d3.select("#hurricanelist2").selectAll('label').remove();
+                    }
+                        
+                    var Top10box =[]
+                    Top10box.push("TOP10");
+                    
+                    d3.select("#hurricanelist").selectAll("input")
+                          .data(Top10box)
+                          .enter()
+                          .append('label')
+                          .style("font-size", "12px")
+                              .text("Remove TOP10")
+                              .append("input")
+                              .attr("val", false)
+                              .attr("type", "checkbox")
+                              .attr("id", function (d, i) { return Top10box[i]; })
+                              .attr("onClick", "modify(this)")
+                              .attr("onClick", "drawPath(this)");
+                               num++;
                         }
 
                     else {
@@ -359,36 +423,23 @@
                         var mynames = [];
                         var starting_position =0;
                         var ending_position =0;
-                        //alert(index);
-                        //alert(num_hurricanes[0].length);
+              
                         
                         for(var j=0; j<(index+1);j++){
-                            
-                            //alert(num_hurricanes[j].length);
                             starting_position += num_hurricanes[j].length;
                         }
                         ending_position = starting_position + num_hurricanes[index].length;
                         
-                        //alert(starting_position);
-                        //alert(ending_position);
+                    
                         
                         if (orderHurr == 0) {
-                            //alert('get here');
                                for(var k =0; k<num_hurricanes[index].length;k++){
                                    mynames.push(num_hurricanes[index][k]);
                                }
                             console.log(mynames.toString());
-                            //alert(mynames.toString());
                             
                         }
                         else if (orderHurr == 1) {
-                            //alert('get here');
-                          //alert(num_hurricanes.toString());
-                            
-                            //alert(starting_position);
-                            //alert(ending_position);
-                            
-                              //console.log(JSON.stringify(Timedict));
                               console.log(Timedict.length)
                               for(var k=0;k<Timedict.length;k++){
                                   console.log(Timedict[k].key);
@@ -398,9 +449,7 @@
                                       mynames.push(num_hurricanes[index][Timedict[k].key-starting_position]);
                                   }
                           }
-                            //alert('printing');
                             console.log(mynames.toString());
-                            //alert(mynames.toString());
                         }
                         
                         else if (orderHurr == 2) {
@@ -413,9 +462,8 @@
                                       mynames.push(num_hurricanes[index][Speeddict[k].key-starting_position]);
                                   }
                           }
-                            //alert('printing');
+                            
                             console.log(mynames.toString());
-                            //alert(mynames.toString());
                             
                         }
 
@@ -423,7 +471,6 @@
                             if ($.inArray(el, uniqueNames) === -1) uniqueNames.push(el);
                         });
                         uniqueNames.push("all");
-                    }
 
 
                     // Creating a legend with all hurricane name
@@ -465,15 +512,14 @@
                     num++;
 
                 }
+                }
 
                 function changeOrder() {
                     var selectedIndex = order.property('selectedIndex'),
                     input = options2[0][selectedIndex].__data__;
                     var myorder = input.order;
-                    //alert(myorder);
 
                     if (myorder == 'chronologically') {
-                        //console.log(JSON.stringify(Timedict));
                         orderHurr = 1;
                     }
 
@@ -482,7 +528,6 @@
                         orderHurr = 2;
                     }
                     else if (myorder == 'alphabetically'){
-                        //alert("that was chosen");
                         orderHurr = 0;
                     }
                 };
@@ -490,7 +535,6 @@
                   function drawPath(that){
                       
                   var check = $(that).attr("val");      
-                  //alert(check);  
                   var polyline_options; 
                   var myline;
                   
@@ -498,20 +542,41 @@
                    myline = new Array();
                   var dot = [];
                   var val = $(that).attr("id");
-                     //alert('in modify');
-                     //alert(val);
+                      
+                     if(val == "TOP10"){
+                     for(var key in polyline) {
+                           if(key.indexOf(val) != -1){
+                              alert(key);
+                              map.removeLayer(polyline[key]);
+                            }  
+                          }
+                     }
+                          else if(val == "TOP5"){
+                              alert("get here");
+                              for(var key in polyline) {
+                           if(key.indexOf(val) != -1){
+                              alert(key);
+                              map.removeLayer(polyline[key]);
+                            }  
+                            }
+                          }
+                      
+                          else if(val == "ALL"){
+                              for(var key in polyline) {
+                           if(key.indexOf(val) != -1){
+                              alert(key);
+                              map.removeLayer(polyline[key]);
+                            }  
+                          }
+                          }
+                          
+                          else{
                      for ( var key in Namedict ) {
-
-                     //alert(Namedict[key].value);
-                     //alert(Namedict[key].key);
-
                       var mykey = Namedict[key].key;
 
                      if ( Namedict[key].value == val){
-                         //alert("match");
                          console.log(wind_id[Namedict[key].key].length);
                          for( var i =0; i<wind_id[Namedict[key].key].length;i++){
-                             //alert(wind_id[Namedict[key].key][i]);
 
                        if (wind_id[Namedict[key].key][i] > 40){  // coloring scheme
                         color ='red'
@@ -530,21 +595,19 @@
                          };
                          
                         polyline[val] = L.polyline(myline,polyline_options).addTo(map);
-            // polyline = L.polyline(myline,polyline_options).addTo(map);
                          
                          break;
+                     }
                      }
                      }
                   }
                       else if(check == 'true'){
                           var val = $(that).attr("id");
-                          //alert(val);
-                          //alert(polyline[val]);
                          map.removeLayer(polyline[val]);
                           if (dateLine[val]){
                          map.removeLayer(dateLine[val]);
+                             }
                           }
-                      }
                      modify(that);
                   }
                 
@@ -556,7 +619,6 @@
                         val.context.attributes.val.value = "false";
                         for (var i = 0; i < hurriSelection.length; i++) {
                             if (selName == hurriSelection[i].values[0].NAME) {
-                                //hurriSelection.push(hurricanesByID[i]);
                                 hurriSelection.splice(i, 1);
                                 console.log(hurriSelection);
                                 break;
@@ -621,11 +683,9 @@
                       var mykey = Namedict[key].key;
 
                      if ( Namedict[key].value == val){
-                         //alert("match");
                          console.log(wind_id[Namedict[key].key].length);
                          for( var i =0; i<wind_id[Namedict[key].key].length;i++){
-                             //alert(wind_id[Namedict[key].key][i]);
-
+                             
                        if (wind_id[Namedict[key].key][i] > 40){  // coloring scheme
                         color ='red'
                     }
@@ -640,7 +700,6 @@
             fillOpacity: 0.5
         }).addTo(map)
 
-              //alert('here');
 
                }
                          break;
@@ -694,10 +753,7 @@
         $(function() {
                 $('#datepicker').datepicker();
                  $('#datepicker').datepicker('option', 'onSelect', function(dateText,inst) {      
-                     //alert(dateText)
                      var i =0;
-                     //var dateNames = [];
-                     //var uniqueDateNames = [];
                      for(var key in day_lat) {
                         if(day_lat.hasOwnProperty(key)) {
                            if(key.indexOf(dateText) != -1){
@@ -714,14 +770,11 @@
                          };
                         }
                      }
-         //dateLine[dateText] = L.polyline(mydateline,line_options).addTo(map);
                      
                          $.each(dateNames, function (i, el) {
                             if ($.inArray(el, uniqueDateNames) === -1) uniqueDateNames.push(el);
                         });
                      
-                     //alert('chosen hurricane');
-                     //alert(uniqueDateNames[0]);
                      dateLine[uniqueDateNames[dateCounter]] = L.polyline(mydateline,line_options).addTo(map);
                         
                      if(dateCounter >0 || num >0){
@@ -848,9 +901,6 @@
                             year_id[i][j] = (leaves[j].YEAR);
                         }
 
-                        // Should be opposite, but it's not working
-                        // very weird it always make the number the key ??
-                        // works anyways 
 
                         Namedict.push({
                             key: i.toString(),
@@ -873,34 +923,6 @@
                     })
                         .entries(text);
 
-                    //debugging code
-
-                    /* console.log(langitute_id.toString());
-                     console.log(latitute_id.toString());
-                     console.log(wind_id.toString());
-                     console.log(year_id.toString());
-                     console.log('value of i',i);
-                     
-     
-                   for ( var key in Namedict ) {
-                       console.log(key);
-                       console.log(Namedict[key].value);
-                       console.log(Namedict[key].key);
-                     }  
-     
-                      for ( var key in Speeddict ) {
-                       console.log(key);
-                       console.log(Speeddict[key].value);
-                       console.log(Speeddict[key].key);
-                      }
-     
-                      for ( var key in Timedict ) {
-                       console.log(key);
-                       console.log(Timedict[key].value);
-                       console.log(Timedict[key].key);
-                      }
-                      */
-
 
                     Timedict = sortOnValue(Timedict);
                     Speeddict = sortOnValue(Speeddict);
@@ -917,26 +939,6 @@
                         console.log(num_hurricanes[i].length);
                         
                     }
-                     //alert(num_hurricanes.toString());
-                    /* 
-                    console.log('after sorting');
-                    
-                     for ( var key in Timedict ) {
-                        console.log(key);
-                        console.log(Timedict[key].value);
-                        console.log(Timedict[key].key);
-                       }
-                       
-                    
-                    console.log('printing the speeds');
-                    
-                    
-                       for ( var key in Speeddict ) {
-                        console.log(Speeddict[key].value);
-                        console.log(Speeddict[key].key);
-                       }
-                       */
-
                 });
 
                 function sortOnValue(dict) {
