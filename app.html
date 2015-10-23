@@ -160,9 +160,13 @@
                 var num_hurricanes = [[], [], [], [], [], [], [], [], [], []];
                  
                 var polyline = {};
-                
                 var dateLine = {};
+                
                 var mydateline = [];
+                var dateNames = [];
+                var uniqueDateNames = [];
+                var dateCounter=0;
+                var numHurrDate=0;
                 
                 var day_lat = {};
                 var day_lag = {};
@@ -394,7 +398,7 @@
 
                     // Creating a legend with all hurricane name
                       if (num != 0) {
-                        alert("removing");
+                        //alert("removing");
                 d3.select("#hurricanelist").selectAll("input").remove();
                 d3.select("#hurricanelist").selectAll('label').remove();
 
@@ -658,25 +662,20 @@
         $(function() {
                 $('#datepicker').datepicker();
                  $('#datepicker').datepicker('option', 'onSelect', function(dateText,inst) {      
-                     alert('one');
-                     alert(dateText)
-                     alert(JSON.stringify(day_lat));
+                     //alert(dateText)
                      var i =0;
-                     var dateNames = [];
-                     var uniqueDateNames = [];
+                     //var dateNames = [];
+                     //var uniqueDateNames = [];
                      for(var key in day_lat) {
                         if(day_lat.hasOwnProperty(key)) {
                            if(key.indexOf(dateText) != -1){
-                               alert("get here");
-                               alert(day_lat[key]);
-                               alert(day_lag[key]);
-                               alert(day_wind[key]);
-                               alert(day_name[key]);
                                mydateline[i] = new Array(2);
                                mydateline[i][0] = parseFloat(day_lat[key]);
                                mydateline[i][1] = parseFloat(day_lag[key]);
-                               dateNames[i] = day_name[key];
+                               dateNames[numHurrDate] = day_name[key];
                                i++;
+                               alert(numHurrDate);
+                               numHurrDate++;
                }                         
                        var line_options = {
                             color: 'red'
@@ -689,10 +688,15 @@
                             if ($.inArray(el, uniqueDateNames) === -1) uniqueDateNames.push(el);
                         });
                      
-                     alert(uniqueDateNames[0]);
-    dateLine[uniqueDateNames[0]] = L.polyline(mydateline,line_options).addTo(map);
+                     //alert('chosen hurricane');
+                     //alert(uniqueDateNames[0]);
+                     dateLine[uniqueDateNames[dateCounter]] = L.polyline(mydateline,line_options).addTo(map);
                         
-                     svg = d3.select("#hurricanelist").selectAll("input")
+                     if(dateCounter >0 || num >0){
+                d3.select("#hurricanelist").selectAll("input").remove();
+                d3.select("#hurricanelist").selectAll('label').remove();
+                     }
+                    d3.select("#hurricanelist").selectAll("input")
                           .data(uniqueDateNames)
                           .enter()
                           .append('label')
@@ -706,6 +710,7 @@
                               .attr("onClick", "modify(this)")
                               .attr("onClick", "drawPath(this)");
                      
+                           dateCounter++; 
                         });
                    });
                 
