@@ -88,7 +88,8 @@ d3.csv('data/PacHurricane2005-2014.csv',function(error,data){
 
     //createline1();
     //createline2();
-    createbar1(HurrData2,graphs[1].bar)
+    createbar1(HurrData2,graphs[1].bar);
+    createbar2(HurrData1,HurrData2,graphs[2].bar);
     //updateline1(HurrData[0],graphs[1]);
     //updateline2(HurrData[0]);
 
