@@ -3,7 +3,7 @@
  */
 
 var x, y, xAxis,yAxis,graphs,
-    graph1,graph2,graph3,graph4,bar1,bar2,margin,height,width;
+    graph1,graph2,graph3,graph4,bar1,bar2,bar3,margin,height,width;
 
 
 var color1 = d3.scale.category20();
@@ -87,8 +87,14 @@ function createline1() {
         .attr("transform",
         "translate(" + margin.left + "," + margin.top + ")");
 
+    bar2 = d3.select("#graph2").append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform",
+        "translate(" + margin.left + "," + margin.top + ")");
 
-   var bar2 = d3.select("#graph2").append("svg")
+    bar3 = d3.select("#graph3").append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
@@ -97,6 +103,7 @@ function createline1() {
 
     graphs.push({max:graph1,min:graph2,bar:bar1});
     graphs.push({max:graph3,min:graph4,bar:bar2});
+    graphs.push({bar:bar3});
 
 }
 
@@ -203,6 +210,126 @@ function createbar1(HurrData,graph) {
         .attr("text-anchor","middle")
         .style("font-size","16px");
         //.text()
+
+}
+
+function createbar2(HurrData,HurrData2,graph) {
+    var tickF;
+    x = d3.scale.ordinal().rangeRoundBands([0, width],.3);
+    y = d3.scale.linear().range([height, 0]);
+
+
+    if(width< 400)
+        tickF = d3.time.format("%b");
+
+
+    else
+        tickF = d3.time.format("%B")
+
+    //places the x axis at the bottom of the graph
+    xAxis = d3.svg.axis()
+        .scale(x)
+        .orient("bottom").ticks(5);
+
+    yAxis = d3.svg.axis()
+        .scale(y)
+        .orient("left");
+
+
+
+    var HurrPerMonth = [];
+    var temp = [];
+    var i;
+    //console.log(HurrData);
+    for(i=0;i<12;i++){
+        temp ={perMonth:0,MONTH:format(new Date(1999,i,12))};
+       // temp.MONTH = tickF.parse(temp.MONTH);
+        HurrPerMonth.push(temp);
+    }
+
+    HurrData.forEach(function(d){
+        var name = " ";
+        d.values.forEach(function(d){
+            if(name!= d.HURID) {
+                //date = format(new Date(d.YEAR, (d.MONTH - 1), d.DAY));
+                HurrPerMonth[d.MONTH-1].perMonth= HurrPerMonth[d.MONTH-1].perMonth+1.
+                //HurrPerMonth[d.MONTH-1].MONTH = date;
+                name = d.HURID;
+            }
+
+        })
+
+    })
+
+    HurrData2.forEach(function(d){
+        var name = " ";
+        d.values.forEach(function(d){
+            if(name!= d.HURID) {
+                HurrPerMonth[d.MONTH-1].perMonth= HurrPerMonth[d.MONTH-1].perMonth+1.
+                name = d.HURID;
+            }
+
+        })
+
+    })
+
+        console.log(HurrPerMonth);
+
+    /* color1 = d3.scale.linear()
+     .domain([0,10])
+     .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);*/
+    color1 = d3.scale.category20();
+
+    /*    color.domain(d3.keys(stateData_Array[0]).filter(function(key) { return key !== "STATE" && key !=="POP" }));
+
+
+     stateData_Array.forEach(function(d) {
+
+     x0 = x0+1;
+     d.name = color.range().map(function(name) { return {name: name, x0: x0-1, x1: x0 = +d[name]}; });
+
+     //console.log(d);
+     });*/
+
+
+    x.domain(HurrPerMonth.map(function(d) { return d.MONTH; }));
+    y.domain([0, d3.max(HurrPerMonth,function(d){return d.perMonth;})]);
+
+    graph.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis)
+        .selectAll("text")
+        .style("text-anchor", "start")
+        //.attr("font-size","12px")
+        //.attr("y",0)
+        .attr("x",-15)
+    //.attr("dy", ".35em");
+    //.attr("transform", "rotate(90)" )*/;
+    graph.append("g")
+        .attr("class", "y axis")
+        .call(yAxis)
+        .append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y",6)
+        .attr("dy", ".71em")
+        .style("text-anchor","end")
+        .text("POP(EST)");
+    graph.selectAll("bar")
+        .data(HurrPerMonth)
+        .enter().append("rect")
+        .attr("x", function(d) { return x(d.MONTH); })
+        .attr("width", x.rangeBand())
+        .attr("y", function(d) { return y(d.perMonth); })
+        .attr("height", function(d) { return height - y(d.perMonth); })
+        .style("fill",  function (d) {
+            return color1(d.MONTH);});
+    graph.append("text")
+        .attr("x",(width/2))
+        .attr("y",10-(margin.top/2))
+        .attr("text-anchor","middle")
+        .style("font-size","16px");
+    //.text()
 
 }
 
