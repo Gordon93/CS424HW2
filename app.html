@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 
 <html>
@@ -102,7 +102,9 @@
                     Date: <input type="text" id="datepicker"> <br />
                     Show Heatmap: <input type="checkbox" id="heat" /> <br />
                     <!-- This is a temporary placement for a button, just for testing the play functionality -->
-                    <!--<button id="play" value = "paused" onclick="playHit()">Play/Pause</button>-->
+                    <button id="play" value="paused" onclick="playHit()">Play/Pause</button> <br />
+
+                    
                     <br />
                     <br />
                 </fieldset>
@@ -111,8 +113,8 @@
                 <!--<div>-->
                 <fieldset>
                     <legend>Filters</legend>
-                    <input value="0" type="number" id="min_speed" style="width:50px" />< Wind Speed < <input value="999" type="number" id="max_speed" style="width:50px" /> <br />
-                    <input value="0" type="number" id="min_pressure" style="width:50px" /> < Pressure < <input value="999" type="number" id="max_pressure" style="width:50px" /> <br />
+                    <input value="0" type="number" id="min_speed" style="width:50px" />< Wind Speed < <input value="9999" type="number" id="max_speed" style="width:50px" /> <br />
+                    <input value="0" type="number" id="min_pressure" style="width:50px" /> < Pressure < <input value="9999" type="number" id="max_pressure" style="width:50px" /> <br />
                     Made Land: <input type="checkbox" id="land" /> <br />
                     <button onclick="change()">Apply Filters</button>
 
@@ -191,6 +193,9 @@
                 var hurriSelection = [];
                 var hurricanesByID = [];
                 var hurricanesByName = [];
+                var timersArray = [];
+                var unprintedVals = [];
+                var circles = [];
 
                 var mytop5 = [];
                 var mytop10 = [];
@@ -234,7 +239,7 @@
                     sliderControl: true,
                     tickLen: 60*60*1000
                 };
-                var playback = new L.Playback(map, null, null, playbackOptions);
+                //var playback = new L.Playback(map, null, null, playbackOptions);
 
                 function change() {
                     
@@ -462,6 +467,9 @@
                               .text(function (d)
                               {
                                   var wind;
+                                  var pressure;
+                                  if (d == "all")
+                                      return d;
                                   /*Get max wind speed for hurricane*/
                                   for ( var key in Namedict )
                                   {
@@ -469,15 +477,19 @@
                                       if ( Namedict[key].value == d)
                                       {
                                           wind = Math.max.apply(null, wind_id[mykey]);
-                                          /*alert(max);*/
+                                          pressure = Math.max.apply(null, MinPress_id[mykey]);
                                       }
                                   }
-                                  if(wind > document.getElementById("min_speed").value && wind < document.getElementById("max_speed").value)
+                                  if (wind >= document.getElementById("min_speed").value && wind <= document.getElementById("max_speed").value
+                                      && pressure >= document.getElementById("min_pressure").value && pressure <= document.getElementById("max_pressure").value)
                                       return d;
                               })
                               .append("input")
                               .style("display", function(d){
                                   var wind;
+                                  var pressure;
+                                  if (d == "all")
+                                      return d;
                                   /*Get max wind speed for hurricane*/
                                   for ( var key in Namedict )
                                   {
@@ -485,10 +497,11 @@
                                       if ( Namedict[key].value == d)
                                       {
                                           wind = Math.max.apply(null, wind_id[mykey]);
-                                          /*alert(max);*/
+                                          pressure = Math.max.apply(null, MinPress_id[mykey]);
                                       }
                                   }
-                                  if(wind > document.getElementById("min_speed").value && wind < document.getElementById("max_speed").value)
+                                  if (wind >= document.getElementById("min_speed").value && wind <= document.getElementById("max_speed").value
+                                      && pressure >= document.getElementById("min_pressure").value && pressure <= document.getElementById("max_pressure").value)
                                       return null;
                                   else
                                       return "none";
@@ -568,6 +581,32 @@
                             }  
                           }
                           }
+                            else if(val == "All"){
+                          alert(index);
+                            var numHurr=0;
+                              for(var i=0;i<names[index].length;i++){
+                                 for (var j=0;j<name_id.length;j++){      
+                                    if(names[index][i] == name_id[j][0]){
+                                        alert(names[index][i]);
+                                        alert(name_id[j][0]);
+                                    var Average = averageWindSpped(wind_id[j]);
+                                        alert(Average);
+                                    for( var i =0; i<wind_id[j].length;i++){
+                                    myline[i] = new Array(2);
+                                    myline[i][0] = parseFloat(latitute_id[j][i]);
+                                    myline[i][1] = parseFloat(langitute_id[j][i]);
+                                     }                
+                         determineColor(Average);
+                        polyline_options = {
+                            color: Color
+                         };
+                         
+     polyline["All"+numHurr.toString()] = L.polyline(myline,polyline_options).addTo(map);
+                                 numHurr++;
+                                    }
+                              }
+                          }
+                      }
                           
                           else{
                     for ( var key in Namedict ) {
@@ -592,13 +631,35 @@
                      }
                      }
                   }
-                      else if(check == 'true'){
+                  else if (check == 'true') {
+
+                      //Clear out all the circles:
+                      for (var i = 0; i < circles.length; i++) {
+                          map.removeLayer(circles[i]);
+                      }
+                      timersArray.splice(0, timersArray.length);
+                      circles.splice(0, circles.length);
+                      unprintedVals.splice(0, unprintedVals.length);
+
+                      //Finish clearing circles and other arrays.
+
+                          if(val == "All"){
+                          alert(index);
+                              for(var key in polyline){
+                                 if(key.indexOf(All) != -1){
+                                  map.removeLayer(polyline[key]);
+                                 }
+                              }
+                           }
+                          
+                          else{
                           var val = $(that).attr("id");
                          map.removeLayer(polyline[val]);
                           if (dateLine[val]){
                          map.removeLayer(dateLine[val]);
                              }
                           }
+                      }
                      modify(that);
                   }
                 
@@ -641,7 +702,6 @@
                                 var strDate;
                                 lnglat.push([hurriSelection[hurricane].values[hurr].LOG, hurriSelection[hurricane].values[hurr].LAT]);
                                 var hour = hurriSelection[hurricane].values[hurr].HOURS[0] + "" + hurriSelection[hurricane].values[hurr].HOURS[1];
-                                //strDate = val.YEAR + " " + val.MONTH + " " + val.DAY + " " + val.HOURS[0] + val.HOURS[1] + ":00:00";
 
                                 var tempDate = Date.UTC(hurriSelection[hurricane].values[hurr].YEAR, hurriSelection[hurricane].values[hurr].MONTH, hurriSelection[hurricane].values[hurr].DAY, hour);
                                 time.push(tempDate);
@@ -664,10 +724,10 @@
 
                         if (geoJsonObjects.length < 2) {
 
-                            playback.setData(geoJsonObjects);
+                            //playback.setData(geoJsonObjects);
 
                         } else {
-                            playback.setData(geoJsonObjects);
+                            //playback.setData(geoJsonObjects);
                         }
 
                         for (var key in Namedict) {
@@ -1015,57 +1075,56 @@
                     return temp;
                 }; //End of the sortOnValue function.
 
-/*
+
                 function playHit() {
-                    console.log("just pushed play");
-                    console.log(hurricanesByID);
-                    d3.csv("data/AtlHurricane2005-2014.csv", function (error, text) {
+                    var button = document.getElementById("play");
+                    var loopFlag = 0;
+                    //The function below sorts the selected hurricane list based on the start date of each hurricane.
+                    hurriSelection.sort(function (A, B) {
+                        var hourA = A.values[0].HOURS[0] + "" + A.values[0].HOURS[1];
+                        var hourB = B.values[0].HOURS[0] + "" + B.values[0].HOURS[1];
+                        var tempDateA = Date.UTC(A.values[0].YEAR, A.values[0].MONTH, A.values[0].DAY, hourA);
+                        var tempDateB = Date.UTC(B.values[0].YEAR, B.values[0].MONTH, B.values[0].DAY, hourB);
+                        return tempDateA - tempDateB;
+                    });
 
-                        //Group the data by hurricane id
-                        var data = d3.nest()
-                        .key(function(d) {
-                            return d.HURID;
-                        }).entries(text);
 
-                        var hurricaneOne = data[0];
-                        console.log(hurricaneOne);
-                        var lnglat = [];
-                        var time = [];
 
-                        for (var i = 0; i < hurricaneOne.values.length; i++) {
-                            var strDate;
-                            lnglat.push([hurricaneOne.values[i].LOG, hurricaneOne.values[i].LAT]);
-                            var hour = hurricaneOne.values[i].HOURS[0] + "" + hurricaneOne.values[i].HOURS[1];
-                            strDate = hurricaneOne.values[i].YEAR + " " + 
-                                        hurricaneOne.values[i].MONTH + " " + 
-                                        hurricaneOne.values[i].DAY + " " +
-                                        hurricaneOne.values[i].HOURS[0] + hurricaneOne.values[i].HOURS[1] + 
-                                        ":00:00";
-                            var tempDate = Date.UTC(hurricaneOne.values[i].YEAR, hurricaneOne.values[i].MONTH, hurricaneOne.values[i].DAY, hour);//hurricaneOne.values[i].HOURS);
-                            console.log(tempDate);
-                            //console.log(strDate);
-                            //console.log(toTimestamp(strDate));
-                            time.push(tempDate);
-                            //Year Month Day time
+                    if(button.value == "paused") {
+                        console.log ("play");
+                        button.value = "play";
+                        button.textContent = "Pause";
+                        var month, day, hour;
+                        month = hurriSelection[0].values[0].MONTH;
+                        day = hurriSelection[0].values[0].DAY;
+                        hour = hurriSelection[0].HOURS;
 
-                            //sleep(1000);
+                        var points = [];
+                        var totalLength = 0;
 
-                        }; //End of the for function.
+                        for (var i = 0; i < hurriSelection.length; i++) {
+                            for (var j = 0; j < hurriSelection[i].values.length; j++) {
+                            
+                                points.push(hurriSelection[i].values[j]);
 
-                        var geoJson = {
-                            "type": "Feature",
-                            "geometry": {
-                                "type": "MultiPoint",
-                                "coordinates": lnglat
-                            },
-                            "properties": {
-                                "time": time
+                                //return tempDateA - tempDateB;
+                                //var lat = hurriSelection[i].values[j].LAT;
+                                //var long = hurriSelection[i].values[j].LOG
+                                //setTimer(j, lat, long);
                             }
+                        }
 
-                        };
+                        var circle;
 
-                        console.log(geoJson);
+                        if (timersArray.length > 0) {
+                            console.log(timersArray);
+                            //setTimeout(timersArray[timersArray.length - 1]);
+                            var tempScale = (unprintedVals.length - 1);
+                            for (var i = unprintedVals[tempScale] + 1; i < points.length; i++) {
+                                var lat = points[i].LAT;
+                                var long = points[i].LOG;
 
+<<<<<<< HEAD
                         var playbackOptions = {
                             playControl: true,
                             dateControl: true,
@@ -1079,15 +1138,88 @@
                             //maxInterpolationTime: 4*60*6000
 >>>>>>> master
                         };
+=======
+                                setTimer(circles, i - tempScale, lat, long);
+                            }
+>>>>>>> refs/remotes/origin/master
 
-                        var playback = new L.Playback(map, geoJson, null, playbackOptions);
+                            var finalTimer = setTimeout(function () {
+                                //clearTimeout(timer);
+                                //map.removeLayer(circle);
+                                console.log(circles);
+                                for (var i = 0; i < circles.length; i++) {
+                                    map.removeLayer(circles[i]);
+                                }
+                                timersArray.splice(0, timersArray.length);
+                                circles.splice(0, circles.length);
+                                unprintedVals.splice(0, unprintedVals.length);
 
-                        //playback.setData(geoJson);
+                            }, 1001 * points.length);
 
-                        //var playback = new L.Playback(map, geoJson, null, playbackOptions);
-                    }); //End the d3.csv call.
+                            timersArray.push(finalTimer);
+
+                        } else {
+
+
+                            for (var i = 0; i < points.length; i++) {
+                                var lat = points[i].LAT;
+                                var long = points[i].LOG;
+
+                                setTimer(circles, i, lat, long);
+                            }
+
+                            var finalTimer = setTimeout(function () {
+                                //clearTimeout(timer);
+                                //map.removeLayer(circle);
+                                console.log(circles);
+                                for (var i = 0; i < circles.length; i++) {
+                                    map.removeLayer(circles[i]);
+                                }
+                                timersArray.splice(0, timersArray.length);
+                                button.value = "paused";
+                                button.textContent = "Play";
+
+                            }, 1001 * points.length);
+
+                            timersArray.push(finalTimer);
+                        }
+                        //button.value = "paused";
+                        //button.textContent = "Play";
+
+
+                    } else {
+                        //clearInterval(timer);
+                        clearTimeout(timersArray[timersArray.length - 1]);
+                        timersArray.pop();
+
+                        for (var i = 0; i < timersArray.length; i++) {
+                            clearTimeout(timersArray[i]);
+                        }
+
+                        console.log("paused");
+                        button.value = "paused"
+                        button.textContent = "Play";
+                    }
+
+
+                    console.log(hurriSelection[0].values[0].HOURS);
                 }; //End of the Play function.
-*/
+
+                function setTimer(circles, i, lat, long) {
+                    timer = setTimeout(function () {
+                        //var circle = L.circle([hurriSelection[i].values[j].LAT, hurriSelection[i].values[j].LOG], 500, {
+                        var circle = L.circle([lat, long], 500, {
+                            color: 'black',
+                            fillColor: '#f03',
+                            fillOpacity: 0.5
+                        }).addTo(map);
+                        circles.push(circle);
+                        unprintedVals.push(i);
+
+                    }, i * 1000, lat, long);
+                    timersArray.push(timer);
+                }
+
                 function sleep(milliseconds) {
                     var start = new Date().getTime();
                     for (var i = 0; i < 1e7; i++) {
