@@ -200,20 +200,13 @@
                 var wind = [[], [], [], [], [], [], [], [], [], []];
                 var names = [[], [], [], [], [], [], [], [], [], []];
 
-                //creating a 2d array with constant size of 170
-                //since there are 170 distinct hurricane names
-                // temporary solution !!!!.
-
-
-                var latitute_id = [[], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []];
-
-
-                var langitute_id = [[], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []];
-
-                var wind_id = [[], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []];
-
-                var year_id = [[], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []];
-
+                var latitute_id = new Array();
+                var langitute_id = new Array();
+                var wind_id = new Array();
+                var year_id = new Array();
+                var name_id = new Array();
+                var MinPress_id = new Array();
+          
                 var map = L.map('map').setView([41.83, -87.68], 4);
                 var map2 = L.map('map2').setView([41.83, -87.68], 4);
 
@@ -288,8 +281,8 @@
                             color: Color
                          };    
                              polyline["ALL"+topNum.toString()]=L.polyline(myline[k],polyline_options).addTo(map);
-                        }
-                             topNum++; 
+                             topNum++;
+                        } 
                               
                         
                     var ALLbox =[]
@@ -577,27 +570,19 @@
                           }
                           
                           else{
-                     for ( var key in Namedict ) {
+                    for ( var key in Namedict ) {
                       var mykey = Namedict[key].key;
-
                      if ( Namedict[key].value == val){
-                             console.log(wind_id[Namedict[key].key].length);
-                         for( var i =0; i<wind_id[Namedict[key].key].length;i++){
-
-                       if (wind_id[Namedict[key].key][i] > 40){  // coloring scheme
-                        color ='red'
-                    }
-                        else{
-                            color = 'green'
-                        }
-                             
-                   myline[i] = new Array(2);
-                   myline[i][0] = parseFloat(latitute_id[mykey][i])
-                   myline[i][1] = parseFloat(langitute_id[mykey][i])
-                   
-               }                         
+                         console.log(wind_id[mykey].length);
+                         var Average = averageWindSpped(wind_id[Namedict[key].key]);
+                         for( var i =0; i<wind_id[mykey].length;i++){
+                             myline[i] = new Array(2);
+                             myline[i][0] = parseFloat(latitute_id[mykey][i]);
+                             myline[i][1] = parseFloat(langitute_id[mykey][i]);
+               }                
+                         determineColor(Average);
                         polyline_options = {
-                            color: 'red'
+                            color: Color
                          };
                          
                         polyline[val] = L.polyline(myline,polyline_options).addTo(map);
@@ -781,19 +766,16 @@
                 }; //End of the top 10 function.
                 
                 function averageWindSpped(WindSpeed){
-                    alert(WindSpeed);
                     var sum=0;
                     for (var j = 0; j < WindSpeed.length; j++) {
                         sum = sum + parseInt(WindSpeed[j]);
                     }
-                    alert(sum/(WindSpeed.length));
                     return sum/(WindSpeed.length);
                 }
-                
+                       
                 function determineColor(Average){
-                    if (Average < 10){
-                    }
-                    else if(Average>10 && Average<20){
+                
+                    if(Average < 20){
                         Color = 'blue'
                     }
                     else if(Average>20 && Average<30){
@@ -957,6 +939,12 @@
                         })
                     .rollup(function (leaves) {
                         //alert(JSON.stringify(leaves[0]));
+                        langitute_id[i] = new Array();
+                        latitute_id[i] = new Array();
+                        wind_id[i] = new Array();
+                        year_id[i] = new Array();
+                        name_id[i] = new Array();
+                        MinPress_id[i] = new Array();
                         for (var j = 0 ; j < leaves.length; j++) {
                             // creating arrays for all the hurricane
 
@@ -964,6 +952,8 @@
                             latitute_id[i][j] = (leaves[j].LAT);
                             wind_id[i][j] = (leaves[j].MaxWind);
                             year_id[i][j] = (leaves[j].YEAR);
+                            name_id[i][j] = leaves[j].NAME;
+                            MinPress_id[i][j] = leaves[j].MinPress;
                         }
 
 
