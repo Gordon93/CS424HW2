@@ -95,37 +95,37 @@
 
             <!-- Options -->
             <div class="inline" style="width:12vw;">
-                <fieldset>
-                    <legend>Options</legend>
+                <fieldset style="font-size:12vw;font-size:.8vw">
+                    <legend style="font-size:12vw;font-size:1vw">Options</legend>
                     <div id="optionmenu"></div>                <br />
                     <div id="ordermenu"></div>                <br />
                     Date: <input type="text" id="datepicker"> <br />
                     Show Heatmap: <input type="checkbox" id="heat" /> <br />
                     <!-- This is a temporary placement for a button, just for testing the play functionality -->
-                    <button id="play" value="paused" onclick="playHit()">Play/Pause</button> <br />
+                    <button id="play" value="paused" onclick="playHit()" style="width:6vw;height:6vh">Play/Pause</button> <br />
 
-                    
+
                     <br />
                     <br />
                 </fieldset>
                 <br />
 
                 <!--<div>-->
-                <fieldset>
-                    <legend>Filters</legend>
+                <fieldset style="font-size:12vw;font-size:.8vw">
+                    <legend style="font-size:12vw;font-size:1vw">Filters</legend>
                     <input value="0" type="number" id="min_speed" style="width:50px" />< Wind Speed < <input value="9999" type="number" id="max_speed" style="width:50px" /> <br />
                     <input value="0" type="number" id="min_pressure" style="width:50px" /> < Pressure < <input value="9999" type="number" id="max_pressure" style="width:50px" /> <br />
                     Made Land: <input type="checkbox" id="land" /> <br />
-                    <button onclick="change()">Apply Filters</button>
+                    <button style="width:5vw;height:5vh" onclick="change()">Apply</button>
 
                 </fieldset>
 
             </div>
 
-            <!-- atlantic list -->
+            <!-- pacific list -->
             <div class="inline" style="height:80vh;width:8vw;">
                 <fieldset style="width:100%;height:100%;overflow:auto;">
-                    <legend style="font-size:15px; overflow:auto">Pacific Hurricanes</legend>
+                    <legend style="font-size:12vw;font-size:1vw" overflow:auto">Pacific Hurricanes</legend>
                     <div id="hurricanelist2" style="width:100%;height:100%; overflow:auto;"></div>
                 </fieldset>
             </div>
@@ -141,23 +141,26 @@
             <!-- atlantic list -->
             <div class="inline" style="height:80vh;width:8vw;">
                 <fieldset style="width:100%;height:100%;overflow:auto;">
-                    <legend style="font-size:15px; overflow:auto">Atlantic Hurricanes</legend>
+                    <legend style="font-size:12vw;font-size:1vw" overflow:auto">Atlantic Hurricanes</legend>
                     <div id="hurricanelist" style="width:100%;height:100%; overflow:auto;"></div>
                 </fieldset>
             </div>          
 
             <!-- chart container-->
-            <div id="chartContainer" class="inline" style="width:15vw">
-                <div id="chart"></div>
-                <div id="chart1"></div>
-                <div id="graph1"> </div>
-            </div>
 
             <div id="chartContainer2" class="inline" style="width:15vw">
                 <div id="chart2"></div>
                 <div id="chart3"></div>
                 <div id="graph2"> </div>
             </div>
+
+            <div id="chartContainer" class="inline" style="width:15vw">
+                <div id="chart"></div>
+                <div id="chart1"></div>
+                <div id="graph1"> </div>
+            </div>
+
+            
 
             <script type="text/javascript">
                 var select;
@@ -500,6 +503,7 @@
                               })
                               .attr("val", false)
                               .attr("type", "checkbox")
+                                .style("height:25vh")
                               .attr("id", function (d, i) { return uniqueNames[i]; })
                               .attr("onClick", "modify(this)")
                               .attr("onClick", "drawPath(this)");
