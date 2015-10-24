@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 
 <html>
@@ -102,7 +102,9 @@
                     Date: <input type="text" id="datepicker"> <br />
                     Show Heatmap: <input type="checkbox" id="heat" /> <br />
                     <!-- This is a temporary placement for a button, just for testing the play functionality -->
-                    <!--<button id="play" value = "paused" onclick="playHit()">Play/Pause</button>-->
+                    <button id="play" value="paused" onclick="playHit()">Play/Pause</button> <br />
+
+                    
                     <br />
                     <br />
                 </fieldset>
@@ -191,6 +193,7 @@
                 var hurriSelection = [];
                 var hurricanesByID = [];
                 var hurricanesByName = [];
+                var timer;
 
                 var mytop5 = [];
                 var mytop10 = [];
@@ -234,7 +237,7 @@
                     sliderControl: true,
                     tickLen: 60*60*1000
                 };
-                var playback = new L.Playback(map, null, null, playbackOptions);
+                //var playback = new L.Playback(map, null, null, playbackOptions);
 
                 function change() {
                     
@@ -678,7 +681,6 @@
                                 var strDate;
                                 lnglat.push([hurriSelection[hurricane].values[hurr].LOG, hurriSelection[hurricane].values[hurr].LAT]);
                                 var hour = hurriSelection[hurricane].values[hurr].HOURS[0] + "" + hurriSelection[hurricane].values[hurr].HOURS[1];
-                                //strDate = val.YEAR + " " + val.MONTH + " " + val.DAY + " " + val.HOURS[0] + val.HOURS[1] + ":00:00";
 
                                 var tempDate = Date.UTC(hurriSelection[hurricane].values[hurr].YEAR, hurriSelection[hurricane].values[hurr].MONTH, hurriSelection[hurricane].values[hurr].DAY, hour);
                                 time.push(tempDate);
@@ -701,10 +703,10 @@
 
                         if (geoJsonObjects.length < 2) {
 
-                            playback.setData(geoJsonObjects);
+                            //playback.setData(geoJsonObjects);
 
                         } else {
-                            playback.setData(geoJsonObjects);
+                            //playback.setData(geoJsonObjects);
                         }
 
                         for (var key in Namedict) {
@@ -1052,74 +1054,87 @@
                     return temp;
                 }; //End of the sortOnValue function.
 
-/*
+
                 function playHit() {
-                    console.log("just pushed play");
-                    console.log(hurricanesByID);
-                    d3.csv("data/AtlHurricane2005-2014.csv", function (error, text) {
+                    var button = document.getElementById("play");
+                    var loopFlag = 0;
+                    //The function below sorts the selected hurricane list based on the start date of each hurricane.
+                    hurriSelection.sort(function (A, B) {
+                        var hourA = A.values[0].HOURS[0] + "" + A.values[0].HOURS[1];
+                        var hourB = B.values[0].HOURS[0] + "" + B.values[0].HOURS[1];
+                        var tempDateA = Date.UTC(A.values[0].YEAR, A.values[0].MONTH, A.values[0].DAY, hourA);
+                        var tempDateB = Date.UTC(B.values[0].YEAR, B.values[0].MONTH, B.values[0].DAY, hourB);
+                        return tempDateA - tempDateB;
+                    });
 
-                        //Group the data by hurricane id
-                        var data = d3.nest()
-                        .key(function(d) {
-                            return d.HURID;
-                        }).entries(text);
+                    if(button.value == "paused") {
+                        console.log ("play");
+                        button.value = "play";
+                        button.textContent = "Pause";
+                        var month, day, hour;
+                        month = hurriSelection[0].values[0].MONTH;
+                        day = hurriSelection[0].values[0].DAY;
+                        hour = hurriSelection[0].HOURS;
 
-                        var hurricaneOne = data[0];
-                        console.log(hurricaneOne);
-                        var lnglat = [];
-                        var time = [];
+                        var points = [];
+                        var totalLength = 0;
 
-                        for (var i = 0; i < hurricaneOne.values.length; i++) {
-                            var strDate;
-                            lnglat.push([hurricaneOne.values[i].LOG, hurricaneOne.values[i].LAT]);
-                            var hour = hurricaneOne.values[i].HOURS[0] + "" + hurricaneOne.values[i].HOURS[1];
-                            strDate = hurricaneOne.values[i].YEAR + " " + 
-                                        hurricaneOne.values[i].MONTH + " " + 
-                                        hurricaneOne.values[i].DAY + " " +
-                                        hurricaneOne.values[i].HOURS[0] + hurricaneOne.values[i].HOURS[1] + 
-                                        ":00:00";
-                            var tempDate = Date.UTC(hurricaneOne.values[i].YEAR, hurricaneOne.values[i].MONTH, hurricaneOne.values[i].DAY, hour);//hurricaneOne.values[i].HOURS);
-                            console.log(tempDate);
-                            //console.log(strDate);
-                            //console.log(toTimestamp(strDate));
-                            time.push(tempDate);
-                            //Year Month Day time
+                        for (var i = 0; i < hurriSelection.length; i++) {
+                            for (var j = 0; j < hurriSelection[i].values.length; j++) {
+                            
+                                points.push(hurriSelection[i].values[j]);
 
-                            //sleep(1000);
-
-                        }; //End of the for function.
-
-                        var geoJson = {
-                            "type": "Feature",
-                            "geometry": {
-                                "type": "MultiPoint",
-                                "coordinates": lnglat
-                            },
-                            "properties": {
-                                "time": time
+                                //return tempDateA - tempDateB;
+                                //var lat = hurriSelection[i].values[j].LAT;
+                                //var long = hurriSelection[i].values[j].LOG
+                                //setTimer(j, lat, long);
                             }
+                        }
+                        var circles = [];
+                        var circle;
+                        for (var i = 0; i < points.length; i++) {
+                            var lat = points[i].LAT;
+                            var long = points[i].LOG;
 
-                        };
+                            setTimer(circles, i, lat, long);
+                        }
+                        setTimeout(function () {
+                            clearTimeout(timer);
+                            //map.removeLayer(circle);
+                            console.log(circles);
+                            for (var i = 0; i < circles.length; i++) {
+                                map.removeLayer(circles[i]);
+                            }
+                        }, 1001 * points.length);
 
-                        console.log(geoJson);
+                        button.value = "paused";
+                        button.textContent = "Play";
 
-                        var playbackOptions = {
-                            playControl: true,
-                            dateControl: true,
-                            tickLen: 1000,
-                            sliderControl: true,
-                            //speed: 2000,
-                            //maxInterpolationTime: 4*60*6000
-                        };
 
-                        var playback = new L.Playback(map, geoJson, null, playbackOptions);
+                    } else {
+                        //clearInterval(timer);
+                        clearTimeout(timer);
+                        console.log("paused");
+                        button.value = "paused"
+                        button.textContent = "Play";
+                    }
 
-                        //playback.setData(geoJson);
 
-                        //var playback = new L.Playback(map, geoJson, null, playbackOptions);
-                    }); //End the d3.csv call.
+                    console.log(hurriSelection[0].values[0].HOURS);
                 }; //End of the Play function.
-*/
+
+                function setTimer(circles, i, lat, long) {
+                    timer = setTimeout(function () {
+                        //var circle = L.circle([hurriSelection[i].values[j].LAT, hurriSelection[i].values[j].LOG], 500, {
+                        var circle = L.circle([lat, long], 500, {
+                            color: 'black',
+                            fillColor: '#f03',
+                            fillOpacity: 0.5
+                        }).addTo(map)
+                        circles.push(circle);
+                    }, i * 1000, lat, long);
+                }
+
                 function sleep(milliseconds) {
                     var start = new Date().getTime();
                     for (var i = 0; i < 1e7; i++) {
