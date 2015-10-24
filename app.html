@@ -113,8 +113,8 @@
                 <!--<div>-->
                 <fieldset>
                     <legend>Filters</legend>
-                    <input value="0" type="number" id="min_speed" style="width:50px" />< Wind Speed < <input value="999" type="number" id="max_speed" style="width:50px" /> <br />
-                    <input value="0" type="number" id="min_pressure" style="width:50px" /> < Pressure < <input value="999" type="number" id="max_pressure" style="width:50px" /> <br />
+                    <input value="0" type="number" id="min_speed" style="width:50px" />< Wind Speed < <input value="9999" type="number" id="max_speed" style="width:50px" /> <br />
+                    <input value="0" type="number" id="min_pressure" style="width:50px" /> < Pressure < <input value="9999" type="number" id="max_pressure" style="width:50px" /> <br />
                     Made Land: <input type="checkbox" id="land" /> <br />
                     <button onclick="change()">Apply Filters</button>
 
@@ -465,6 +465,9 @@
                               .text(function (d)
                               {
                                   var wind;
+                                  var pressure;
+                                  if (d == "all")
+                                      return d;
                                   /*Get max wind speed for hurricane*/
                                   for ( var key in Namedict )
                                   {
@@ -472,15 +475,19 @@
                                       if ( Namedict[key].value == d)
                                       {
                                           wind = Math.max.apply(null, wind_id[mykey]);
-                                          /*alert(max);*/
+                                          pressure = Math.max.apply(null, MinPress_id[mykey]);
                                       }
                                   }
-                                  if(wind > document.getElementById("min_speed").value && wind < document.getElementById("max_speed").value)
+                                  if (wind >= document.getElementById("min_speed").value && wind <= document.getElementById("max_speed").value
+                                      && pressure >= document.getElementById("min_pressure").value && pressure <= document.getElementById("max_pressure").value)
                                       return d;
                               })
                               .append("input")
                               .style("display", function(d){
                                   var wind;
+                                  var pressure;
+                                  if (d == "all")
+                                      return d;
                                   /*Get max wind speed for hurricane*/
                                   for ( var key in Namedict )
                                   {
@@ -488,10 +495,11 @@
                                       if ( Namedict[key].value == d)
                                       {
                                           wind = Math.max.apply(null, wind_id[mykey]);
-                                          /*alert(max);*/
+                                          pressure = Math.max.apply(null, MinPress_id[mykey]);
                                       }
                                   }
-                                  if(wind > document.getElementById("min_speed").value && wind < document.getElementById("max_speed").value)
+                                  if (wind >= document.getElementById("min_speed").value && wind <= document.getElementById("max_speed").value
+                                      && pressure >= document.getElementById("min_pressure").value && pressure <= document.getElementById("max_pressure").value)
                                       return null;
                                   else
                                       return "none";
