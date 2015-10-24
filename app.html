@@ -193,7 +193,9 @@
                 var hurriSelection = [];
                 var hurricanesByID = [];
                 var hurricanesByName = [];
-                var timer;
+                var timersArray = [];
+                var unprintedVals = [];
+                var circles = [];
 
                 var mytop5 = [];
                 var mytop10 = [];
@@ -629,7 +631,18 @@
                      }
                      }
                   }
-                      else if(check == 'true'){
+                  else if (check == 'true') {
+
+                      //Clear out all the circles:
+                      for (var i = 0; i < circles.length; i++) {
+                          map.removeLayer(circles[i]);
+                      }
+                      timersArray.splice(0, timersArray.length);
+                      circles.splice(0, circles.length);
+                      unprintedVals.splice(0, unprintedVals.length);
+
+                      //Finish clearing circles and other arrays.
+
                           if(val == "All"){
                           alert(index);
                               for(var key in polyline){
@@ -1075,6 +1088,8 @@
                         return tempDateA - tempDateB;
                     });
 
+
+
                     if(button.value == "paused") {
                         console.log ("play");
                         button.value = "play";
@@ -1098,30 +1113,73 @@
                                 //setTimer(j, lat, long);
                             }
                         }
-                        var circles = [];
+
                         var circle;
-                        for (var i = 0; i < points.length; i++) {
-                            var lat = points[i].LAT;
-                            var long = points[i].LOG;
 
-                            setTimer(circles, i, lat, long);
-                        }
-                        setTimeout(function () {
-                            clearTimeout(timer);
-                            //map.removeLayer(circle);
-                            console.log(circles);
-                            for (var i = 0; i < circles.length; i++) {
-                                map.removeLayer(circles[i]);
+                        if (timersArray.length > 0) {
+                            console.log(timersArray);
+                            //setTimeout(timersArray[timersArray.length - 1]);
+                            var tempScale = (unprintedVals.length - 1);
+                            for (var i = unprintedVals[tempScale] + 1; i < points.length; i++) {
+                                var lat = points[i].LAT;
+                                var long = points[i].LOG;
+
+                                setTimer(circles, i - tempScale, lat, long);
                             }
-                        }, 1001 * points.length);
 
-                        button.value = "paused";
-                        button.textContent = "Play";
+                            var finalTimer = setTimeout(function () {
+                                //clearTimeout(timer);
+                                //map.removeLayer(circle);
+                                console.log(circles);
+                                for (var i = 0; i < circles.length; i++) {
+                                    map.removeLayer(circles[i]);
+                                }
+                                timersArray.splice(0, timersArray.length);
+                                circles.splice(0, circles.length);
+                                unprintedVals.splice(0, unprintedVals.length);
+
+                            }, 1001 * points.length);
+
+                            timersArray.push(finalTimer);
+
+                        } else {
+
+
+                            for (var i = 0; i < points.length; i++) {
+                                var lat = points[i].LAT;
+                                var long = points[i].LOG;
+
+                                setTimer(circles, i, lat, long);
+                            }
+
+                            var finalTimer = setTimeout(function () {
+                                //clearTimeout(timer);
+                                //map.removeLayer(circle);
+                                console.log(circles);
+                                for (var i = 0; i < circles.length; i++) {
+                                    map.removeLayer(circles[i]);
+                                }
+                                timersArray.splice(0, timersArray.length);
+                                button.value = "paused";
+                                button.textContent = "Play";
+
+                            }, 1001 * points.length);
+
+                            timersArray.push(finalTimer);
+                        }
+                        //button.value = "paused";
+                        //button.textContent = "Play";
 
 
                     } else {
                         //clearInterval(timer);
-                        clearTimeout(timer);
+                        clearTimeout(timersArray[timersArray.length - 1]);
+                        timersArray.pop();
+
+                        for (var i = 0; i < timersArray.length; i++) {
+                            clearTimeout(timersArray[i]);
+                        }
+
                         console.log("paused");
                         button.value = "paused"
                         button.textContent = "Play";
@@ -1138,9 +1196,12 @@
                             color: 'black',
                             fillColor: '#f03',
                             fillOpacity: 0.5
-                        }).addTo(map)
+                        }).addTo(map);
                         circles.push(circle);
+                        unprintedVals.push(i);
+
                     }, i * 1000, lat, long);
+                    timersArray.push(timer);
                 }
 
                 function sleep(milliseconds) {
