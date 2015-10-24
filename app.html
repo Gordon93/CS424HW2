@@ -156,7 +156,7 @@
                 var num = 0;
                 var topNum =0;
                 var mydate;
-                
+                var Color;
                 var num_hurricanes = [[], [], [], [], [], [], [], [], [], []];
                  
                 var polyline = {};
@@ -234,8 +234,13 @@
                 var playback = new L.Playback(map, null, null, playbackOptions);
 
                 function change() {
+                    
                     if (num != 0) {
-                        d3.select(".map").remove();
+                d3.select(".map").remove();   
+                d3.select("#hurricanelist").selectAll("input").remove();
+                d3.select("#hurricanelist").selectAll('label').remove();
+                d3.select("#hurricanelist2").selectAll("input").remove();
+                d3.select("#hurricanelist2").selectAll('label').remove();
                     }
 
                     
@@ -259,36 +264,23 @@
                     if (input.Hurricane == 'All') {
                         var myline = new Array();
                         var polyline_options;
-                        for (var k = 0; k < 10; k++) {
+                        for (var k = 0; k < wind_id.length; k++) {
                             myline[k] = new Array();
-                            for (var j = 0; j < wind[k].length; j++) {
-                                if (wind[k][j] > 40) {  // coloring scheme
-                                    color = 'red'
-                                }
-                                else {
-                                    color = 'green'
-                                }
-                   myline[k][j] = new Array(2);
-                   myline[k][j][0] = parseFloat(latitute[[k]][j]);
-                   myline[k][j][1] = parseFloat(langitute[[k]][j]);
-               }                         
+                            var Average = averageWindSpped(wind_id[k])
+                            for(var j=0;j<wind_id[k].length;j++){
+                            myline[k][j] = new Array(2);
+                            myline[k][j][0] = parseFloat(latitute_id[k][j]);
+                            myline[k][j][1] = parseFloat(langitute_id[k][j]);
+                         }                        
+                        determineColor(Average);  
+                            
                         polyline_options = {
-                            color: 'red'
+                            color: Color
                          };    
-                            
-                       alert(JSON.stringify((myline[k])));
                              polyline["ALL"+topNum.toString()]=L.polyline(myline[k],polyline_options).addTo(map);
-                            
+                        }
                              topNum++; 
                               
-                            }
-                        
-                           if (num != 0) {   
-                d3.select("#hurricanelist").selectAll("input").remove();
-                d3.select("#hurricanelist").selectAll('label').remove();
-                d3.select("#hurricanelist2").selectAll("input").remove();
-                d3.select("#hurricanelist2").selectAll('label').remove();
-                    }
                         
                     var ALLbox =[]
                     ALLbox.push("ALL");
@@ -313,36 +305,27 @@
                         var myline = [[], [], [], [], []];
                         var polyline_options; 
                         top10();
-                        
                         for (var k = 0; k < 5; k++) {
+                            var Average = averageWindSpped(wind_id[mytop5[k]]);
+                             alert(wind_id[mytop5[k]]);
+                            
                              myline[k] = new Array();
-                            for (var j = 0; j < wind_id[mytop5[k]].length; j++) {
-                                if (wind_id[mytop5[k]][j] > 40) {  // coloring scheme
-                                    color = 'red'
-                                }
-                                else {
-                                    color = 'green'
-                                }
-                   myline[k][j] = new Array(2);
-                   myline[k][j][0] = parseFloat(latitute_id[mytop5[k]][j]);
-                   myline[k][j][1] = parseFloat(langitute_id[mytop5[k]][j]);
-               }                         
+                             for (var j = 0; j < wind_id[mytop5[k]].length; j++) {
+                             myline[k][j] = new Array(2);
+                             myline[k][j][0] = parseFloat(latitute_id[mytop5[k]][j]);
+                             myline[k][j][1] = parseFloat(langitute_id[mytop5[k]][j]);
+                              }  
+                            
+                             determineColor(Average);
+                             alert(Color);
                         polyline_options = {
-                            color: 'red'
+                            color: Color
                          };    
                             
-                       alert(JSON.stringify((myline[k])));
                              polyline["TOP5"+topNum.toString()]=L.polyline(myline[k],polyline_options).addTo(map);
                             
                              topNum++;     
-                            }
-                        
-                if (num != 0) {   
-                d3.select("#hurricanelist").selectAll("input").remove();
-                d3.select("#hurricanelist").selectAll('label').remove();
-                d3.select("#hurricanelist2").selectAll("input").remove();
-                d3.select("#hurricanelist2").selectAll('label').remove();
-                    }
+                        }
                         
                     var Top5box =[]
                     Top5box.push("TOP5");
@@ -370,34 +353,26 @@
                         
                         for (var k = 0; k < 10; k++) {
                              myline[k] = new Array();
-                            for (var j = 0; j < wind_id[mytop10[k]].length; j++) {
-                                if (wind_id[mytop10[k]][j] > 40) {  // coloring scheme
-                                    color = 'red'
-                                }
-                                else {
-                                    color = 'green'
-                                }
-                   myline[k][j] = new Array(2);
-                   myline[k][j][0] = parseFloat(latitute_id[mytop10[k]][j]);
-                   myline[k][j][1] = parseFloat(langitute_id[mytop10[k]][j]);
-               }                         
+                            var Average = averageWindSpped(wind_id[mytop10[k]]);
+                             myline[k] = new Array();
+                            
+                             for (var j = 0; j < wind_id[mytop10[k]].length; j++) {
+                             myline[k][j] = new Array(2);
+                             myline[k][j][0] = parseFloat(latitute_id[mytop10[k]][j]);
+                             myline[k][j][1] = parseFloat(langitute_id[mytop10[k]][j]);
+                             }
+                            
+                             determineColor(Average);
+                             alert(Color);                 
                         polyline_options = {
-                            color: 'red'
+                            color: Color
                          };    
                             
-                       alert(JSON.stringify((myline[k])));
                              polyline["TOP10"+topNum.toString()]=L.polyline(myline[k],polyline_options).addTo(map);
                             
                              topNum++;     
                             }
                         
-                if (num != 0) {
-                d3.select("#hurricanelist").selectAll("input").remove();
-                d3.select("#hurricanelist").selectAll('label').remove();
-
-                d3.select("#hurricanelist2").selectAll("input").remove();
-                d3.select("#hurricanelist2").selectAll('label').remove();
-                    }
                         
                     var Top10box =[]
                     Top10box.push("TOP10");
@@ -474,14 +449,7 @@
 
 
                     // Creating a legend with all hurricane name
-                      if (num != 0) {
-                        //alert("removing");
-                d3.select("#hurricanelist").selectAll("input").remove();
-                d3.select("#hurricanelist").selectAll('label').remove();
-
-                d3.select("#hurricanelist2").selectAll("input").remove();
-                d3.select("#hurricanelist2").selectAll('label').remove();
-                    }
+         
                       svg = d3.select("#hurricanelist").selectAll("input")
                           .data(uniqueNames)
                           .enter()
@@ -546,16 +514,13 @@
                      if(val == "TOP10"){
                      for(var key in polyline) {
                            if(key.indexOf(val) != -1){
-                              alert(key);
                               map.removeLayer(polyline[key]);
                             }  
                           }
                      }
                           else if(val == "TOP5"){
-                              alert("get here");
                               for(var key in polyline) {
                            if(key.indexOf(val) != -1){
-                              alert(key);
                               map.removeLayer(polyline[key]);
                             }  
                             }
@@ -564,7 +529,6 @@
                           else if(val == "ALL"){
                               for(var key in polyline) {
                            if(key.indexOf(val) != -1){
-                              alert(key);
                               map.removeLayer(polyline[key]);
                             }  
                           }
@@ -624,6 +588,7 @@
                                 break;
                             }
                         }
+                        
                         //This is where we will need to run the remove code for a single hurricane.
 
 
@@ -711,44 +676,103 @@
 
                 function top5() {
                     var maxspeed = [];
-
+                    var shift=0;
                     Array.max = function (array) {
                         return Math.max.apply(Math, array);
                     };
+                    
                     // finding max speed for each hurricane 
                     for (var i = 0; i < wind_id.length; i++) {
                         maxspeed.push(Array.max(wind_id[i]));
                     }
+                    alert(JSON.stringify(maxspeed));
 
                     // finding the strongest 5 hurricanes 
 
                     for (var k = 0; k < 5; k++) {
+                        shift=0;
                         var i = maxspeed.indexOf(Math.max.apply(Math, maxspeed));
-                        mytop5.push(i);
+                        for(var j =0;j<mytop5.length;j++){
+                            if(i+k > mytop5[j]){
+                                shift++;
+                            }
+                        }
+                        mytop5.push(i+shift);
                         maxspeed.splice(i, 1);
+                    }
+                    alert(mytop5);
+                    for (var k = 0; k < 5; k++) {
+                        alert(maxspeed[mytop5[k]]);
                     }
                 }; //End of the top 5 function.
 
                 function top10() {
                     var maxspeed = [];
+                    var shift=0;
                     Array.max = function (array) {
                         return Math.max.apply(Math, array);
                     };
+                    
                     // finding max speed for each hurricane 
                     for (var i = 0; i < wind_id.length; i++) {
                         maxspeed.push(Array.max(wind_id[i]));
                     }
+                    alert(JSON.stringify(maxspeed));
 
-                    // finding the strongest 10 hurricanes 
+                    // finding the strongest 5 hurricanes 
 
                     for (var k = 0; k < 10; k++) {
+                        shift=0;
                         var i = maxspeed.indexOf(Math.max.apply(Math, maxspeed));
-                        mytop10.push(i);
+                        for(var j =0;j<mytop10.length;j++){
+                            if(i+k > mytop10[j]){
+                                shift++;
+                            }
+                        }
+                        mytop10.push(i+shift);
                         maxspeed.splice(i, 1);
+                    }
+                    alert(mytop5);
+                    for (var k = 0; k < 10; k++) {
+                        alert(maxspeed[mytop10[k]]);
                     }
                 }; //End of the top 10 function.
                 
+                function averageWindSpped(WindSpeed){
+                    alert(WindSpeed);
+                    var sum=0;
+                    for (var j = 0; j < WindSpeed.length; j++) {
+                        sum = sum + parseInt(WindSpeed[j]);
+                    }
+                    alert(sum/(WindSpeed.length));
+                    return sum/(WindSpeed.length);
+                }
                 
+                function determineColor(Average){
+                    if (Average < 10){
+                    }
+                    else if(Average>10 && Average<20){
+                        Color = 'blue'
+                    }
+                    else if(Average>20 && Average<30){
+                        Color = 'green'
+                    }
+                    else if(Average>30 && Average<40){
+                        Color = 'yellow'
+                    }
+                    else if(Average>40 && Average<50){
+                        Color = 'orange'
+                    }
+                    else if(Average>50 && Average<60){
+                        Color = 'red'
+                    }
+                    else if(Average>60 && Average<70){
+                        Color = 'pink'
+                    }
+                    else if(Average >70 ){
+                        Color = 'purple'
+                            }
+                }
           
         $(function() {
                 $('#datepicker').datepicker();
@@ -762,7 +786,6 @@
                                mydateline[i][1] = parseFloat(day_lag[key]);
                                dateNames[numHurrDate] = day_name[key];
                                i++;
-                               alert(numHurrDate);
                                numHurrDate++;
                }                         
                        var line_options = {
