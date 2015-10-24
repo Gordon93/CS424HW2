@@ -58,6 +58,15 @@
 	</head>
 	
 	<body>
+
+    <!--global vars-->
+<!--    <script>
+        var wind_min = null;
+        var wind_max = null;
+        var press_min = null;
+        var press_max = null;
+    </script>
+    -->
 	        <!-- This section begins the bootstrap button headers -->
         <nav class="navbar navbar-inverse navbar-fixed-top">
             <div class="container">
@@ -102,9 +111,10 @@
                 <!--<div>-->
                 <fieldset>
                     <legend>Filters</legend>
-                    <input type="number" id="min_speed" style="width:50px" /> < Wind Speed < <input type="number" id="max_speed" style="width:50px" /> <br />
-                    <input type="number" id="min_pressure" style="width:50px" /> < Pressure < <input type="number" id="max_pressure" style="width:50px" /> <br />
+                    <input value="0" type="number" id="min_speed" style="width:50px" />< Wind Speed < <input value="999" type="number" id="max_speed" style="width:50px" /> <br />
+                    <input value="0" type="number" id="min_pressure" style="width:50px" /> < Pressure < <input value="999" type="number" id="max_pressure" style="width:50px" /> <br />
                     Made Land: <input type="checkbox" id="land" /> <br />
+                    <button onclick="change()">Apply Filters</button>
 
                 </fieldset>
 
@@ -456,8 +466,40 @@
                           .append('label')
                           .style("font-size", "12px")
                               .attr('for', function (d, i) { return 'a' + i; })
-                              .text(function (d) { return d; })
+                              .text(function (d)
+                              {
+                                  var wind;
+                                  /*Get max wind speed for hurricane*/
+                                  for ( var key in Namedict )
+                                  {
+                                      var mykey = Namedict[key].key;
+                                      if ( Namedict[key].value == d)
+                                      {
+                                          wind = Math.max.apply(null, wind_id[mykey]);
+                                          /*alert(max);*/
+                                      }
+                                  }
+                                  if(wind > document.getElementById("min_speed").value && wind < document.getElementById("max_speed").value)
+                                      return d;
+                              })
                               .append("input")
+                              .style("display", function(d){
+                                  var wind;
+                                  /*Get max wind speed for hurricane*/
+                                  for ( var key in Namedict )
+                                  {
+                                      var mykey = Namedict[key].key;
+                                      if ( Namedict[key].value == d)
+                                      {
+                                          wind = Math.max.apply(null, wind_id[mykey]);
+                                          /*alert(max);*/
+                                      }
+                                  }
+                                  if(wind > document.getElementById("min_speed").value && wind < document.getElementById("max_speed").value)
+                                      return null;
+                                  else
+                                      return "none";
+                              })
                               .attr("val", false)
                               .attr("type", "checkbox")
                               .attr("id", function (d, i) { return uniqueNames[i]; })
@@ -539,7 +581,7 @@
                       var mykey = Namedict[key].key;
 
                      if ( Namedict[key].value == val){
-                         console.log(wind_id[Namedict[key].key].length);
+                             console.log(wind_id[Namedict[key].key].length);
                          for( var i =0; i<wind_id[Namedict[key].key].length;i++){
 
                        if (wind_id[Namedict[key].key][i] > 40){  // coloring scheme
