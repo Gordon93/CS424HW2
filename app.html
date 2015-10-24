@@ -568,6 +568,32 @@
                             }  
                           }
                           }
+                            else if(val == "All"){
+                          alert(index);
+                            var numHurr=0;
+                              for(var i=0;i<names[index].length;i++){
+                                 for (var j=0;j<name_id.length;j++){      
+                                    if(names[index][i] == name_id[j][0]){
+                                        alert(names[index][i]);
+                                        alert(name_id[j][0]);
+                                    var Average = averageWindSpped(wind_id[j]);
+                                        alert(Average);
+                                    for( var i =0; i<wind_id[j].length;i++){
+                                    myline[i] = new Array(2);
+                                    myline[i][0] = parseFloat(latitute_id[j][i]);
+                                    myline[i][1] = parseFloat(langitute_id[j][i]);
+                                     }                
+                         determineColor(Average);
+                        polyline_options = {
+                            color: Color
+                         };
+                         
+     polyline["All"+numHurr.toString()] = L.polyline(myline,polyline_options).addTo(map);
+                                 numHurr++;
+                                    }
+                              }
+                          }
+                      }
                           
                           else{
                     for ( var key in Namedict ) {
@@ -593,12 +619,23 @@
                      }
                   }
                       else if(check == 'true'){
+                          if(val == "All"){
+                          alert(index);
+                              for(var key in polyline){
+                                 if(key.indexOf(All) != -1){
+                                  map.removeLayer(polyline[key]);
+                                 }
+                              }
+                           }
+                          
+                          else{
                           var val = $(that).attr("id");
                          map.removeLayer(polyline[val]);
                           if (dateLine[val]){
                          map.removeLayer(dateLine[val]);
                              }
                           }
+                      }
                      modify(that);
                   }
                 
