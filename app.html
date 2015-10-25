@@ -172,6 +172,7 @@
                 var mydate;
                 var Color;
                 var num_hurricanes = [[], [], [], [], [], [], [], [], [], []];
+                var num_hurricanes_Pacific = [[], [], [], [], [], [], [], [], [], []];
                  
                 var polyline = {};
                 var dateLine = {};
@@ -180,15 +181,27 @@
                 var uniqueDateNames = [];
                 var numHurrDate=0;
                 
+                // Dictionaries that are indexed by a day for example "6/29/2007"
+                // Useful when the user picks a date/
                 var day_lat = {};
                 var day_lag = {};
                 var day_wind = {};
                 var day_name = {};
                 
+                var day_lat_Pacific = {};
+                var day_lag_Pacific = {};
+                var day_wind_Pacific = {};
+                var day_name_Pacific = {};
                 
+                // Dictionaries that contain information for each hurricane.
+                // Useful when ordering the hurricanes
                 var Namedict = [];
                 var Timedict = [];
                 var Speeddict = [];
+                
+                var NamedictPacific = [];
+                var TimedictPacific = [];
+                var SpeeddictPacific = [];
 
                 var hurriSelection = [];
                 var hurricanesByID = [];
@@ -199,18 +212,36 @@
 
                 var mytop5 = [];
                 var mytop10 = [];
+                var mytop5Pacific =[];
+                var mytop10Pacific =[];
 
+                // Arrays of size 10 each index represents a year. usefull when the user picks a year.
                 var latitute = [[], [], [], [], [], [], [], [], [], []];
                 var langitute = [[], [], [], [], [], [], [], [], [], []];
                 var wind = [[], [], [], [], [], [], [], [], [], []];
                 var names = [[], [], [], [], [], [], [], [], [], []];
-
+                
+                var latitutePacific = [[], [], [], [], [], [], [], [], [], []];
+                var langitutePacific = [[], [], [], [], [], [], [], [], [], []];
+                var windPacific = [[], [], [], [], [], [], [], [], [], []];
+                var namesPacific = [[], [], [], [], [], [], [], [], [], []];
+                
+                // 2 Dimesional Arrays that are index by a hurricane
+                // Useful when a user pick a hurricane to diplay,
+                
                 var latitute_id = new Array();
                 var langitute_id = new Array();
                 var wind_id = new Array();
                 var year_id = new Array();
                 var name_id = new Array();
                 var MinPress_id = new Array();
+                
+                var latitute_id_pacific = new Array();
+                var langitute_id_pacific = new Array();
+                var wind_id_pacific = new Array();
+                var year_id_pacific = new Array();
+                var name_id_pacific = new Array();
+                var MinPress_id_pacific = new Array();
 
                 //from data.js
                 var HurrData1 = [];
@@ -978,6 +1009,27 @@
                     })
                     .entries(text);
                 });
+                
+                // 1. populating the pacific array that is indexed by year late.
+                   d3.csv("data/PacHurricane2005-2014.csv", function (error, text) {
+                    var i = 0;
+                    var data = d3.nest()
+                        .key(function (d) {
+                            return d.YEAR;
+                        })
+                    .rollup(function (leaves) {
+                        for (var j = 0 ; j < leaves.length; j++) {
+                            langitutePacific[i][j] = (leaves[j].LOG);
+                            latitutePacific[i][j] = (leaves[j].LAT);
+                            windPacific[i][j] = (leaves[j].MaxWind);
+                            namesPacific[i][j] = (leaves[j].NAME);
+                        }
+                        i++;
+                        return leaves.length;
+                    })
+                    .entries(text);
+                       //alert(JSON.stringify(namesPacific));
+                });
 
 
                 //from data.js
@@ -1100,6 +1152,38 @@
                                
                 });
                 
+                //2. The pacifinc function to put the date into arrays later accessed by the date.
+                            d3.csv("data/PacHurricane2005-2014.csv", function (error, text) {
+                    var i = 0;
+                    var data = d3.nest()
+                        .key(function (d) {
+                            return d.YEAR;
+                        })
+                        .key(function (d) {
+                            return d.MONTH;
+                        })
+                    .key(function (d) {
+                            return d.DAY;
+                        })
+                    .rollup(function (leaves) {
+                        //alert(JSON.stringify(leaves[0]));
+                        var mykey = leaves[0].MONTH + "/" + leaves[0].DAY + "/" +leaves[0].YEAR;
+                        console.log(mykey);
+                        for (var j = 0 ; j < leaves.length; j++) {
+                            mykey += "|" + j.toString();
+                            
+                            day_lat_Pacific[mykey] =  leaves[j].LAT;
+                            day_lag_Pacific[mykey] =  leaves[j].LOG;
+                            day_wind_Pacific[mykey] = leaves[j].MaxWind;
+                            day_name_Pacific[mykey] = leaves[j].NAME;
+                        }
+                        i++;
+                        return leaves.length;
+                    })
+                    .entries(text);
+                          //alert(JSON.stringify(day_lat_Pacific));    
+                });
+                
                 //The function below grabs the hurricane data and breaks it up into HURID.
                 
                 d3.csv("data/AtlHurricane2005-2014.csv", function (error, text) {
@@ -1160,13 +1244,77 @@
                     $.each(names[i], function (k, el) {
                             if ($.inArray(el, num_hurricanes[i]) === -1) num_hurricanes[i].push(el);
                         });
-                        console.log('get here');
-                        console.log(num_hurricanes[i].toString());
-                        console.log(num_hurricanes[i].length);
                         
                     }
                 });
+                
+                // 3.Tha pacific fucntion to read in the data into arrays later accesing them
+                // by hurricane index.
+                
+                  d3.csv("data/PacHurricane2005-2014.csv", function (error, text) {
+                    var i = 0;
+                    var data = d3.nest()
+                        .key(function (d) {
+                            return d.HURID;
+                        })
+                    .rollup(function (leaves) {
+                        //alert(JSON.stringify(leaves[0]));
+                        langitute_id_pacific[i] = new Array();
+                        latitute_id_pacific[i] = new Array();
+                        wind_id_pacific[i] = new Array();
+                        year_id_pacific[i] = new Array();
+                        name_id_pacific[i] = new Array();
+                        MinPress_id_pacific[i] = new Array();
+                        for (var j = 0 ; j < leaves.length; j++) {
+                            // creating arrays for all the hurricane
 
+                            langitute_id_pacific[i][j] = (leaves[j].LOG);
+                            latitute_id_pacific[i][j] = (leaves[j].LAT);
+                            wind_id_pacific[i][j] = (leaves[j].MaxWind);
+                            year_id_pacific[i][j] = (leaves[j].YEAR);
+                            name_id_pacific[i][j] = leaves[j].NAME;
+                            MinPress_id_pacific[i][j] = leaves[j].MinPress;
+                        }
+
+
+                        NamedictPacific.push({
+                            key: i.toString(),
+                            value: leaves[0].NAME
+                        });
+
+                        TimedictPacific.push({
+                            key: i.toString(),
+                            value: leaves[0].MONTH
+                        });
+
+                        SpeeddictPacific.push({
+                            key: i.toString(),
+                            value: leaves[0].MaxWind
+                        });
+
+
+                        i++;
+                        return leaves.length;
+                    })
+                        .entries(text);
+
+
+                    TimedictPacific = sortOnValue(Timedict);
+                    SpeeddictPacific = sortOnValue(Speeddict);
+                    
+                
+                    console.log(num_hurricanes_Pacific.length);
+                    
+                    for(var i=0;i<num_hurricanes_Pacific.length;i++){
+                    $.each(names[i], function (k, el) {
+                            if ($.inArray(el, num_hurricanes_Pacific[i]) === -1) num_hurricanes_Pacific[i].push(el);
+                        });
+                        
+                    }
+                      //alert(JSON.stringify(name_id_pacific));
+                });
+
+                
                 function sortOnValue(dict) {
                     var sortable = [];
                     var temp = []
