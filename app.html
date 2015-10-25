@@ -102,6 +102,11 @@
                     Show Heatmap: <input type="checkbox" id="heat" /> <br />
                     <!-- This is a temporary placement for a button, just for testing the play functionality -->
                     <button id="play" value="paused" onclick="playHit()" style="width:6vw;height:6vh;">Play/Pause</button> <br />
+                    <select id="speedSelector">
+                        <option value="0">Select Speed</option>
+                        <option value="1">1x</option>
+                        <option value="2">2x</option>
+                    </select>
 
                     <div id="colorLegend"></div>
                     
@@ -1350,6 +1355,12 @@
                 function playHit() {
                     var button = document.getElementById("play");
                     var loopFlag = 0;
+
+                    var speed = $('select[id=speedSelector]').val();
+                    if (speed == 0) {
+                        speed = 1;
+                    }
+                    var modifier = 1.0 / speed;
                     //The function below sorts the selected hurricane list based on the start date of each hurricane.
                     hurriSelection.sort(function (A, B) {
                         var hourA = A.values[0].HOURS[0] + "" + A.values[0].HOURS[1];
@@ -1377,23 +1388,9 @@
                             for (var j = 0; j < hurriSelection[i].values.length; j++) {
                             
                                 points.push(hurriSelection[i].values[j]);
-
-                                //return tempDateA - tempDateB;
-                                //var lat = hurriSelection[i].values[j].LAT;
-                                //var long = hurriSelection[i].values[j].LOG
-                                //setTimer(j, lat, long);
                             }
                         }
 
-                        /*
-                        for (var i = 0; i < points.length; i++) {
-                            var iVal = points[i].values[]
-                            for (var j = 1; j < points.length; j++) {
-
-                                if (points[j].values. < )
-                            }
-                        }
-                        */
 
                         var circle;
 
@@ -1406,25 +1403,8 @@
                                 var lat = points[i].LAT;
                                 var long = points[i].LOG;
 
-                             /*
-                        var playbackOptions = {
-                            playControl: true,
-                            dateControl: true,
 
-                            sliderControl: true,
-                            speed: 2000
-
-                            tickLen: 1000,
-                            sliderControl: true,
-                            //speed: 2000,
-                            //maxInterpolationTime: 4*60*6000
-
-                        };
-                        */
-
-
-                                setTimer(time, circles, i - tempScale, lat, long);
-
+                                setTimer(modifier ,time, circles, i - tempScale, lat, long);
                             }
 
 
@@ -1438,7 +1418,7 @@
                                 circles.splice(0, circles.length);
                                 unprintedVals.splice(0, unprintedVals.length);
 
-                            }, 1001 * points.length);
+                            }, (1001 * points.length) * modifier);
 
                             timersArray.push(finalTimer);
 
@@ -1450,7 +1430,7 @@
                                 var lat = points[i].LAT;
                                 var long = points[i].LOG;
 
-                                setTimer(time, circles, i, lat, long);
+                                setTimer(modifier,time, circles, i, lat, long);
                             }
 
                             var finalTimer = setTimeout(function () {
@@ -1463,7 +1443,7 @@
                                 button.value = "paused";
                                 button.textContent = "Play";
 
-                            }, 1001 * points.length);
+                            }, (1001 * points.length) * modifier);
 
                             timersArray.push(finalTimer);
                         }
@@ -1489,7 +1469,7 @@
                     console.log(hurriSelection[0].values[0].HOURS);
                 }; //End of the Play function.
 
-                function setTimer(time, circles, i, lat, long) {
+                function setTimer(modifier, time, circles, i, lat, long) {
                     timer = setTimeout(function () {
                         //var circle = L.circle([hurriSelection[i].values[j].LAT, hurriSelection[i].values[j].LOG], 500, {
                         var circle = L.circle([lat, long], 500, {
@@ -1501,7 +1481,7 @@
                         unprintedVals.push(i);
                         info.update(time)
 
-                    }, i * 1000, lat, long);
+                    }, (i * 1000) * modifier, lat, long);
                     timersArray.push(timer);
                 }
 
