@@ -160,6 +160,10 @@
                 <div id="graph1"> </div>
             </div>
 
+            <div id="chartContainer3" class="inline" style="width:15vw">
+                <div id="graph3"> </div>
+            </div>
+
             
 
             <script type="text/javascript">
@@ -1069,6 +1073,7 @@
                     createline1();
                     createbar1(HurrData1,graphs[0].bar);
                     createbar1(HurrData2,graphs[1].bar);
+                    createbar2(HurrData1,HurrData2,graphs[2].bar);
 
 
                 });
