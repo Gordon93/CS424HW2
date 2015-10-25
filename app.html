@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 
 
 <html>
@@ -104,7 +104,8 @@
                     <!-- This is a temporary placement for a button, just for testing the play functionality -->
                     <button id="play" value="paused" onclick="playHit()" style="width:6vw;height:6vh;">Play/Pause</button> <br />
 
-
+                    <div id="colorLegend"></div>
+                    
                     <br />
                     <br />
                 </fieldset>
@@ -214,6 +215,48 @@
                 var name_id = new Array();
                 var MinPress_id = new Array();
           
+                
+                    var dataset = ["0-20 MPH","20-30 MPH","30-40 MPH","40-50 MPH","50-60 MPH","60-70 MPH",">70 MPH"];
+  var color_hash = ["Blue","Green","yellow","Orange","red","pink","Purple"];
+      
+     var svg = d3.select("#colorLegend")
+     .append("svg");
+                
+  var legend = svg.append("g")
+  .attr("class", "legend")
+  .attr("x", 65)
+  .attr("y", 25)
+  .attr("height", 100)
+  .attr("width", 100);
+  
+      
+     svg.selectAll("text")
+      .data(dataset)
+      .enter()
+      .append("text")
+      .attr("x", 30)
+      .attr("y", function(d, i){ return (i+2) *  16 ;})
+      .attr("width", 10)
+      .attr("height", 10)
+      .text(function(d,i) { 
+         var color = dataset[i];
+         return color;
+      });
+                   
+                
+      svg.selectAll("rect")
+      .data(dataset)
+      .enter()
+      .append("rect")
+      .attr("x", 10)
+      .attr("y", function(d, i){ return (i+2) *  16 -10;})
+      .attr("width", 10)
+      .attr("height", 10)
+      .style("fill", function(d,i) { 
+         var mycolor = color_hash[i];
+         return mycolor;
+      });
+           
                 var map = L.map('map').setView([41.83, -100], 3);
 
                 // creating a map
