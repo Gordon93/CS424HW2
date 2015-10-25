@@ -177,10 +177,8 @@
                 var polyline = {};
                 var dateLine = {};
                 
-                var mydateline = [];
                 var dateNames = [];
                 var uniqueDateNames = [];
-                var dateCounter=0;
                 var numHurrDate=0;
                 
                 var day_lat = {};
@@ -277,7 +275,8 @@
                     tickLen: 60*60*1000
                 };
                 //var playback = new L.Playback(map, null, null, playbackOptions);
-
+                var svg2;
+                
                 function change() {
                     if (num != 0) {
                 d3.select(".map").remove();   
@@ -285,6 +284,7 @@
                 d3.select("#hurricanelist").selectAll('label').remove();
                 d3.select("#hurricanelist2").selectAll("input").remove();
                 d3.select("#hurricanelist2").selectAll('label').remove();
+                svg2.selectAll("*").remove();
                     }
 
                     
@@ -347,14 +347,13 @@
                         }
                     
                     else if (input.Hurricane == 'TOP5') {
-                        top5();
+                   
                         var myline = [[], [], [], [], []];
                         var polyline_options; 
-                        top10();
+                        var HurricaneNames = [];
+                         top5();
                         for (var k = 0; k < 5; k++) {
-                            var Average = averageWindSpped(wind_id[mytop5[k]]);
-                             alert(wind_id[mytop5[k]]);
-                            
+                            var Average = averageWindSpped(wind_id[mytop5[k]]);               
                              myline[k] = new Array();
                              for (var j = 0; j < wind_id[mytop5[k]].length; j++) {
                              myline[k][j] = new Array(2);
@@ -363,13 +362,12 @@
                               }  
                             
                              determineColor(Average);
-                             alert(Color);
                         polyline_options = {
                             color: Color
                          };    
                             
                              polyline["TOP5"+topNum.toString()]=L.polyline(myline[k],polyline_options).addTo(map);
-                            
+                            HurricaneNames[k] = (name_id[mytop5[k]][0]) + " " + year_id[mytop5[k]][0];
                              topNum++;     
                         }
                         
@@ -388,13 +386,41 @@
                               .attr("id", function (d, i) { return Top5box[i]; })
                               .attr("onClick", "modify(this)")
                               .attr("onClick", "drawPath(this)");
-                               num++;
+                         
+                        
+                                svg2 = d3.select("#hurricanelist")
+                                .append("svg");
+                
+                                var myHurricaneNames = svg2.append("g")
+                                .attr("class", "hurricane")
+                                .attr("x", 65)
+                                .attr("y", 25)
+                                .attr("height", 100)
+                                .attr("width", 100);
+  
+                                 myHurricaneNames.selectAll("text")
+                                .data(HurricaneNames)
+                                .enter()
+                                .append("text")
+                                .attr("x", 5)
+                                .attr("y", function(d, i){ return i * 16 +16;})
+                                .attr("width", 10)
+                                .attr("height", 10)
+                                .style("font-size", "10px")
+                                .text(function(d,i) { 
+                                 var Name = HurricaneNames[i];
+                                 return Name;
+                                    });
+                                    
+                        
+                    num++;    
                     }
                     
                     else if (input.Hurricane == 'TOP10') {
 
                         var myline = [[], [], [], [], [], [], [], [], [], []];
                         var polyline_options; 
+                        var HurricaneNames = [];
                         top10();
                         
                         for (var k = 0; k < 10; k++) {
@@ -408,14 +434,14 @@
                              myline[k][j][1] = parseFloat(langitute_id[mytop10[k]][j]);
                              }
                             
-                             determineColor(Average);
-                             alert(Color);                 
+                             determineColor(Average);              
                         polyline_options = {
                             color: Color
                          };    
                             
                              polyline["TOP10"+topNum.toString()]=L.polyline(myline[k],polyline_options).addTo(map);
-                            
+                             HurricaneNames[k] = name_id[mytop10[k]][0]
+                             + " " + year_id[mytop10[k]][0];
                              topNum++;     
                             }
                         
@@ -435,8 +461,33 @@
                               .attr("id", function (d, i) { return Top10box[i]; })
                               .attr("onClick", "modify(this)")
                               .attr("onClick", "drawPath(this)");
+                        
+                        
+                                svg2 = d3.select("#hurricanelist")
+                                .append("svg");
+                
+                                var myHurricaneNames = svg2.append("g")
+                                .attr("class", "hurricane")
+                                .attr("x", 65)
+                                .attr("y", 25)
+                                .attr("height", 100)
+                                .attr("width", 100);
+  
+                                 myHurricaneNames.selectAll("text")
+                                .data(HurricaneNames)
+                                .enter()
+                                .append("text")
+                                .attr("x", 5)
+                                .attr("y", function(d, i){ return i * 16 +16;})
+                                .attr("width", 10)
+                                .attr("height", 10)
+                                .style("font-size", "10px")
+                                .text(function(d,i) { 
+                                 var Name = HurricaneNames[i];
+                                 return Name;
+                                    });
                                num++;
-                        }
+                    }
 
                     else {
 
@@ -803,7 +854,6 @@
                     for (var i = 0; i < wind_id.length; i++) {
                         maxspeed.push(Array.max(wind_id[i]));
                     }
-                    alert(JSON.stringify(maxspeed));
 
                     // finding the strongest 5 hurricanes 
 
@@ -818,9 +868,7 @@
                         mytop5.push(i+shift);
                         maxspeed.splice(i, 1);
                     }
-                    alert(mytop5);
                     for (var k = 0; k < 5; k++) {
-                        alert(maxspeed[mytop5[k]]);
                     }
                 }; //End of the top 5 function.
 
@@ -835,7 +883,6 @@
                     for (var i = 0; i < wind_id.length; i++) {
                         maxspeed.push(Array.max(wind_id[i]));
                     }
-                    alert(JSON.stringify(maxspeed));
 
                     // finding the strongest 5 hurricanes 
 
@@ -850,9 +897,7 @@
                         mytop10.push(i+shift);
                         maxspeed.splice(i, 1);
                     }
-                    alert(mytop5);
                     for (var k = 0; k < 10; k++) {
-                        alert(maxspeed[mytop10[k]]);
                     }
                 }; //End of the top 10 function.
                 
@@ -896,26 +941,20 @@
                      for(var key in day_lat) {
                         if(day_lat.hasOwnProperty(key)) {
                            if(key.indexOf(dateText) != -1){
-                               mydateline[i] = new Array(2);
-                               mydateline[i][0] = parseFloat(day_lat[key]);
-                               mydateline[i][1] = parseFloat(day_lag[key]);
-                               dateNames[numHurrDate] = day_name[key];
+                               dateNames[i] = day_name[key];
                                i++;
-                               numHurrDate++;
                }                         
-                       var line_options = {
-                            color: 'red'
-                         };
                         }
                      }
-                     
+                       if(i ==0){
+                           alert("No Hurricane data for this date, Please try to pick another date");
+                       }
                          $.each(dateNames, function (i, el) {
                             if ($.inArray(el, uniqueDateNames) === -1) uniqueDateNames.push(el);
                         });
                      
-                     dateLine[uniqueDateNames[dateCounter]] = L.polyline(mydateline,line_options).addTo(map);
                         
-                     if(dateCounter >0 || num >0){
+                     if(num >0){
                 d3.select("#hurricanelist").selectAll("input").remove();
                 d3.select("#hurricanelist").selectAll('label').remove();
                      }
@@ -932,8 +971,8 @@
                               .attr("id", function (d, i) { return uniqueDateNames[i]; })
                               .attr("onClick", "modify(this)")
                               .attr("onClick", "drawPath(this)");
-                     
-                           dateCounter++; 
+                           
+                           num++; 
                         });
                    });
                 
