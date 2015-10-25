@@ -11,10 +11,6 @@ d3.csv('data/AtlHurricane2005-2014.csv',function(error,data){
         //if error is not null then something went wrong
         console.log(error);
     }
-    else{
-        //if error is null than fille loaded as expected
-        console.log(data);
-    }
 
 
     data.forEach(function(d) {
@@ -34,20 +30,13 @@ d3.csv('data/AtlHurricane2005-2014.csv',function(error,data){
         })
         .entries(data)
 
-            console.log(dataSet);
+            //console.log(dataSet);
 
     //load data to global variable usaData
     HurrData1 = dataSet;
-    //console.log(HurrData);
-
 
     createline1();
-    //createline2();
     createbar1(HurrData1,graphs[0].bar);
-    //createbar1(HurrData,graphs[1].bar)
-   // updateline1(HurrData[0],graphs[0]);
-    //updateline1(HurrData[0],graphs[1]);
-    //updateline2(HurrData[0]);
 
 });
 
@@ -55,10 +44,6 @@ d3.csv('data/PacHurricane2005-2014.csv',function(error,data){
     if(error) {
         //if error is not null then something went wrong
         console.log(error);
-    }
-    else{
-        //if error is null than fille loaded as expected
-        console.log(data);
     }
 
 
@@ -79,18 +64,15 @@ d3.csv('data/PacHurricane2005-2014.csv',function(error,data){
         })
         .entries(data)
 
-    console.log(dataSet);
+    //console.log(dataSet);
 
     //load data to global variable usaData
     HurrData2 = dataSet;
-    //console.log(HurrData);
 
-
-    //createline1();
-    //createline2();
     createbar1(HurrData2,graphs[1].bar);
     createbar2(HurrData1,HurrData2,graphs[2].bar);
-    //updateline1(HurrData[0],graphs[1]);
-    //updateline2(HurrData[0]);
+
 
 });
+
+

@@ -31,7 +31,6 @@
         <script src="http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.js"></script>
 
         <!-- line chart source -->
-        <script src="data.js"></script>
         <script src="lineChart.js"></script>
 
         <!--Bar chart Source-->
@@ -214,9 +213,14 @@
                 var year_id = new Array();
                 var name_id = new Array();
                 var MinPress_id = new Array();
-          
-                
-                    var dataset = ["0-20 MPH","20-30 MPH","30-40 MPH","40-50 MPH","50-60 MPH","60-70 MPH",">70 MPH"];
+
+                //from data.js
+                var HurrData1 = [];
+                var HurrData2 = [];
+
+
+
+                var dataset = ["0-20 MPH","20-30 MPH","30-40 MPH","40-50 MPH","50-60 MPH","60-70 MPH",">70 MPH"];
   var color_hash = ["Blue","Green","yellow","Orange","red","pink","Purple"];
       
      var svg = d3.select("#colorLegend")
@@ -296,14 +300,14 @@
                     
 
                  //method to create linechart
-/*
+
                     if(index < 10)
                     {
                         updateline1(HurrData1[index],graphs[0]);
                         updateline1(HurrData2[index],graphs[1]);
 
                     }
-*/
+
 
                     var color;
 
@@ -971,6 +975,79 @@
                     })
                     .entries(text);
                 });
+
+
+                //from data.js
+
+                d3.csv('data/AtlHurricane2005-2014.csv',function(error,data){
+                    if(error) {
+                        //if error is not null then something went wrong
+                        console.log(error);
+                    }
+
+
+                    data.forEach(function(d) {
+                        d.YEAR = parseInt(d.YEAR);
+                        d.MONTH = parseInt(d.MONTH);
+                        d.DAY = parseInt(d.DAY);
+                        d.HOURS = parseInt(d.HOURS);
+                        d.LAT = parseFloat(d.LAT);
+                        d.LOG = parseFloat(d.LOG);
+                        d.MaxWind = parseInt(d.MaxWind);
+                        d.MinPress = parseInt(d.MinPress);
+                    });
+
+                    HurrData1 = d3.nest()
+                            .key(function(d) {
+                                return d.YEAR;
+                            })
+                            .entries(data);
+
+                    //console.log(dataSet);
+                    createline1();
+                    createbar1(HurrData1,graphs[0].bar);
+                    createbar1(HurrData2,graphs[1].bar);
+
+
+                });
+
+                d3.csv('data/PacHurricane2005-2014.csv',function(error,data){
+
+                    if(error) {
+                        //if error is not null then something went wrong
+                        console.log(error);
+                    }
+
+
+                    data.forEach(function(d) {
+                        d.YEAR = parseInt(d.YEAR);
+                        d.MONTH = parseInt(d.MONTH);
+                        d.DAY = parseInt(d.DAY);
+                        d.HOURS = parseInt(d.HOURS);
+                        d.LAT = parseFloat(d.LAT);
+                        d.LOG = parseFloat(d.LOG);
+                        d.MaxWind = parseInt(d.MaxWind);
+                        d.MinPress = parseInt(d.MinPress);
+                    });
+
+                    HurrData2 = d3.nest()
+                            .key(function(d) {
+                                return d.YEAR;
+                            })
+                            .entries(data);
+
+                    console.log("loading pacData");
+                    //console.log(dataSet);
+
+
+
+                    console.log("created bar chart2");
+                    //createbar2(HurrData1,HurrData2,graphs[2].bar);
+
+
+                });
+
+                //end of code from data.js
 
                 //The section below grabs the hurricanes from 2005-2014 and groups them by hurricane YEAR. Thus breaking the file into 10 objects instead of 5000 entries.
                 d3.csv("data/AtlHurricane2005-2014.csv", function (error, text) {

@@ -2,7 +2,7 @@
  * Created by Ryan Jones on 10/14/2015.
  */
 
-var x, y, xAxis,yAxis,graphs,
+var x, y, xAxis,yAxis,
     graph1,graph2,graph3,graph4,bar1,bar2,bar3,margin,height,width;
 
 
@@ -10,7 +10,7 @@ var color1 = d3.scale.category20();
 
 //parse the date
 var format = d3.time.format("%d-%b-%y");
-var format2 = d3.time.format("%d");
+
 
 var graphs = [];
 var line = d3.svg.line()
@@ -39,7 +39,7 @@ function createline1() {
     //set the dimensions of the canvas/graph
     margin = {top: 30, right: 20, bottom: 30, left: 50},
         width = parseInt(d3.select('#chart').style('width'),10),
-        width = width - margin.left - margin.right,
+        width = (width - margin.left - margin.right),
         height = ((window.innerHeight) *.30)-margin.bottom - margin.top;
     console.log(width);
         //height = 270 - margin.top - margin.bottom;
@@ -118,7 +118,7 @@ function createbar1(HurrData,graph) {
     if(width< 400)
         tickF = d3.time.format("%y");
     else
-        tickF = d3.time.format("%Y")
+        tickF = d3.time.format("%Y");
 
     //places the x axis at the bottom of the graph
     xAxis = d3.svg.axis()
@@ -140,7 +140,7 @@ function createbar1(HurrData,graph) {
         var temp = [];
         var name = " ";
         temp.perYear = 0;
-        date = format(new Date(d.values[0].YEAR, (d.values[0].MONTH - 1), d.values[0].DAY));
+        var date = format(new Date(d.values[0].YEAR, (d.values[0].MONTH - 1), d.values[0].DAY));
 
         temp.YEAR = format.parse(date);
         d.values.forEach(function(d){
@@ -149,10 +149,10 @@ function createbar1(HurrData,graph) {
                 name = d.HURID;
             }
 
-        })
+        });
 
         HurrPerYear.push(temp);
-    })
+    });
 
 
     /* color1 = d3.scale.linear()
@@ -183,7 +183,7 @@ function createbar1(HurrData,graph) {
         .style("text-anchor", "start")
         //.attr("font-size","12px")
         //.attr("y",0)
-        .attr("x",-15)
+        .attr("x",-15);
         //.attr("dy", ".35em");
         //.attr("transform", "rotate(90)" )*/;
     graph.append("g")
@@ -224,7 +224,7 @@ function createbar2(HurrData,HurrData2,graph) {
 
 
     else
-        tickF = d3.time.format("%B")
+        tickF = d3.time.format("%B");
 
     //places the x axis at the bottom of the graph
     xAxis = d3.svg.axis()
@@ -252,26 +252,26 @@ function createbar2(HurrData,HurrData2,graph) {
         d.values.forEach(function(d){
             if(name!= d.HURID) {
                 //date = format(new Date(d.YEAR, (d.MONTH - 1), d.DAY));
-                HurrPerMonth[d.MONTH-1].perMonth= HurrPerMonth[d.MONTH-1].perMonth+1.
+                HurrPerMonth[d.MONTH-1].perMonth= (HurrPerMonth[d.MONTH-1].perMonth)+1;
                 //HurrPerMonth[d.MONTH-1].MONTH = date;
                 name = d.HURID;
             }
 
         })
 
-    })
+    });
 
     HurrData2.forEach(function(d){
         var name = " ";
         d.values.forEach(function(d){
             if(name!= d.HURID) {
-                HurrPerMonth[d.MONTH-1].perMonth= HurrPerMonth[d.MONTH-1].perMonth+1.
+                HurrPerMonth[d.MONTH-1].perMonth= (HurrPerMonth[d.MONTH-1].perMonth)+1;
                 name = d.HURID;
             }
 
         })
 
-    })
+    });
 
         console.log(HurrPerMonth);
 
@@ -303,7 +303,7 @@ function createbar2(HurrData,HurrData2,graph) {
         .style("text-anchor", "start")
         //.attr("font-size","12px")
         //.attr("y",0)
-        .attr("x",-15)
+        .attr("x",-15);
     //.attr("dy", ".35em");
     //.attr("transform", "rotate(90)" )*/;
     graph.append("g")
@@ -343,14 +343,13 @@ function updateline1(HurrData,graph) {
 
     HurrData.values.forEach(function (d) {
         // d.values.forEach(function (d) {
-        date = format(new Date(d.YEAR, (d.MONTH - 1), d.DAY));
+        var date = format(new Date(d.YEAR, (d.MONTH - 1), d.DAY));
         //console.log(date);
         d.DATE = format.parse(date);
         //console.log(d.DATE);
         //});
     });
 
-    console.log(numTicks);
     //creates the x and y scales for the graph
     x = d3.time.scale().range([0, width]);
     y = d3.scale.linear().range([height, 0]);
@@ -391,7 +390,7 @@ function updateline1(HurrData,graph) {
         .key(function(d) {
             return d.HURID;
         })
-        .entries(HurrData.values)
+        .entries(HurrData.values);
 
 
     console.log(dataSet);
