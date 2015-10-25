@@ -1392,11 +1392,53 @@
                         }
 
 
+                        
+                        //Arrange the points based on timestamp.
+                        for (var i = 0; i < points.length; i++) {
+                            var temp;
+
+                            for (var j = i+1; j < points.length; j++) {
+                                var time1Year = parseInt(points[i].YEAR);
+                                var time1Month = parseInt(points[i].MONTH);
+                                var time1Day = parseInt(points[i].DAY);
+                                var time1Hour = parseInt(points[i].HOURS);
+
+                                var time2Year = parseInt(points[j].YEAR);
+                                var time2Month = parseInt(points[j].MONTH);
+                                var time2Day = parseInt(points[j].DAY);
+                                var time2Hour = parseInt(points[j].HOURS);
+                                
+                                if (time1Year > time2Year) {
+                                    var temp = points[i];
+                                    points[i] = points[j];
+                                    points[j] = temp;
+                                } else if (time2Year == time1Year) {
+                                    if (time2Month < time1Month) {
+                                        var temp = points[i];
+                                        points[i] = points[j];
+                                        points[j] = temp;
+                                    } else if (time2Month == time1Month) {
+                                        if (time2Day < time1Day) {
+                                            var temp = points[i];
+                                            points[i] = points[j];
+                                            points[j] = temp;
+                                        } else if (time2Day == time1Day) {
+                                            if (time2Hour < time1Hour) {
+                                                var temp = points[i];
+                                                points[i] = points[j];
+                                                points[j] = temp;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        
+
                         var circle;
 
+
                         if (timersArray.length > 0) {
-                            console.log(timersArray);
-                            //setTimeout(timersArray[timersArray.length - 1]);
                             var tempScale = (unprintedVals.length - 1);
                             for (var i = unprintedVals[tempScale] + 1; i < points.length; i++) {
                                 var time = points[i].HOURS + " " + points[i].MONTH + "/" + points[i].DAY + "/" + points[i].YEAR;
@@ -1410,7 +1452,6 @@
 
                             var finalTimer = setTimeout(function () {
 
-                                console.log(circles);
                                 for (var i = 0; i < circles.length; i++) {
                                     map.removeLayer(circles[i]);
                                 }
