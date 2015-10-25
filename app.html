@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 
 
 <html>
@@ -202,16 +202,10 @@
                 var day_wind_Pacific = {};
                 var day_name_Pacific = {};
                 
-                // Dictionaries that contain information for each hurricane.
-                // Useful when ordering the hurricanes
+                // Used to map index to name
                 var Namedict = [];
-                var Timedict = [];
-                var Speeddict = [];
-                
                 var NamedictPacific = [];
-                var TimedictPacific = [];
-                var SpeeddictPacific = [];
-
+                
                 var hurriSelection = [];
                 var hurricanesByID = [];
                 var hurricanesByName = [];
@@ -558,38 +552,40 @@
                     
                         
                         if (orderHurr == 0) {
-                               for(var k =0; k<num_hurricanes[index].length;k++){
-                                   mynames.push(num_hurricanes[index][k]);
-                               }
-                            console.log(mynames.toString());
-                            
+                        // Sorting alphabetically 
+                            for(var k=0; k<names[index].length;k++){
+                                      mynames.push(names[index][k]);
+                           }
+                            mynames.sort();
                         }
                         else if (orderHurr == 1) {
-                              console.log(Timedict.length)
-                              for(var k=0;k<Timedict.length;k++){
-                                  console.log(Timedict[k].key);
-                                  if (Timedict[k].key > starting_position && Timedict[k].key < ending_position){
-                                      console.log('pushed this');
-                                      console.log(num_hurricanes[index][Timedict[k].key-starting_position]);
-                                      mynames.push(num_hurricanes[index][Timedict[k].key-starting_position]);
-                                  }
-                          }
-                            console.log(mynames.toString());
+                            // already sorted by month
+                            
+                              for(var k=0; k<names[index].length;k++){
+                                      mynames.push(names[index][k]);
+                           }
                         }
                         
                         else if (orderHurr == 2) {
-                               console.log(Speeddict);
-                                         for(var k=0;k<Speeddict.length;k++){
-                                  console.log(Speeddict[k].key);
-                                  if (Speeddict[k].key > starting_position && Speeddict[k].key < ending_position){
-                                      console.log('pushed this');
-                                      console.log(num_hurricanes[index][Speeddict[k].key-starting_position]);
-                                      mynames.push(num_hurricanes[index][Speeddict[k].key-starting_position]);
-                                  }
-                          }
+                        // Sorting by wind speed;
+                         var windTemp = {};
+                         var sortable = [];
                             
-                            console.log(mynames.toString());
+                         for (var i=0; i<wind[index].length; i++){
+                             windTemp[i] = wind[index][i];
+                         }
+                            //alert(JSON.stringify(windTemp));
+                            var sortable = [];
+                            for (var key in windTemp)
+                                  sortable.push([key, windTemp[key]])
+                            sortable.sort(function(a, b) {return b[1] - a[1]})
+                            //alert(JSON.stringify(sortable));
                             
+                            for(var key in sortable){
+                                var Sorted = parseInt(sortable[key][0]);
+                            mynames.push(names[index][Sorted]);
+                            }
+                           // alert(JSON.stringify(mynames));
                         }
 
                         $.each(mynames, function (i, el) {
@@ -682,7 +678,6 @@
                     }
 
                     else if (myorder == 'MaxWindSpeed') {
-                        console.log(JSON.stringify(Speeddict));
                         orderHurr = 2;
                     }
                     else if (myorder == 'alphabetically'){
@@ -1234,26 +1229,10 @@
                             value: leaves[0].NAME
                         });
 
-                        Timedict.push({
-                            key: i.toString(),
-                            value: leaves[0].MONTH
-                        });
-
-                        Speeddict.push({
-                            key: i.toString(),
-                            value: leaves[0].MaxWind
-                        });
-
-
                         i++;
                         return leaves.length;
                     })
                         .entries(text);
-
-
-                    Timedict = sortOnValue(Timedict);
-                    Speeddict = sortOnValue(Speeddict);
-                    
                 
                     console.log(num_hurricanes.length);
                     
@@ -1284,7 +1263,6 @@
                         MinPress_id_pacific[i] = new Array();
                         for (var j = 0 ; j < leaves.length; j++) {
                             // creating arrays for all the hurricane
-
                             langitute_id_pacific[i][j] = (leaves[j].LOG);
                             latitute_id_pacific[i][j] = (leaves[j].LAT);
                             wind_id_pacific[i][j] = (leaves[j].MaxWind);
@@ -1299,25 +1277,10 @@
                             value: leaves[0].NAME
                         });
 
-                        TimedictPacific.push({
-                            key: i.toString(),
-                            value: leaves[0].MONTH
-                        });
-
-                        SpeeddictPacific.push({
-                            key: i.toString(),
-                            value: leaves[0].MaxWind
-                        });
-
-
                         i++;
                         return leaves.length;
                     })
                         .entries(text);
-
-
-                    TimedictPacific = sortOnValue(Timedict);
-                    SpeeddictPacific = sortOnValue(Speeddict);
                     
                 
                     console.log(num_hurricanes_Pacific.length);
@@ -1331,25 +1294,6 @@
                       //alert(JSON.stringify(name_id_pacific));
                 });
 
-                
-                function sortOnValue(dict) {
-                    var sortable = [];
-                    var temp = []
-                    for (var key in dict) {
-                        sortable.push([key, dict[key].value])
-                    }
-                    sortable.sort(function (a, b) { return a[1] - b[1] })
-                    // console.log(JSON.stringify(sortable));
-
-                    for (var key in sortable) {
-                        temp.push({
-                            key: sortable[key][0],
-                            value: sortable[key][1]
-                        });
-                    }
-
-                    return temp;
-                }; //End of the sortOnValue function.
 
 
                 function playHit() {
