@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 
 <html>
@@ -303,13 +303,20 @@
                 }).addTo(map);
 
 
-                var playbackOptions = {
-                    playControl: true,
-                    dateControl: true,
-                    sliderControl: true,
-                    tickLen: 60*60*1000
+                var info = L.control();
+
+                info.onAdd = function(map) {
+                    this._div = L.DomUtil.create('div', 'info');
+                    this.update();
+                    return this._div;
                 };
-                //var playback = new L.Playback(map, null, null, playbackOptions);
+
+                info.update = function (val) {
+                    this._div.innerHTML = '<h4>TIMESTAMP</h4>' + (val ? '<b>' + val + '</b></br>' : "Select a hurricane and press play");
+                };
+
+                info.addTo(map);
+
                 var svg2;
                 
                 function change() {
@@ -1373,6 +1380,16 @@
                             }
                         }
 
+                        /*
+                        for (var i = 0; i < points.length; i++) {
+                            var iVal = points[i].values[]
+                            for (var j = 1; j < points.length; j++) {
+
+                                if (points[j].values. < )
+                            }
+                        }
+                        */
+
                         var circle;
 
                         if (timersArray.length > 0) {
@@ -1380,9 +1397,11 @@
                             //setTimeout(timersArray[timersArray.length - 1]);
                             var tempScale = (unprintedVals.length - 1);
                             for (var i = unprintedVals[tempScale] + 1; i < points.length; i++) {
+                                var time = points[i].HOURS + " " + points[i].MONTH + "/" + points[i].DAY + "/" + points[i].YEAR;
                                 var lat = points[i].LAT;
                                 var long = points[i].LOG;
 
+<<<<<<< HEAD
                                 /*
                         var playbackOptions = {
                             playControl: true,
@@ -1399,6 +1418,9 @@
                         };
                         */
                                 setTimer(circles, i - tempScale, lat, long);
+=======
+                                setTimer(time, circles, i - tempScale, lat, long);
+>>>>>>> refs/remotes/origin/master
                             }
 
 
@@ -1421,10 +1443,11 @@
 
 
                             for (var i = 0; i < points.length; i++) {
+                                var time = points[i].HOURS + " " + points[i].MONTH + "/" + points[i].DAY + "/" + points[i].YEAR;
                                 var lat = points[i].LAT;
                                 var long = points[i].LOG;
 
-                                setTimer(circles, i, lat, long);
+                                setTimer(time, circles, i, lat, long);
                             }
 
                             var finalTimer = setTimeout(function () {
@@ -1464,7 +1487,7 @@
                     console.log(hurriSelection[0].values[0].HOURS);
                 }; //End of the Play function.
 
-                function setTimer(circles, i, lat, long) {
+                function setTimer(time, circles, i, lat, long) {
                     timer = setTimeout(function () {
                         //var circle = L.circle([hurriSelection[i].values[j].LAT, hurriSelection[i].values[j].LOG], 500, {
                         var circle = L.circle([lat, long], 500, {
@@ -1474,6 +1497,7 @@
                         }).addTo(map);
                         circles.push(circle);
                         unprintedVals.push(i);
+                        info.update(time)
 
                     }, i * 1000, lat, long);
                     timersArray.push(timer);
