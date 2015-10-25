@@ -12,6 +12,7 @@ var color1 = d3.scale.category20();
 var format = d3.time.format("%d-%b-%y");
 
 
+
 var graphs = [];
 var line = d3.svg.line()
     .x(function (d) {
@@ -215,21 +216,18 @@ function createbar1(HurrData,graph) {
 
 function createbar2(HurrData,HurrData2,graph) {
     var tickF;
+
     x = d3.scale.ordinal().rangeRoundBands([0, width],.3);
     y = d3.scale.linear().range([height, 0]);
 
-
-    if(width< 400)
+    tickF = d3.time.format("%m");
+    if(width> 400)
         tickF = d3.time.format("%b");
-
-
-    else
-        tickF = d3.time.format("%B");
 
     //places the x axis at the bottom of the graph
     xAxis = d3.svg.axis()
         .scale(x)
-        .orient("bottom").ticks(5);
+        .orient("bottom").ticks(5).tickFormat(tickF);
 
     yAxis = d3.svg.axis()
         .scale(y)
@@ -242,17 +240,22 @@ function createbar2(HurrData,HurrData2,graph) {
     var i;
     //console.log(HurrData);
     for(i=0;i<12;i++){
-        temp ={perMonth:0,MONTH:format(new Date(1999,i,12))};
-       // temp.MONTH = tickF.parse(temp.MONTH);
+        var date = tickF(new Date(1999,i,12));
+        date = tickF.parse(date);
+        temp ={perMonth:0,MONTH:date};
+        console.log(temp.MONTH);
         HurrPerMonth.push(temp);
     }
-
+    console.log(HurrPerMonth);
     HurrData.forEach(function(d){
         var name = " ";
+        var index;
         d.values.forEach(function(d){
             if(name!= d.HURID) {
                 //date = format(new Date(d.YEAR, (d.MONTH - 1), d.DAY));
-                HurrPerMonth[d.MONTH-1].perMonth= (HurrPerMonth[d.MONTH-1].perMonth)+1;
+                index = d.MONTH-1;
+                console.log(index);
+                HurrPerMonth[index].perMonth= (HurrPerMonth[index].perMonth)+1;
                 //HurrPerMonth[d.MONTH-1].MONTH = date;
                 name = d.HURID;
             }
@@ -263,9 +266,12 @@ function createbar2(HurrData,HurrData2,graph) {
 
     HurrData2.forEach(function(d){
         var name = " ";
+        var index;
         d.values.forEach(function(d){
             if(name!= d.HURID) {
-                HurrPerMonth[d.MONTH-1].perMonth= (HurrPerMonth[d.MONTH-1].perMonth)+1;
+                index = d.MONTH-1;
+                console.log(index);
+                HurrPerMonth[index].perMonth= (HurrPerMonth[index].perMonth)+1;
                 name = d.HURID;
             }
 
@@ -273,7 +279,7 @@ function createbar2(HurrData,HurrData2,graph) {
 
     });
 
-        console.log(HurrPerMonth);
+
 
     /* color1 = d3.scale.linear()
      .domain([0,10])
