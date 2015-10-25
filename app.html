@@ -132,7 +132,8 @@
 
             <!--maps-->
             <div class="inline" id = top style = "width: 40vw; height: 80vh;" >
-                <div  id="map"  style="height: 100%; width:100%" class="inline"></div>                
+                <div id="map2" style="height: 100%; width:50%" class="inline"></div>
+                <div  id="map"  style="height: 100%; width:50%" class="inline"></div>                
                 <!--<div id = "map" style = "height: 50%;"></div>-->
                 <div id = "legend" style = "height: 50% ; "></div>
 
@@ -214,7 +215,8 @@
                 var name_id = new Array();
                 var MinPress_id = new Array();
           
-                var map = L.map('map').setView([41.83, -100], 3);
+                var map = L.map('map').setView([41.83, -87.68], 4);
+                var map2 = L.map('map2').setView([41.83, -87.68], 4);
 
                 // creating a map
 
@@ -226,6 +228,13 @@
                     accessToken: 'pk.eyJ1IjoieWdvcmRvbjIyIiwiYSI6ImNpZmQ5cW1idzUzeWFzNG03bjVqc3czZWEifQ.dpecRLb3F4lRAOvIVd5KpQ'
                 }).addTo(map);
 
+                L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+                    attribution: 'Map data &copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://mapbox.com">Mapbox</a>',
+                    maxZoom: 18,
+                    noWrap: true,
+                    id: 'ygordon22.cifd9ql4c53tbsmlx7cegx4iy',
+                    accessToken: 'pk.eyJ1IjoieWdvcmRvbjIyIiwiYSI6ImNpZmQ5cW1idzUzeWFzNG03bjVqc3czZWEifQ.dpecRLb3F4lRAOvIVd5KpQ'
+                }).addTo(map2);
 
                 var playbackOptions = {
                     playControl: true,
@@ -507,12 +516,6 @@
                               .attr("id", function (d, i) { return uniqueNames[i]; })
                               .attr("onClick", "modify(this)")
                               .attr("onClick", "drawPath(this)");
-
-                      //legend = svg.append("g")
-                      //      .attr("class", "legend")
-                      //      .attr("transform", "translate(50,30)")
-                      //      .style("font-size", "12px")
-                      //      .call(d3.legend);
 
                       svg = d3.select("#hurricanelist2").selectAll("input")
                            .data(uniqueNames)
