@@ -106,6 +106,7 @@
                         <option value="0">Select Speed</option>
                         <option value="1">1x</option>
                         <option value="2">2x</option>
+                        <option value="3">3x</option>
                     </select>
 
                     <div id="colorLegend"></div>
@@ -1336,11 +1337,53 @@
                         }
 
 
+                        
+                        //Arrange the points based on timestamp.
+                        for (var i = 0; i < points.length; i++) {
+                            var temp;
+
+                            for (var j = i+1; j < points.length; j++) {
+                                var time1Year = parseInt(points[i].YEAR);
+                                var time1Month = parseInt(points[i].MONTH);
+                                var time1Day = parseInt(points[i].DAY);
+                                var time1Hour = parseInt(points[i].HOURS);
+
+                                var time2Year = parseInt(points[j].YEAR);
+                                var time2Month = parseInt(points[j].MONTH);
+                                var time2Day = parseInt(points[j].DAY);
+                                var time2Hour = parseInt(points[j].HOURS);
+                                
+                                if (time1Year > time2Year) {
+                                    var temp = points[i];
+                                    points[i] = points[j];
+                                    points[j] = temp;
+                                } else if (time2Year == time1Year) {
+                                    if (time2Month < time1Month) {
+                                        var temp = points[i];
+                                        points[i] = points[j];
+                                        points[j] = temp;
+                                    } else if (time2Month == time1Month) {
+                                        if (time2Day < time1Day) {
+                                            var temp = points[i];
+                                            points[i] = points[j];
+                                            points[j] = temp;
+                                        } else if (time2Day == time1Day) {
+                                            if (time2Hour < time1Hour) {
+                                                var temp = points[i];
+                                                points[i] = points[j];
+                                                points[j] = temp;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        
+
                         var circle;
 
+
                         if (timersArray.length > 0) {
-                            console.log(timersArray);
-                            //setTimeout(timersArray[timersArray.length - 1]);
                             var tempScale = (unprintedVals.length - 1);
                             for (var i = unprintedVals[tempScale] + 1; i < points.length; i++) {
                                 var time = points[i].HOURS + " " + points[i].MONTH + "/" + points[i].DAY + "/" + points[i].YEAR;
@@ -1354,15 +1397,15 @@
 
                             var finalTimer = setTimeout(function () {
 
-                                console.log(circles);
                                 for (var i = 0; i < circles.length; i++) {
                                     map.removeLayer(circles[i]);
                                 }
                                 timersArray.splice(0, timersArray.length);
                                 circles.splice(0, circles.length);
                                 unprintedVals.splice(0, unprintedVals.length);
-
-                            }, (1001 * points.length) * modifier);
+                                button.value = "paused";
+                                button.textContent = "Play";
+                            }, (1001 * ((points.length + 1) - unprintedVals.length)) * modifier);
 
                             timersArray.push(finalTimer);
 
@@ -1387,16 +1430,13 @@
                                 button.value = "paused";
                                 button.textContent = "Play";
 
-                            }, (1001 * points.length) * modifier);
+                            }, (1001 * ((points.length + 1) - unprintedVals.length)) * modifier);
 
                             timersArray.push(finalTimer);
                         }
-                        //button.value = "paused";
-                        //button.textContent = "Play";
 
 
                     } else {
-                        //clearInterval(timer);
                         clearTimeout(timersArray[timersArray.length - 1]);
                         timersArray.pop();
 
@@ -1415,7 +1455,6 @@
 
                 function setTimer(modifier, time, circles, i, lat, long) {
                     timer = setTimeout(function () {
-                        //var circle = L.circle([hurriSelection[i].values[j].LAT, hurriSelection[i].values[j].LOG], 500, {
                         var circle = L.circle([lat, long], 500, {
                             color: 'black',
                             fillColor: '#f03',
@@ -1446,58 +1485,5 @@
             </script>
 
         </div>
-        <script type=text/javascript>
-            d3.csv("data/AtlHurricane2005-2014.csv", function (error, text) {
-                //Create a year array to hold the count of hurricanes per year.
-                var yearArray = [0,0,0,0,0,0,0,0,0,0];
-
-                //Group the data by hurricane id
-                var data = d3.nest()
-                .key(function(d) {
-                    return d.HURID;
-                }).entries(text);
-
-                //Loop through the data to get the count of hurricanes per year.
-                for (var i = 0; i < data.length; i++) {
-                    //The "-0" is to force the conversion from string to integer for use in the switch case.
-                    switch(data[i].values[0].YEAR - 0) {
-                        case 2005:
-                            yearArray[0]++;
-                            console.log("2005");
-                            break;
-                        case 2006:
-                            yearArray[1]++;
-                            break;
-                        case 2007:
-                            yearArray[2]++;
-                            break;
-                        case 2008:
-                            yearArray[3]++;
-                            break;
-                        case 2009:
-                            yearArray[4]++;
-                            break;
-                        case 2010:
-                            yearArray[5]++;
-                            break;
-                        case 2011:
-                            yearArray[6]++;
-                            break;
-                        case 2012:
-                            yearArray[7]++;
-                            break;
-                        case 2013:
-                            yearArray[8]++;
-                            break;
-                        case 2014:
-                            yearArray[9]++;
-                            break;
-                    }
-                
-                } //Ends the for loop.
-                //Print out the content of the yearArray to the console for checking.
-                //console.log(yearArray);
-            }); //End the d3.csv call.
-        </script>
 	</body>
 </html>
