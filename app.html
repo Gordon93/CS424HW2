@@ -106,6 +106,7 @@
                         <option value="0">Select Speed</option>
                         <option value="1">1x</option>
                         <option value="2">2x</option>
+                        <option value="3">3x</option>
                     </select>
 
                     <div id="colorLegend"></div>
@@ -1458,8 +1459,9 @@
                                 timersArray.splice(0, timersArray.length);
                                 circles.splice(0, circles.length);
                                 unprintedVals.splice(0, unprintedVals.length);
-
-                            }, (1001 * points.length) * modifier);
+                                button.value = "paused";
+                                button.textContent = "Play";
+                            }, (1001 * ((points.length + 1) - unprintedVals.length)) * modifier);
 
                             timersArray.push(finalTimer);
 
@@ -1484,7 +1486,7 @@
                                 button.value = "paused";
                                 button.textContent = "Play";
 
-                            }, (1001 * points.length) * modifier);
+                            }, (1001 * ((points.length + 1) - unprintedVals.length)) * modifier);
 
                             timersArray.push(finalTimer);
                         }
