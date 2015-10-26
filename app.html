@@ -56,7 +56,7 @@
         
 	</head>
 	
-	<body>
+	<body onload ="pageOnload()">
 
     <!--global vars-->
 <!--    <script>
@@ -1046,75 +1046,82 @@
 
                 //from data.js
 
-                d3.csv('data/AtlHurricane2005-2014.csv',function(error,data){
-                    if(error) {
-                        //if error is not null then something went wrong
-                        console.log(error);
-                    }
-
-
-                    data.forEach(function(d) {
-                        d.YEAR = parseInt(d.YEAR);
-                        d.MONTH = parseInt(d.MONTH);
-                        d.DAY = parseInt(d.DAY);
-                        d.HOURS = parseInt(d.HOURS);
-                        d.LAT = parseFloat(d.LAT);
-                        d.LOG = parseFloat(d.LOG);
-                        d.MaxWind = parseInt(d.MaxWind);
-                        d.MinPress = parseInt(d.MinPress);
-                    });
-
-                    HurrData1 = d3.nest()
-                            .key(function(d) {
-                                return d.YEAR;
-                            })
-                            .entries(data);
-
-                    //console.log(dataSet);
+                function pageOnload(){
                     createline1();
                     createbar1(HurrData1,graphs[0].bar);
                     createbar1(HurrData2,graphs[1].bar);
                     createbar2(HurrData1,HurrData2,graphs[2].bar);
+                }
 
 
-                });
-
-                d3.csv('data/PacHurricane2005-2014.csv',function(error,data){
-
-                    if(error) {
-                        //if error is not null then something went wrong
-                        console.log(error);
-                    }
 
 
-                    data.forEach(function(d) {
-                        d.YEAR = parseInt(d.YEAR);
-                        d.MONTH = parseInt(d.MONTH);
-                        d.DAY = parseInt(d.DAY);
-                        d.HOURS = parseInt(d.HOURS);
-                        d.LAT = parseFloat(d.LAT);
-                        d.LOG = parseFloat(d.LOG);
-                        d.MaxWind = parseInt(d.MaxWind);
-                        d.MinPress = parseInt(d.MinPress);
+
+                    d3.csv('data/AtlHurricane2005-2014.csv', function (error, data) {
+                        if (error) {
+                            //if error is not null then something went wrong
+                            console.log(error);
+                        }
+
+
+                        data.forEach(function (d) {
+                            d.YEAR = parseInt(d.YEAR);
+                            d.MONTH = parseInt(d.MONTH);
+                            d.DAY = parseInt(d.DAY);
+                            d.HOURS = parseInt(d.HOURS);
+                            d.LAT = parseFloat(d.LAT);
+                            d.LOG = parseFloat(d.LOG);
+                            d.MaxWind = parseInt(d.MaxWind);
+                            d.MinPress = parseInt(d.MinPress);
+                        });
+
+                        HurrData1 = d3.nest()
+                                .key(function (d) {
+                                    return d.YEAR;
+                                })
+                                .entries(data);
+
+                        //console.log(dataSet);
                     });
 
-                    HurrData2 = d3.nest()
-                            .key(function(d) {
-                                return d.YEAR;
-                            })
-                            .entries(data);
 
-                    console.log("loading pacData");
-                    //console.log(dataSet);
+                    d3.csv('data/PacHurricane2005-2014.csv', function (error, data) {
 
+                        if (error) {
+                            //if error is not null then something went wrong
+                            console.log(error);
+                        }
 
 
-                    console.log("created bar chart2");
-                    //createbar2(HurrData1,HurrData2,graphs[2].bar);
+                        data.forEach(function (d) {
+                            d.YEAR = parseInt(d.YEAR);
+                            d.MONTH = parseInt(d.MONTH);
+                            d.DAY = parseInt(d.DAY);
+                            d.HOURS = parseInt(d.HOURS);
+                            d.LAT = parseFloat(d.LAT);
+                            d.LOG = parseFloat(d.LOG);
+                            d.MaxWind = parseInt(d.MaxWind);
+                            d.MinPress = parseInt(d.MinPress);
+                        });
+
+                        HurrData2 = d3.nest()
+                                .key(function (d) {
+                                    return d.YEAR;
+                                })
+                                .entries(data);
+
+                        console.log("loading pacData");
 
 
-                });
+                        //console.log(dataSet);
 
+                        console.log("created bar chart2");
+                        //createbar2(HurrData1,HurrData2,graphs[2].bar);
+
+
+                    });
+
+                window.onload = pageOnload;
                 //end of code from data.js
 
                 //The section below grabs the hurricanes from 2005-2014 and groups them by hurricane YEAR. Thus breaking the file into 10 objects instead of 5000 entries.
@@ -1481,8 +1488,8 @@
                     var datum = Date.parse(strDate);
                     return datum/1000;
                 }; //End of the toTimestamp function.
-                    
             </script>
+
 
         </div>
 	</body>
