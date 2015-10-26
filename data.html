@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8">
@@ -37,7 +37,26 @@
 
         <div class="pageContent">
         <!-- PUT ALL PAGE CODE EITHER IN OR BELOW THIS DIV! OTHERWISE IT WILL FALL BELOW THE NAV BAR! -->
+            <div class="workPage">
+                <h2 style="font-size: 40px">
+                   Where did it come from? 
+                </h2>
+                <p style="font-size: 30px">
+                    The data that we got for this project came from the National Hurricane Center webpage. The webpage provided a set of data for both the Atlantic and the Northeast and North Central Pacific oceans. 
+                    The data for the Atlantic Ocean ranged from 1851 to 2014. The data for the Northeast and North Central Pacific was from 1949 to 2014. 
+                    In this project we ended up using the most recent data which is from 2004 to 2014.<br/>
+                    Link to Atlantic Hurricane database 1851 -2014: <a href="http://www.nhc.noaa.gov/data/hurdat/hurdat2-1851-2014-060415.txt">Atlantic Hurricane Database</a><br/>
+                    Link to Northeast and North Central Pacific Hurricane database 1949-2014: <a href="http://www.nhc.noaa.gov/data/hurdat/hurdat2-nencpac-1949-2014-092515.txt">Pacific Data</a>
+                    <br/>
+                </p>
+                <h2 style="font-size: 40px">What did we do to the data?</h2>
+                <p style="font-size: 30px">
+                    The data for this project was read through python to adjust to make it easier to work with. We ended up having the name of the Hurricanes being listed in each row instead of once. 
+                    We also parsed the data to separate it by year, month, and day. We changed how the latitude and longitude were displayed in the file to show negative coordinate for South and West. We then filtered out the direction symbols.
+                    To use the data in the app we used the d3 nest function to filter it by different keys ranging from the Year to the Hurricane ID.
 
+                </p>
+            </div>
         
         </div>
     </body>
