@@ -102,8 +102,8 @@ function createline1() {
         .attr("transform",
         "translate(" + margin.left + "," + margin.top + ")");
 
-    graphs.push({max:graph1,min:graph2,bar:bar1});
-    graphs.push({max:graph3,min:graph4,bar:bar2});
+    graphs.push({max:graph1,min:graph2,bar:bar1,title:"Atlantic Hurricanes"});
+    graphs.push({max:graph3,min:graph4,bar:bar2,title:"Pacific Hurricanes"});
     graphs.push({bar:bar3});
 
 }
@@ -209,8 +209,8 @@ function createbar1(HurrData,graph) {
         .attr("x",(width/2))
         .attr("y",10-(margin.top/2))
         .attr("text-anchor","middle")
-        .style("font-size","16px");
-        //.text()
+        .style("font-size","16px")
+        .text("By Year");
 
 }
 
@@ -320,7 +320,6 @@ function createbar2(HurrData,HurrData2,graph) {
         .attr("y",6)
         .attr("dy", ".71em")
         .style("text-anchor","end")
-        .text("POP(EST)");
     graph.selectAll("bar")
         .data(HurrPerMonth)
         .enter().append("rect")
@@ -334,8 +333,8 @@ function createbar2(HurrData,HurrData2,graph) {
         .attr("x",(width/2))
         .attr("y",10-(margin.top/2))
         .attr("text-anchor","middle")
-        .style("font-size","16px");
-    //.text()
+        .style("font-size","16px")
+        .text("Total # Occurances per Month");
 
 }
 
