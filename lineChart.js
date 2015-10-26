@@ -194,8 +194,7 @@ function createbar1(HurrData,graph) {
         .attr("transform", "rotate(-90)")
         .attr("y",6)
         .attr("dy", ".71em")
-        .style("text-anchor","end")
-        .text("POP(EST)");
+        .style("text-anchor","end");
     graph.selectAll("bar")
         .data(HurrPerYear)
         .enter().append("rect")
