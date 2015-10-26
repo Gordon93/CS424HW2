@@ -182,6 +182,10 @@
                 
                 var dateNames = [];
                 var uniqueDateNames = [];
+                
+                var dateNamesPacific = [];
+                var uniqueDateNamesPacific = [];
+                
                 var numHurrDate=0;
                 
                 // Dictionaries that are indexed by a day for example "6/29/2007"
@@ -1371,18 +1375,45 @@
                                             }                         
                                         }
                                     }
-                                    if(i ==0){
-                                        alert("No Hurricane data for this date, Please try to pick another date");
-                                    }
-                                    $.each(dateNames, function (i, el) {
+                                    
+                                    //alert(dateNames);
+                                    
+                                               $.each(dateNames, function (i, el) {
                                         if ($.inArray(el, uniqueDateNames) === -1) uniqueDateNames.push(el);
                                     });
+                                    
+                                    //alert(uniqueDateNames);
+                                    
+                                    var j =0;
+                                   // alert(JSON.stringify(day_name_Pacific));
+                                    
+                                    for(var key in day_lat_Pacific) {
+                                        if(day_lat_Pacific.hasOwnProperty(key)) {
+                                            if(key.indexOf(dateText) != -1){
+                                                dateNamesPacific[j] = day_name_Pacific[key];
+                                                j++;
+                                            }                         
+                                        }
+                                    }
+                                    
+                                    //alert(dateNamesPacific);
+                                    
+                                    $.each(dateNamesPacific, function (i, el) {
+                                        if ($.inArray(el, uniqueDateNamesPacific) === -1) uniqueDateNamesPacific.push(el);
+                                    });
+                                    
+                                    //alert(uniqueDateNamesPacific)
                      
-                        
+                                 if(i ==0 && j==0){
+                                        alert("No Hurricane data for this date, Please try to pick another date");
+                                    }
                                     if(num >0){
                                         d3.select("#hurricanelist").selectAll("input").remove();
                                         d3.select("#hurricanelist").selectAll('label').remove();
+                                        d3.select("#hurricanelist2").selectAll("input").remove();
+                                        d3.select("#hurricanelist2").selectAll('label').remove();
                                     }
+                                    
                                     d3.select("#hurricanelist").selectAll("input")
                                           .data(uniqueDateNames)
                                           .enter()
@@ -1396,6 +1427,20 @@
                                               .attr("id", function (d, i) { return uniqueDateNames[i]; })
                                               .attr("onClick", "modify(this)")
                                               .attr("onClick", "drawPath(this)");
+                                    
+                                    d3.select("#hurricanelist2").selectAll("input")
+                                          .data(uniqueDateNamesPacific)
+                                          .enter()
+                                          .append('label')
+                                          .style("font-size", "12px")
+                                              .attr('for', function (d, i) { return 'a' + i; })
+                                              .text(function (d) { return d; })
+                                              .append("input")
+                                              .attr("val", false)
+                                              .attr("type", "checkbox")
+                                              .attr("id", function (d, i) { return uniqueDateNames[i]; })
+                                              .attr("onClick", "modify2(this)")
+                                              .attr("onClick", "drawPath2(this)");
                            
                                     num++; 
                                 });
