@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 	<head>
 		<meta charset="utf-8">
@@ -13,7 +13,7 @@
 	<body>
         <!-- This section begins the bootstrap button headers -->
         <nav class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container">
+            <div class="container" style="margin-left:inherit">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
                         <span class="sr-only">Toggle navigation</span>
@@ -36,7 +36,19 @@
 
         <div class="pageContent">
         <!-- PUT ALL PAGE CODE EITHER IN OR BELOW THIS DIV! OTHERWISE IT WILL FALL BELOW THE NAV BAR! -->
-
+            <div class="workPage">
+                <h2>Application setup</h2>
+                <p style="font-size: 30px">
+                    This program uses calls to hosted libraries and thus requires access to the internet in order to run.<br />
+                    It also imports information from data files that are hosted in the github that hosts this website.<br />
+                    To use the application the user need only click the application button on the navigation bar at the top of the screen. <br />
+                    Once on the application page a map will display in the center. On the left of this map will be controls that the user can use to determine which hurricanes will be displayed. <br />
+                    The user can use a dropdown menu to select a year and another dropdown to pick how the hurricanes are ordered. Once the user selects a year the listboxes for Pacific and Atlantic hurricanes will populate. Below that the user can select a specific start date of a hurricane, if that information is known to the user. <br />
+                    When the user selects a hurricane (or multiple) they will be able to use the play button along with the speed selection dropdown in order to watch the progress of the selected hurricanes starting from the first timestamp of the earliest hurricane to the final timestamp of the latest hurricane. <br />
+                    Below that is a legend describing the coloring of the hurricanes on the map, based on their maximum wind speed. Finally the user will be able to filter the hurricanes by wind speed and pressure. <br />
+                    On the other side of the map the user will be presented by graphs of important information based on the selected graphs. 
+                </p>
+            </div>
 	</body>
 
 </html>
