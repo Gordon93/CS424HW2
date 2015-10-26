@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 
 
 <html>
@@ -167,6 +167,7 @@
                 var index;
                 var index_pacific;
                 var num = 0;
+                var numCheck2=0;
                 var topNum =0;
                 var topNum_pacific =0;
                 var mydate;
@@ -177,6 +178,7 @@
                 var polyline = {};
                 var polyline_pacific = {};
                 var dateLine = {};
+                var dateLine_pacific ={};
                 
                 var dateNames = [];
                 var uniqueDateNames = [];
@@ -731,9 +733,9 @@
                                 alert(names[index][k])
                             }
 
-                            for (var k = 0; k < names_pacific[index_pacific].length; k++) 
+                            for (var k = 0; k < namesPacific[index_pacific].length; k++) 
                             {
-                                mynames_pacific.push(names_pacific[index_pacific][k]);
+                                mynames_pacific.push(namesPacific[index_pacific][k]);
                             }                        
                         }
                         
@@ -892,8 +894,8 @@
                               .attr("val", false)
                               .attr("type", "checkbox")
                               .attr("id", function (d, i) { return uniqueNames_pacific[i]; })
-                              .attr("onClick", "modify(this)")
-                              .attr("onClick", "drawPath(this)");
+                              .attr("onClick", "modify2(this)")
+                              .attr("onClick", "drawPath2(this)");
 
                         num++;
                     }
@@ -980,6 +982,77 @@
                          }
                         }
 
+                     }
+                  }
+                  else if (check == 'true') {
+
+                      //Clear out all the circles:
+                      for (var i = 0; i < circles.length; i++) {
+                          map.removeLayer(circles[i]);
+                      }
+                      timersArray.splice(0, timersArray.length);
+                      circles.splice(0, circles.length);
+                      unprintedVals.splice(0, unprintedVals.length);
+
+                      //Finish clearing circles and other arrays.
+
+                          var val = $(that).attr("id");
+                         map.removeLayer(polyline[val]);
+                          if (dateLine[val]){
+                         map.removeLayer(dateLine[val]);
+                             }
+                             
+                          }
+                     modify(that);
+                  }
+                
+                     function drawPath2(that){
+                      var check2;
+                  //var check2 = $(that).attr("val");
+                  if(numCheck2 %2 == 0){
+                      check2 = 'false';
+                  }
+                  else{
+                      check2 = 'true';
+                  }      
+                  numCheck2++;
+                         
+                  //alert(check2);
+                  var polyline_options_pacific;
+                  var myline_pacific;
+                         
+                  if (check2 == 'false'){
+                   myline = new Array();
+                      myline_pacific = new Array();
+                  var dot = [];
+                  var val = $(that).attr("id");
+                      
+                     if(val == "TOP10"){
+                     for(var key in polyline_pacific) {
+                           if(key.indexOf(val) != -1){
+                              map.removeLayer(polyline_pacific[key]);
+                            }  
+                          }
+                     }
+                          else if(val == "TOP5"){
+                              for(var key in polyline_pacific) {
+                           if(key.indexOf(val) != -1){
+                              map.removeLayer(polyline_pacific[key]);
+                            }
+                            }
+                          }
+                      
+                          else if(val == "ALL"){
+                              for(var key in polyline_pacific) {
+                           if(key.indexOf(val) != -1){
+                              map.removeLayer(polyline_pacific[key]);
+                            }
+                          }
+                          }
+                          
+                          else
+                     {
+
                          for ( var key in NamedictPacific )
                          {
                              var mykey = NamedictPacific[key].key;
@@ -1006,8 +1079,8 @@
                          }
                      }
                   }
-                  else if (check == 'true') {
-
+                  else if (check2 == 'true') {
+                      // alert("get here");
                       //Clear out all the circles:
                       for (var i = 0; i < circles.length; i++) {
                           map.removeLayer(circles[i]);
@@ -1019,12 +1092,14 @@
                       //Finish clearing circles and other arrays.
 
                           var val = $(that).attr("id");
-                         map.removeLayer(polyline[val]);
+                          //alert(val);
+                         map.removeLayer(polyline_pacific[val]);
                           if (dateLine[val]){
-                         map.removeLayer(dateLine[val]);
+                         map.removeLayer(dateLine_pacific[val]);
                              }
+                             
                           }
-                     modify(that);
+                     modify2(that);
                   }
                 
                   function modify(that) {
@@ -1135,6 +1210,11 @@
                           }
                       }
                   }
+                
+                function modify2(){
+                    
+                    // JOSH your code for modigy 2 should go here.
+                }
 
 
                   function top5() 
