@@ -85,7 +85,7 @@
             <!-- PUT ALL PAGE CODE EITHER IN OR BELOW THIS DIV! OTHERWISE IT WILL FALL BELOW THE NAV BAR! -->
 
             <!-- Options -->
-            <div class="inline" style="width:12vw;">
+            <div class="inline" style="width:12vw;height:100vh;">
                 <fieldset style="font-size:12vw;font-size:.8vw;">
                     <legend style="font-size:12vw;font-size:1vw;">Options</legend>
                     <div id="optionmenu"></div>                <br />
@@ -100,11 +100,9 @@
                         <option value="2">2x</option>
                         <option value="3">3x</option>
                     </select>
-
                     <div id="colorLegend"></div>
 
                 </fieldset>
-                <br />
 
                 <!--<div>-->
                 <fieldset style="font-size:12vw;font-size:.8vw;">
@@ -122,7 +120,7 @@
             <div class="inline" style="height:80vh;width:8vw;">
                 <fieldset style="width:100%;height:100%;overflow:auto;">
                     <legend style="font-size:12px;font-size:1vw; overflow:auto">Pacific Hurricanes</legend>
-                    <div id="hurricanelist2" style="width:100%;height:100%; overflow:auto;"></div>
+                    <div id="hurricanelist2" style="width:100%;height:100%;"></div>
                 </fieldset>
             </div>
 
@@ -138,19 +136,21 @@
             <div class="inline" style="height:80vh;width:8vw;">
                 <fieldset style="width:100%;height:100%;overflow:auto;">
                     <legend style="font-size:12px;font-size:1vw; overflow:auto">Atlantic Hurricanes</legend>
-                    <div id="hurricanelist" style="width:100%;height:100%; overflow:auto;"></div>
+                    <div id="hurricanelist" style="width:100%;height:100%;"></div>
                 </fieldset>
             </div>          
 
             <!-- chart container-->
 
             <div id="chartContainer2" class="inline" style="width:15vw">
+                <h1 style="font-size:12px;font-size: 1vw;">Pacific</h1>
                 <div id="chart2"></div>
                 <div id="chart3"></div>
                 <div id="graph2"> </div>
             </div>
 
-            <div id="chartContainer" class="inline" style="width:15vw">
+            <div id="chartContainer" class="inline" style="width:15vw;">
+                <h1 style="font-size:12px;font-size: 1vw;">Atlantic</h1>
                 <div id="chart"></div>
                 <div id="chart1"></div>
                 <div id="graph1"> </div>
@@ -269,6 +269,7 @@
       .attr("y", function(d, i){ return (i+2) *  16 ;})
       .attr("width", 10)
       .attr("height", 10)
+      .style("font-size","12px")
       .style("font-size", "0.8vh")
       .text(function(d,i) { 
          var color = dataset[i];
