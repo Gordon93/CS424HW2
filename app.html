@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 
 <html>
@@ -60,7 +60,7 @@
 
 	        <!-- This section begins the bootstrap button headers -->
         <nav class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container">
+            <div class="container" style="margin-left:inherit">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
                         <span class="sr-only">Toggle navigation</span>
@@ -1222,9 +1222,67 @@
                       }
                   }
                 
-                function modify2(){
-                    
+                function modify2(that){
+
                     // JOSH your code for modigy 2 should go here.
+
+                    var val = $(that);
+                    var selName = val.attr("id");
+                    if (val.context.attributes.val.value == "true") {
+                        val.context.attributes.val.value = "false";
+                        for (var i = 0; i < hurriSelection.length; i++) {
+                            if (selName == hurriSelection[i].values[0].NAME) {
+                                hurriSelection.splice(i, 1);
+                                break;
+                            }
+                        }
+
+                        //This is where we will need to run the remove code for a single hurricane.
+
+
+                    } else {
+                        val.context.attributes.val.value = "true"
+
+                        for (var i = 0; i < hurricanesByID.length; i++) {
+                            if (selName == hurricanesByID[i].values[0].NAME) {
+                                hurriSelection.push(hurricanesByID[i]);
+                                break;
+                            }
+                        }
+                    }
+
+                    var geoJsonObjects = [];
+
+                    for (var hurricane in hurriSelection) {
+                        var lnglat = [];
+                        var time = [];
+                        //console.log(hurricane);
+                        for (var hurr in hurriSelection[hurricane].values) {
+
+                            var strDate;
+                            lnglat.push([hurriSelection[hurricane].values[hurr].LOG, hurriSelection[hurricane].values[hurr].LAT]);
+                            var hour = hurriSelection[hurricane].values[hurr].HOURS[0] + "" + hurriSelection[hurricane].values[hurr].HOURS[1];
+
+                            var tempDate = Date.UTC(hurriSelection[hurricane].values[hurr].YEAR, hurriSelection[hurricane].values[hurr].MONTH, hurriSelection[hurricane].values[hurr].DAY, hour);
+                            time.push(tempDate);
+                        } // End of the for function.
+
+                        /*
+                        var geoJson = {
+                            "type": "Feature",
+                            "geometry": {
+                                "type": "MultiPoint",
+                                "coordinates": lnglat
+                            },
+                            "properties": {
+                                "time": time
+                            }
+                        };
+
+                        geoJsonObjects.push(geoJson);
+                        */
+
+                    }
                 }
 
 
@@ -1603,6 +1661,18 @@
                                 }
                                 //console.log("hurricane obj by id");
                                 //console.log(data);
+                            });
+
+                            d3.csv("data/PacHurricane2005-2014.csv", function (error, text) {
+                                var i = 0;
+                                var data = d3.nest()
+                                    .key(function (d) {
+                                        return d.NAME;
+                                    }).entries(text);
+
+                                for (var i = 0; i < data.length; i++) {
+                                    hurricanesByID.push(data[i]);
+                                }
                             });
             
                             // This function gets clusters by year, month, day
