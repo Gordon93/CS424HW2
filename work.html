@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8">
@@ -14,7 +14,7 @@
     <body>
         <!-- This section begins the bootstrap button headers -->
         <nav class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container">
+            <div class="container" style="margin-left:inherit">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
                         <span class="sr-only">Toggle navigation</span>
@@ -40,42 +40,70 @@
         <!-- PUT ALL PAGE CODE EITHER IN OR BELOW THIS DIV! OTHERWISE IT WILL FALL BELOW THE NAV BAR! -->
             <div class = "workPage">
                 <div id="JonathanG">
-                    <h3>Jonathan G</h3>
+                    <h3 style ="font-size: 40px">Jonathan G</h3>
+                    <p style="font-size: 30px">
+                        Jonathan was the main contributor to the creation of a leaflet map and worked on the display and removal of selected hurricanes line paths. He also did work on bundling the data after the d3 calls so that they could be used for other sections of the code.
+                    </p>
                 </div>
                 <div id="RyanJ">
-                    <h3>Ryan J</h3>
+                    <h3 style="font-size: 40px">Ryan J</h3>
+                    <h4 style="font-size: 35px">Week 1</h4>
+                    <p style="font-size: 30px">
+                        Assignment assigned. No group was formed at this point.
+                    </p>
+                    <h4 style="font-size: 35px">Week 2</h4>
+                    <p style="font-size: 30px">
+                        During week two I started off the project by filtering the data using a python script that I created. I was able to filter both the Pacific and Atlantic Hurricane data with my script. I had to setup script help parse certain parts of the data more easily. Those parts were the field that contain the date and the coordinates.
+                    </p>
+                    <h4 style="font-size: 35px">Week 3</h4>
+                    <p style="font-size: 30px">
+                        In week 3, I worked on created the graphs that were going to be used in the project. During this week I created the line charts for the Atlantic Ocean that showed the max wind speed and the minimum pressure of a particular Hurricane.
+                    </p>    
+                    <h4 style="font-size: 35px">Week 4</h4>
+                    <p style="font-size: 30px">
+                        What I did during week four was I created the bar charts and made the graphs more responsive with different screen sizes. The bar charts that I created were for the number of Hurricanes per year and the number of Hurricanes overall per month. I also added code for the graphs to resize base on the size of the screen.
+                    </p>
                 </div>
                 <div id="RyanM">
-                    <h3>Ryan M</h3>
+                    <h3 style="font-size: 40px">Ryan M</h3>
+                    <p style="font-size: 30px">
+                        Ryan Mak worked on creating the ui elements used for the filtering of data and the listbox that is used for hurricane selection. He also worked on researching how to make our application scale for use on the large scale display.
+                    </p>
                 </div>
                 <div id="JoshuaR">
-                    <h3>Joshua R</h3>
-                    <p>
-                        <h4>Week 1</h4>
-                        Assignment assigned. No group was formed at this point.
-
-                        <h4>Week 2</h4>
-
-                        Group was formed. Waiting for data to be parsed before beginning any work.
-                        <h4>Week 3</h4>
-
-                        Helped show Johnathan how to grab the data from the CSV file produced by Ryan Jones and bundle it into usable objects. This was important for finding out how to sort the hurricanes by year, name, or hurricane id.
-                        Added clean navigation and a stylesheet to the website and each of its pages in order to create a consistent theme to the page site.
-                        Began working as the "merge manager". The person in charge of fixing merge issues and making sure that the live page was updated for view by the rest of the team.
-
-                        <h4>Week 4</h4>
-                        Implemented the leafletplayback plugin that would allow for the playing of our hurricane points onto the map. Also modified the javascript of that plugin to allow for speeds that were conductive to the size of our data and the 6 hour difference in timestamps.
-                        I linked this functionality to the modify functions so that the map would only playback those hurricanes that the user had already designated by selecting.
-                        Continued to work as the "merge manager". The person in charge of fixing merge issues and making sure that the live page was updated for view by the rest of the team.
+                    <h3 style ="font-size: 40px">Joshua R</h3>
+                    <h4 style="font-size: 35px">Week 1</h4>
+                    <p style="font-size:30px">
+                        Assignment assigned. No group was formed at this point.<br />
+                    </p>
+                    <h4 style="font-size: 35px">Week 2</h4>
+                    <p style="font-size:30px">
+                        Group was formed. Waiting for data to be parsed before beginning any work.<br />
+                    </p>
+                    <h4 style="font-size: 35px">Week 3</h4>
+                    <p style="font-size:30px">
+                        Helped show Johnathan how to grab the data from the CSV file produced by Ryan Jones and bundle it into usable objects. This was important for finding out how to sort the hurricanes by year, name, or hurricane id.<br />
+                        Added clean navigation and a stylesheet to the website and each of its pages in order to create a consistent theme to the page site.<br />
+                        Began working as the "merge manager". The person in charge of fixing merge issues and making sure that the live page was updated for view by the rest of the team.<br />
+                    </p>
+                    <h4 style="font-size: 35px">Week 4</h4>
+                    <p style="font-size:30px">
+                        Implemented the leafletplayback plugin that would allow for the playing of our hurricane points onto the map. Also modified the javascript of that plugin to allow for speeds that were conductive to the size of our data and the 6 hour difference in timestamps.<br />
+                        I linked this functionality to the modify functions so that the map would only playback those hurricanes that the user had already designated by selecting.<br />
+                        Continued to work as the "merge manager". The person in charge of fixing merge issues and making sure that the live page was updated for view by the rest of the team.<br />
                         Led the presentation of our alpha product to the class.
+                    </p>
+                    <h4 style="font-size: 35px">Week 5</h4>
+                    <p style="font-size:30px">
+                        Reimplemented the animation of the map after taking out the leaflet plugin. Created the proper logic for a functioning start/pause button that will continue to draw the animated points from where the process was stopped. Instead of a moving a marker, the play animation is now a placement of a small circle on the drawn line of the hurricane. This is so when the user selects a hurricane they do not lose view of it when they try to play the timestamps of that hurricane.<br />
+                        Created the sorting logic that makes sure that if hurricanes overlap that they will play the earliest point first, isntead of finishing the animation of one hurricane before moving onto another.<br />
+                        The timestamps also incorporate a speed slider that will allow the user to determine how fast the new points will appear.<br />
+                        Added a control view to the top right of the map so that the user can see the timestamps for each point as it is being drawn.<br />
+                        Continued to work as the "merge manager" making sure that there were no merge issues and that the live page was updated for view by the rest of the team.<br />
+                        Created the video for the web page and transformed everyones write-ups into readable html format for the website.<br />
+                        
 
-                        <h4>Week 5</h4>
-                        Reimplemented the animation of the map after taking out the leaflet plugin. Created the proper logic for a functioning start/pause button that will continue to draw the animated points from where the process was stopped. Instead of a moving marker, the play animation is now a placement of a small circle on the drawn line of the hurricane. This is so when the user selects a hurricane they do not lose view of it when they try to play the timestamps of that hurricane.
-                        Created the sorting logic that makes sure that if hurricanes overlap that they will play the earliest point first, isntead of finishing the animation of one hurricane before moving onto another.
-                        The timestamps also incorporate a speed slider that will allow the user to determine how fast the new points will appear.
-                        Added a control view to the top right of the map so that the user can see the timestamps for each point as it is being drawn.
-                        Continued to work as the "merge manager" making sure that there were no merge issues and that the live page was updated for view by the rest of the team.
-
+                    </p>
 
                     </p>
                 </div>
