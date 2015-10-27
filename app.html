@@ -331,6 +331,14 @@
                 if(svg3){
                 svg3.selectAll("*").remove();
                 }
+
+                        var list1test = document.getElementById("list1");
+                        if(list1test != undefined)
+                            document.getElementById("hurricanelist").removeChild(list1test);
+
+                        var list2test = document.getElementById("list2");
+                        if(list1test != undefined)
+                            document.getElementById("hurricanelist2").removeChild(list2test);
                     }
                     
                     var selectedIndex = select.property('selectedIndex'),
@@ -404,6 +412,7 @@
                                     .enter()
                                     .append('label')
                                     .style("font-size", "12px")
+                                    .style("font-size", "1vw")
                                     .text("Remove ALL")
                                     .append("input")
                                     .attr("val", false)
@@ -417,6 +426,7 @@
                                     .enter()
                                     .append('label')
                                     .style("font-size", "12px")
+                                    .style("font-size", "1vw")
                                     .text("Remove ALL")
                                     .append("input")
                                     .attr("val", false)
@@ -436,6 +446,8 @@
                         var myline_pacific = [[], [], [], [], []];
                         var polyline_options_pacific;
                         var HurricaneNames_pacific = [];
+
+
 
                          top5();
                          for (var k = 0; k < 5; k++) 
@@ -460,12 +472,13 @@
 
                         var Top5box =[];
                         Top5box.push("TOP5");
-                    
+
                     d3.select("#hurricanelist").selectAll("input")
                           .data(Top5box)
                           .enter()
                           .append('label')
                           .style("font-size", "12px")
+                            .style("font-size", "1vw")
                               .text("Remove TOP5")
                               .append("input")
                               .attr("val", false)
@@ -475,7 +488,8 @@
                               .attr("onClick", "drawPath(this)");                         
                         
                                 svg2 = d3.select("#hurricanelist")
-                                .append("svg");
+                                .append("svg")
+                                .attr("id", "list1");
                 
                                 var myHurricaneNames = svg2.append("g")
                                 .attr("class", "hurricane")
@@ -492,7 +506,8 @@
                                 .attr("y", function(d, i){ return i * 16 +16;})
                                 .attr("width", 10)
                                 .attr("height", 10)
-                                .style("font-size", "0.8vh")
+                                .style("font-size", "12px")
+                                .style("font-size", ".8vw")
                                 .text(function(d,i) { 
                                  var Name = HurricaneNames[i];
                                  return Name;
@@ -527,6 +542,7 @@
                                 .enter()
                                 .append('label')
                                 .style("font-size", "12px")
+                                .style("font-size", "1vw")
                                 .text("Remove TOP5")
                                 .append("input")
                                 .attr("val", false)
@@ -536,7 +552,8 @@
                                 .attr("onClick", "drawPath2(this)");
 
                         svg3 = d3.select("#hurricanelist2")
-                                .append("svg");
+                                .append("svg")
+                                .attr("id", "list2");
 
                         var myHurricaneNames3 = svg3.append("g")
                                 .attr("class", "hurricane")
@@ -553,7 +570,8 @@
                                 .attr("y", function(d, i){ return i * 16 +16;})
                                 .attr("width", 10)
                                 .attr("height", 10)
-                                .style("font-size", "0.8vh")
+                                .style("font-size", "12px")
+                                .style("font-size", "0.8vw")
                                 .text(function(d,i) {
                                     var Name = HurricaneNames_pacific[i];
                                     return Name;
@@ -599,6 +617,7 @@
                           .enter()
                           .append('label')
                           .style("font-size", "12px")
+                            .style("font-size", "1vw")
                               .text("Remove TOP10")
                               .append("input")
                               .attr("val", false)
@@ -608,7 +627,8 @@
                               .attr("onClick", "drawPath(this)");
                         
                                 svg2 = d3.select("#hurricanelist")
-                                .append("svg");
+                                .append("svg")
+                        .attr("id", "list1");
                 
                                 var myHurricaneNames = svg2.append("g")
                                 .attr("class", "hurricane")
@@ -625,7 +645,8 @@
                                 .attr("y", function(d, i){ return i * 16 +16;})
                                 .attr("width", 10)
                                 .attr("height", 10)
-                                .style("font-size", "0.8vh")
+                                .style("font-size", "12px")
+                                .style("font-size", "0.8vw")
                                 .text(function(d,i) { 
                                  var Name = HurricaneNames[i];
                                  return Name;
@@ -667,6 +688,7 @@
                                 .enter()
                                 .append('label')
                                 .style("font-size", "12px")
+                                .style("font-size", "1vw")
                                 .text("Remove TOP10")
                                 .append("input")
                                 .attr("val", false)
@@ -677,7 +699,8 @@
 
 
                         svg3 = d3.select("#hurricanelist2")
-                                .append("svg");
+                                .append("svg")
+                                .attr("id", "list2");
 
                         var myHurricaneNames2 = svg3.append("g")
                                 .attr("class", "hurricane")
@@ -694,7 +717,8 @@
                                 .attr("y", function(d, i){ return i * 16 +16;})
                                 .attr("width", 10)
                                 .attr("height", 10)
-                                .style("font-size", "0.7vh")
+                                .style("font-size", "12px")
+                                .style("font-size", "0.8vw")
                                 .text(function(d,i) {
                                     var Name = HurricaneNames_pacific[i];
                                     return Name;
@@ -1023,6 +1047,7 @@
                   //alert($(that).prop("val"));
                     
                   var val= $(that).attr("id");
+                    //alert(val);
                     
                          
                   //alert(check2);
