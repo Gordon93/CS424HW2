@@ -167,7 +167,6 @@
                 var index;
                 var index_pacific;
                 var num = 0;
-                var numCheck2=0;
                 var topNum =0;
                 var topNum_pacific =0;
                 var mydate;
@@ -213,6 +212,7 @@
 
                 var mytop5 = [];
                 var mytop10 = [];
+                
                 var mytop5Pacific =[];
                 var mytop10Pacific =[];
 
@@ -314,6 +314,7 @@
                 info.addTo(map);
 
                 var svg2;
+                var svg3;
                 
                 function change() {
                     if (num != 0) {
@@ -324,6 +325,9 @@
                 d3.select("#hurricanelist2").selectAll('label').remove();
                 if(svg2){
                 svg2.selectAll("*").remove();
+                }
+                if(svg3){
+                svg3.selectAll("*").remove();
                 }
                     }
                     
@@ -385,7 +389,7 @@
                             polyline_options_pacific = {
                                 color: Color
                             };
-                            topNum_pacific=0;
+                        
                             polyline_pacific["ALL" + topNum_pacific.toString()] = L.polyline(myline_pacific[k], polyline_options_pacific).addTo(map);
                             topNum_pacific++;
                         }
@@ -416,8 +420,8 @@
                                     .attr("val", false)
                                     .attr("type", "checkbox")
                                     .attr("id", function (d, i) { return ALLbox_pacific[i]; })
-                                    .attr("onClick", "modify(this)")
-                                    .attr("onClick", "drawPath(this)");
+                                    .attr("onClick", "modify2(this)")
+                                    .attr("onClick", "drawPath2(this)");
                             num++;                        
                     }
                     
@@ -500,15 +504,16 @@
                                 myline_pacific[k][j][0] = parseFloat(latitute_id_pacific[mytop5Pacific[k]][j]);
                                 myline_pacific[k][j][1] = parseFloat(langitute_id_pacific[mytop5Pacific[k]][j]);
                             }
-
+                            
+                            alert(topNum_pacific);
+                            
                             determineColor(Average_pacific);
                             polyline_options_pacific = {
                                 color: Color
                             };
-                            var topNum_pacific=0;
-
-                            polyline_pacific["TOP5"+topNum_pacific.toString()]=L.polyline(myline_pacific[k],polyline_options_pacific).addTo(map);
+                            polyline_pacific["TOP5"+(topNum_pacific.toString())]=L.polyline(myline_pacific[k],polyline_options_pacific).addTo(map);
                             HurricaneNames_pacific[k] = (name_id_pacific[mytop5Pacific[k]][0]) + " " + year_id_pacific[mytop5Pacific[k]][0];
+                            
                             topNum_pacific++;
                         }
 
@@ -525,20 +530,20 @@
                                 .attr("val", false)
                                 .attr("type", "checkbox")
                                 .attr("id", function (d, i) { return Top5box_pacific[i]; })
-                                .attr("onClick", "modify(this)")
-                                .attr("onClick", "drawPath(this)");
+                                .attr("onClick", "modify2(this)")
+                                .attr("onClick", "drawPath2(this)");
 
-                        svg2 = d3.select("#hurricanelist2")
+                        svg3 = d3.select("#hurricanelist2")
                                 .append("svg");
 
-                        var myHurricaneNames2 = svg2.append("g")
+                        var myHurricaneNames3 = svg3.append("g")
                                 .attr("class", "hurricane")
                                 .attr("x", 65)
                                 .attr("y", 25)
                                 .attr("height", 100)
                                 .attr("width", 100);
 
-                        myHurricaneNames2.selectAll("text")
+                        myHurricaneNames3.selectAll("text")
                                 .data(HurricaneNames_pacific)
                                 .enter()
                                 .append("text")
@@ -627,7 +632,7 @@
                         var myline_pacific = [[], [], [], [], [], [], [], [], [], []];
                         var polyline_options_pacific;
                         var HurricaneNames_pacific = [];
-                        var topNum_pacific=0;
+                        //var topNum_pacific=0;
 
                         for (var k = 0; k < 10; k++) {
                             myline_pacific[k] = new Array();
@@ -665,14 +670,14 @@
                                 .attr("val", false)
                                 .attr("type", "checkbox")
                                 .attr("id", function (d, i) { return Top10box_pacific[i]; })
-                                .attr("onClick", "modify(this)")
-                                .attr("onClick", "drawPath(this)");
+                                .attr("onClick", "modify2(this)")
+                                .attr("onClick", "drawPath2(this)");
 
 
-                        svg2 = d3.select("#hurricanelist2")
+                        svg3 = d3.select("#hurricanelist2")
                                 .append("svg");
 
-                        var myHurricaneNames2 = svg2.append("g")
+                        var myHurricaneNames2 = svg3.append("g")
                                 .attr("class", "hurricane")
                                 .attr("x", 65)
                                 .attr("y", 25)
@@ -924,7 +929,8 @@
                 
                   function drawPath(that){
                       
-                  var check = $(that).attr("val");      
+                  var check = $(that).attr("val");  
+                  alert(check);
                   var polyline_options;
                   var polyline_options_pacific;
                   var myline;
@@ -1010,28 +1016,26 @@
                      modify(that);
                   }
                 
-                     function drawPath2(that){
-                      var check2;
-                  //var check2 = $(that).attr("val");
-                  if(numCheck2 %2 == 0){
-                      check2 = 'false';
-                  }
-                  else{
-                      check2 = 'true';
-                  }      
-                  numCheck2++;
+                function drawPath2(that){
+                  var check2 = $(that).attr("val");
+                  //alert($(that).prop("val"));
+                    
+                  var val= $(that).attr("id");
+                    
                          
                   //alert(check2);
+                  //alert(val);
+                         
                   var polyline_options_pacific;
                   var myline_pacific;
                          
                   if (check2 == 'false'){
                    myline = new Array();
-                      myline_pacific = new Array();
+                  myline_pacific = new Array();
                   var dot = [];
-                  var val = $(that).attr("id");
-                      
-                     if(val == "TOP10"){
+                    //alert("get here");
+                  //var val = $(that).attr("id");
+                            if(val == "TOP10"){
                      for(var key in polyline_pacific) {
                            if(key.indexOf(val) != -1){
                               map.removeLayer(polyline_pacific[key]);
@@ -1039,24 +1043,26 @@
                           }
                      }
                           else if(val == "TOP5"){
+                               //alert("get here");
                               for(var key in polyline_pacific) {
-                           if(key.indexOf(val) != -1){
+                           if(key.indexOf(val) != -1){ 
+                               //alert(key);
                               map.removeLayer(polyline_pacific[key]);
                             }
                             }
                           }
                       
                           else if(val == "ALL"){
+                              //alert("get here");
                               for(var key in polyline_pacific) {
                            if(key.indexOf(val) != -1){
                               map.removeLayer(polyline_pacific[key]);
                             }
                           }
+                              
                           }
-                          
-                          else
-                     {
-
+                      
+                      else{
                          for ( var key in NamedictPacific )
                          {
                              var mykey = NamedictPacific[key].key;
@@ -1084,8 +1090,9 @@
                      }
                   }
                   else if (check2 == 'true') {
-                      // alert("get here");
-                      //Clear out all the circles:
+                      //alert(val);
+                      
+                      
                       for (var i = 0; i < circles.length; i++) {
                           map.removeLayer(circles[i]);
                       }
